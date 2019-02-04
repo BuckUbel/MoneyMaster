@@ -1,0 +1,4 @@
+lsof -i
+echo "kill $(lsof -i | grep $1 | cut -d " " -f5)" 
+kill "$(lsof -i | grep $1 | cut -d " " -f5)"
+lsof -i | grep $1 | cut -d " " -f5

@@ -1,0 +1,28 @@
+form.form-multiline {
+  max-width: 500px;
+  padding: 20px 12px 10px 20px;
+  font: 13px Arial, Helvetica, sans-serif;
+}
+form.form-multiline label {
+  display: block;
+  margin: 0 0 5px 0;
+}
+form.form-multiline input {
+  margin: 0 0 10px 5px;
+}
+form.form-multiline textArea{
+  height: 100px;
+  width: 100%;
+  margin: 5px 0 10px 0;
+
+}
+form.form-multiline input[type=submit],
+form.form-multiline input[type=button],
+form.form-multiline button{
+  border: none;
+  padding: 8px 15px 8px 15px;
+  background: #FF8500;
+  color: #fff;
+  border-radius: 3px;
+  float: right;
+}

@@ -1,0 +1,83 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+.projectContainer {
+  display: block;
+  text-align: left;
+  margin: 5px 0 0 5px;
+}
+.projectContainer h4 {
+}
+.projectContainer p {
+  margin: 5px 0 0 2px;
+}
+.projectContainer .pTitle {
+  margin: 5px 0 10px 2px;
+}
+.projectContainer .pDescription {
+}
+.projectContainer .pStatus {
+}
+.projectContainer .pCategories {
+}
+.projectContainer .pCategories ul {
+}
+.projectContainer .pCategories ul li {
+}
+.form-multiline {
+  margin: 5px 0 0 5px;
+}
+.form-multiline label {
+  display: block;
+}
+
+.react-bootstrap-table table{
+  margin: 10px auto 0 auto;
+}
+/* for paginator */
+.show.react-bs-table-sizePerPage-dropdown ul:last-child {
+  display: block;
+}
+.react-bootstrap-table-pagination{
+ margin: 40px 0 0 0;
+}
+
+
+
+#modal {
+  z-index: 998;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  padding-top: 50px;
+}
+#modal-Window {
+  z-index: 999;
+  background-color: #fff;
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+  position: relative;
+  text-align: center;
+  overflow:auto;
+  display: block;
+}
+#modal-Window-Content{
+  max-width: none;
+}
+.large#modal-Window {
+  width: 80%;
+}
+.medium#modal-Window {
+  width: 60%;
+}
+.small#modal-Window {
+  width: 80%;
+}

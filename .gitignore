@@ -1,0 +1,10 @@
+node_modules
+.DS_Store
+dist
+
+Coverage
+coverage
+/.idea
+/.vagrant
+/private
+/public

@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./private/",
+    "module": "commonjs",
+    "target": "es6",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "sourceMap": true,
+    "allowJs": true,
+    "inlineSources": true,
+    "moduleResolution": "node",
+    "rootDir": "./server/",
+    "noImplicitAny": true,
+    "keyofStringsOnly": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "./server/"
+  ],
+  "exclude": [
+    "node_modules/"
+  ]
+}

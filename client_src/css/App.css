@@ -1,0 +1,73 @@
+.App {
+    display: flex;
+}
+
+.headerbar {
+    position: fixed;
+    width: 100%;
+    height: 70px;
+    top: 0;
+    left: 0;
+}
+
+.content {
+    padding: 50px 30px 50px 30px;
+    margin-top: 70px;
+    flex-grow: 1;
+    display: flex;
+}
+
+.sidebar > div {
+    margin-top: 70px;
+}
+
+.sidebar {
+    flex-shrink: 0;
+}
+
+.sidebar-short {
+    width: 100px;
+    transition: width 0.5s;
+}
+
+.sidebar-large {
+    width: 200px;
+    transition: width 0.5s;
+}
+
+.sidebar-paper {
+    width: auto;
+}
+
+.sidebar-paper-short {
+    max-width: 100px;
+    transition: all 0.5s;
+}
+
+.sidebar-paper-large {
+    max-width: 200px;
+    transition: all 0.5s;
+}
+
+.hiddenLinkText {
+    display: none;
+}
+
+.clickedLinkText {
+    background-color: rgba(0, 0, 0, 0.075) !important;
+}
+
+.menuIcon {
+    margin-right: unset !important;
+}
+
+.roundButton {
+    border-radius: 50% !important;
+
+}
+.menuToggleButton{
+    padding: 10px !important;
+    min-width: 10px !important;
+    margin-left: -12px !important;
+    margin-right: 12px !important;
+}

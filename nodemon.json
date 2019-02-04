@@ -1,0 +1,5 @@
+{
+  "events": {
+    "restart": "qkill 3000"
+  }
+}
