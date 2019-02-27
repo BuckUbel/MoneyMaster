@@ -21,6 +21,22 @@ export function basicDateToString(date: Date, delimiter: string): string {
   return [day, month, year].join(delimiter);
 }
 
+export function addTwentyToYear(s: string, separator: string) {
+  const dateFields = s.split(separator);
+  const day = dateFields[0];
+  const month = dateFields[1];
+  const year = dateFields[2];
+  return day + separator + month + separator + "20" + year;
+}
+
+export function stringToDateWithSeparator(s: string, separator: string): Date {
+  const dateFields = s.split(separator);
+  const day = dateFields[0];
+  const month = dateFields[1];
+  const year = dateFields[2];
+  return new Date(year + "-" + month + "-" + day);
+}
+
 export function stringToDate(s: string): Date {
   return Date.parse(s) ? new Date(Date.parse(s)) : null;
 }

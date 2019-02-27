@@ -18,11 +18,13 @@ export interface IBookingViewProps {
 }
 
 export interface IBookingViewState {
-  upload: any;
+  uploadThing: any;
+  upload: BookingModel[];
 }
 
 const defaultState: IBookingViewState = {
-  upload: {},
+  uploadThing: {},
+  upload: [],
 };
 
 export default class BookingView extends React.Component<IBookingViewProps, IBookingViewState> {
@@ -35,6 +37,7 @@ export default class BookingView extends React.Component<IBookingViewProps, IBoo
     this.resetMonth = this.resetMonth.bind(this);
     this.onChangeFileInput = this.onChangeFileInput.bind(this);
     this.setUploadField = this.setUploadField.bind(this);
+    this.extractBookingsFromFile = this.extractBookingsFromFile.bind(this);
   }
 
   public componentDidMount() {
@@ -52,21 +55,43 @@ export default class BookingView extends React.Component<IBookingViewProps, IBoo
       });
   }
 
-  public onChangeFileInput(files: FileList) {
-    const fr = new FileReader();
-    fr.onload = (event: any) => {
-      const elements: string[] = event.target.result.split("\n");
-      const categories = getStringValues(elements[0], ";")
-      elements.shift();
-      console.log(Object.keys(bookingFields).map((fieldName: string) => {
-        return bookingFields[fieldName];
-      }));
+  public extractBookingsFromFile(event: any) {
+    const {bookings} = this.props;
+    const elements: string[] = event.target.result.split("\n");
+    const categories = getStringValues(elements[0], ";");
+    elements.shift();
+    console.log(Object.keys(bookingFields).map((fieldName: string) => {
+      return bookingFields[fieldName];
+    }));
 
-      const newBookings = elements.map((el: string): IBookingIdentity => {
-        return arrayToBookingModel(getStringValues(el, ";"), categories);
-      });
-      console.log(newBookings);
-    };
+    const newBookings = elements.map((el: string): BookingModel => {
+      return arrayToBookingModel(getStringValues(el, ";"), categories);
+    });
+    console.log(newBookings);
+    const filteredNewBookings = newBookings.filter((booking) => {
+      for (let i = 0; i < bookings.length; i++) {
+        if (bookings[i].equals(booking)) {
+          return false;
+        }
+      }
+      return true;
+    });
+
+    this.setState({upload: filteredNewBookings});
+  }
+
+  public onChangeFileInput(files: FileList) {
+
+    // TODO: Hochladen der Datei
+    //
+    // --> Lesen der Datei
+    //
+    // Überprüfen jedes Eintrages oob er existiert und wenn nicht dann, wird er erstellt
+    // --> Nur Einträge, welche nach dem max-Datum sind, werden zugelassen
+    // --> max- Datum: wird bei jedem Insert gesetzt auf den vorherigen Tag
+
+    const fr = new FileReader();
+    fr.onload = this.extractBookingsFromFile;
     fr.readAsText(files[0]);
   }
 
@@ -76,13 +101,13 @@ export default class BookingView extends React.Component<IBookingViewProps, IBoo
 
   public setUploadField(ref: any) {
     this.setState({
-      upload: ref
+      uploadThing: ref
     });
   }
 
   public render() {
     const {bookings} = this.props;
-    const {upload} = this.state;
+    const {uploadThing} = this.state;
 
     return (
       <Grid item xs={12} container spacing={24}>
@@ -97,7 +122,7 @@ export default class BookingView extends React.Component<IBookingViewProps, IBoo
             }}/>
             <Button color={"secondary"} variant={"contained"} className={"roundButton menuToggleButton"}
                     onClick={(e) => {
-                      upload.click();
+                      uploadThing.click();
                     }}>
               <CloudUploadIcon/>
             </Button>

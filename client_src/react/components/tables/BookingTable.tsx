@@ -99,30 +99,32 @@ export default class BookingTable extends React.Component<IBookingTableProps, {}
 
     let table;
     // let data: IBookingDisplay[] = [];
-    let data: string[][] = [];
-    let header: string[] = [];
+    const data: string[][] = [];
+    const header: string[] = [];
     let nowValue = 0;
-    // if (bookings.length > 0) {
-    //   data = bookings.map((actvitity) => {
-    //     return getDisplayBookingArray(actvitity);
-    //   });
-    //   header = Object.keys(getDisplayBooking(bookings[0])).map((prop) => {
-    //     return (bookingCols.find((col) => {
-    //       return (col.key === prop);
-    //     }).name);
-    //   });
-    //   nowValue = bookings.map((b) => {
-    //     return b.value;
-    //   }).reduce((accumulator: number, currentValue: number) => {
-    //     return accumulator + currentValue;
-    //   });
-    //   table = (<MUIDataTable title={"Buchungen: " + nowValue.toFixed(2) + "€"} columns={header} data={data}
-    //                          options={this.generalOptions}/>);
-    // }
+    if (bookings.length > 0) {
+      //   data = bookings.map((actvitity) => {
+      //     return getDisplayBookingArray(actvitity);
+      //   });
+      //   header = Object.keys(getDisplayBooking(bookings[0])).map((prop) => {
+      //     return (bookingCols.find((col) => {
+      //       return (col.key === prop);
+      //     }).name);
+      //   });
+
+      nowValue = bookings.map((b) => {
+        return b.value;
+      }).reduce((accumulator: number, currentValue: number) => {
+        return accumulator + currentValue;
+      });
+
+      //   table = (<MUIDataTable title={"Buchungen: " + nowValue.toFixed(2) + "€"} columns={header} data={data}
+      //                          options={this.generalOptions}/>);
+    }
 
     return (
       <React.Fragment>
-        {/*{table}*/}
+        {nowValue}
         <Grid container spacing={24}>
           {bookings.sort(compareOnDate).map((booking, index) => {
             return (

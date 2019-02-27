@@ -1,4 +1,4 @@
-import {stringToDate} from "../helper/util";
+import {addTwentyToYear, beautyDateString, stringToDate, stringToDateWithSeparator} from "../helper/util";
 import {number, string} from "prop-types";
 import {Requireable} from "prop-types";
 
@@ -162,12 +162,23 @@ export interface IBookingDisplay {
   [key: string]: any;
 }
 
-export function arrayToBookingModel(arr: string[], categories: string[]): IBookingIdentity {
+export function arrayToBookingModel(arr: string[], categories: string[]): BookingModel {
   // const fields = Object.keys(bookingFields);
   const newElement = new BookingModel();
   Object.keys(bookingFields).map((fieldName: string, index: number) => {
     const categoryIndex = categories.indexOf(bookingFields[fieldName].fieldName);
-    newElement[fieldName] = arr[categoryIndex];
+
+    const typeOfField = bookingFields[fieldName].type;
+
+    if (typeOfField === string) {
+      newElement[fieldName] = arr[categoryIndex] ? arr[categoryIndex].trim() : "";
+    }
+    if (typeOfField === Date) {
+      newElement[fieldName] = arr[categoryIndex] ? stringToDateWithSeparator(addTwentyToYear(arr[categoryIndex], "."), ".") : null;
+    }
+    if (typeOfField === number) {
+      newElement[fieldName] = arr[categoryIndex] ? Number(arr[categoryIndex].replace(",", ".")) : null;
+    }
   });
   return newElement;
   // const fields = Object.keys(bookingFields);
@@ -220,5 +231,47 @@ export class BookingModel implements IBookingIdentity {
     this.value = object && object.value ? parseFloat(object.value.replace(",", ".")) : bookingFields.value.value;
     this.currency = object && object.currency ? object.currency : bookingFields.currency.value;
     this.info = object && object.info ? object.info : bookingFields.info.value;
+  }
+
+  public equals(object: BookingModel): boolean {
+    // TODO: Einige Daten stimmen bisher nicht überein mit denen aus der Datenbank
+    // --> Lösung einmal richtig importieren, danach sollten keine Fehler mehr auftreten
+
+    if (this.orderAccount === object.orderAccount) {
+      if (this.bookingDate && object.bookingDate) {
+        if (this.bookingDate.getTime() === object.bookingDate.getTime()) {
+          if (this.bookingType === object.bookingType) {
+            if (this.purpose === object.purpose) {
+              if (this.believerId === object.believerId) {
+                if (this.mandateReference === object.mandateReference) {
+                  if (this.customerReference === object.customerReference) {
+                    if (this.payPartner === object.payPartner) {
+                      if (this.iban === object.iban) {
+                        if (this.bic === object.bic) {
+                          if (this.value === object.value) {
+                            if (this.currency === object.currency) {
+                              if (this.info === object.info) {
+                                // TODO: Hinweis auf neue Buchung, ander ist veraltet
+                                // if (this.validDate && object.validDate) {
+                                //   if (this.validDate.getTime() === object.validDate.getTime()) {
+                                return true;
+                                // }
+                                // }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return false;
   }
 }
