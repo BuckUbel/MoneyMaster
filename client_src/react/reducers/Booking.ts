@@ -20,9 +20,6 @@ export default (state: IState = defaultState, action: IResultAction) => {
     case ActionTypes.EDIT_BOOKING_SUCCESS: {
       return state;
     }
-    case ActionTypes.LOAD_MULTIPLE_BOOKING_SUCCESS: {
-      return state;
-    }
     case ActionTypes.LOAD_ALL_BOOKING_FAILURE: {
       return state;
     }

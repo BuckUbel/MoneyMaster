@@ -162,6 +162,8 @@ export interface IBookingDisplay {
   [key: string]: any;
 }
 
+export type objectStatus = "add" | "update" | "ignore";
+
 export function arrayToBookingModel(arr: string[], categories: string[]): BookingModel {
   // const fields = Object.keys(bookingFields);
   const newElement = new BookingModel();
@@ -233,37 +235,37 @@ export class BookingModel implements IBookingIdentity {
     this.info = object && object.info ? object.info : bookingFields.info.value;
   }
 
-  public equals(object: BookingModel): boolean {
+  public equals(object: BookingModel): objectStatus {
     // TODO: Einige Daten stimmen bisher nicht überein mit denen aus der Datenbank
     // --> Lösung einmal richtig importieren, danach sollten keine Fehler mehr auftreten
 
     if (this.orderAccount === object.orderAccount) {
-      if (this.bookingDate && object.bookingDate) {
-        if (this.bookingDate.getTime() === object.bookingDate.getTime()) {
-          if (this.bookingType === object.bookingType) {
-            if (this.purpose === object.purpose) {
-              if (this.believerId === object.believerId) {
-                if (this.mandateReference === object.mandateReference) {
-                  if (this.customerReference === object.customerReference) {
-                    if (this.payPartner === object.payPartner) {
-                      if (this.iban === object.iban) {
-                        if (this.bic === object.bic) {
-                          if (this.value === object.value) {
-                            if (this.currency === object.currency) {
-                              if (this.info === object.info) {
-                                // TODO: Hinweis auf neue Buchung, ander ist veraltet
-                                // if (this.validDate && object.validDate) {
-                                //   if (this.validDate.getTime() === object.validDate.getTime()) {
-                                return true;
-                                // }
+      if (this.bookingType === object.bookingType) {
+        if (this.purpose === object.purpose) {
+          if (this.believerId === object.believerId) {
+            if (this.mandateReference === object.mandateReference) {
+              if (this.customerReference === object.customerReference) {
+                if (this.payPartner === object.payPartner) {
+                  if (this.iban === object.iban) {
+                    if (this.bic === object.bic) {
+                      if (this.value === object.value) {
+                        if (this.currency === object.currency) {
+                          if (this.info === object.info) {
+                            if (compareDateData(this.bookingDate, object.bookingDate)) {
+                              // if (this.bookingDate.getTime() === object.bookingDate.getTime()) {
+                              // Hinweis auf neue Buchung, andere sind veraltet
+                              if (compareDateData(this.validDate, object.validDate)) {
+                                // if (this.validDate.getTime() === object.validDate.getTime()) {
+                                return "ignore";
                                 // }
                               }
+                              return "update";
                             }
+                            // }
                           }
                         }
                       }
                     }
-
                   }
                 }
               }
@@ -272,6 +274,19 @@ export class BookingModel implements IBookingIdentity {
         }
       }
     }
-    return false;
+    return "add";
+
   }
+}
+
+export function compareDateData(d1: Date, d2: Date): boolean {
+  if (d1 && d2) {
+    if (d1.getTime() === d2.getTime()) {
+      return true;
+    }
+  }
+  if (!d1 && !d2) {
+    return true;
+  }
+  return false;
 }

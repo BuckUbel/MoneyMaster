@@ -16,10 +16,6 @@ export enum ActionTypes {
   EDIT_BOOKING_SUCCESS = "EDIT_BOOKING_SUCCESS",
   EDIT_BOOKING_FAILURE = "EDIT_BOOKING_FAILURE",
 
-  LOAD_MULTIPLE_BOOKING_REQUEST = "LOAD_MULTIPLE_BOOKING_REQUEST",
-  LOAD_MULTIPLE_BOOKING_SUCCESS = "LOAD_MULTIPLE_BOOKING_SUCCESS",
-  LOAD_MULTIPLE_BOOKING_FAILURE = "LOAD_MULTIPLE_BOOKING_FAILURE",
-
   LOAD_ALL_BOOKING_REQUEST = "LOAD_BOOKING_REQUEST",
   LOAD_ALL_BOOKING_SUCCESS = "LOAD_ALL_BOOKING_SUCCESS",
   LOAD_ALL_BOOKING_FAILURE = "LOAD_ALL_BOOKING_FAILURE",
@@ -46,11 +42,11 @@ export const addBookingFailAction = (bookings: IBookingIdentity[], code: string,
   });
 };
 
-export const addBookingAction = (booking: IBookingIdentity): ICallApiAction => {
+export const addBookingAction = (bookings: IBookingIdentity[]): ICallApiAction => {
   return ({
     endpoint: "api/bookings/add",
     payload: {
-      element: booking,
+      element: bookings,
     },
     method: "post",
     type: ActionTypes.ADD_BOOKING_REQUEST,
@@ -93,11 +89,11 @@ export const editBookingFailAction = (bookings: IBookingIdentity[], code: string
   });
 };
 
-export const editBookingAction = (booking: IBookingIdentity): ICallApiAction => {
+export const editBookingAction = (bookings: IBookingIdentity[]): ICallApiAction => {
   return ({
     endpoint: "api/bookings/edit",
     payload: {
-      element: booking,
+      element: bookings,
     },
     method: "post",
     type: ActionTypes.EDIT_BOOKING_REQUEST,
@@ -106,45 +102,6 @@ export const editBookingAction = (booking: IBookingIdentity): ICallApiAction => 
   });
 };
 
-export const loadMultipleBookingSuccessAction = (bookings: IBookingIdentity[]): ISuccessAction => {
-  return ({
-    response: {
-      success: true,
-      data: bookings,
-    },
-    type: ActionTypes.LOAD_MULTIPLE_BOOKING_SUCCESS,
-  });
-};
-
-// (bookings: IBookingIdentity[]): ISuccessAction {
-// response: {
-//   success: true,
-//   data: bookings,
-// },
-// type: ActionTypes.LOAD_MULTIPLE_BOOKING_SUCCESS,
-//
-// });
-export const loadMultipleBookingFailAction
-  = (bookings: IBookingIdentity[], code: string, message: string): IFailAction => {
-  return ({
-    type: ActionTypes.LOAD_MULTIPLE_BOOKING_FAILURE,
-    error: {message, code},
-    responseData: {bookings},
-  });
-};
-
-export const loadMultipleBookingAction = (ids: number[]): ICallApiAction => {
-  return ({
-    endpoint: "api/bookings/loadmultiple",
-    payload: {
-      ids,
-    },
-    method: "post",
-    type: ActionTypes.LOAD_MULTIPLE_BOOKING_REQUEST,
-    successAction: loadMultipleBookingSuccessAction,
-    failAction: loadMultipleBookingFailAction,
-  });
-};
 
 export const loadAllBookingSuccessAction = (bookings: IBookingIdentity[]): ISuccessAction => {
   return ({

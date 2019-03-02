@@ -3,7 +3,7 @@ import {
   arrayToBookingModel,
   bookingFields,
   BookingModel,
-  IBookingIdentity, IDBCol,
+  IBookingIdentity,
 } from "../../model/BookingModel";
 import Button from "@material-ui/core/Button";
 import BookingTable from "../tables/BookingTable";
@@ -14,7 +14,8 @@ import {getStringValues} from "../../helper/util";
 export interface IBookingViewProps {
   bookings: BookingModel[];
   fetchAllBookings: () => Promise<any>;
-  fetchBookingsForGantt: (from: Date, to: Date) => Promise<any>;
+  addBookings: (bookings: IBookingIdentity[]) => Promise<any>;
+  editBookings: (bookings: IBookingIdentity[]) => Promise<any>;
 }
 
 export interface IBookingViewState {
@@ -58,26 +59,44 @@ export default class BookingView extends React.Component<IBookingViewProps, IBoo
   public extractBookingsFromFile(event: any) {
     const {bookings} = this.props;
     const elements: string[] = event.target.result.split("\n");
+    elements.pop();
     const categories = getStringValues(elements[0], ";");
     elements.shift();
-    console.log(Object.keys(bookingFields).map((fieldName: string) => {
-      return bookingFields[fieldName];
-    }));
 
     const newBookings = elements.map((el: string): BookingModel => {
       return arrayToBookingModel(getStringValues(el, ";"), categories);
     });
-    console.log(newBookings);
-    const filteredNewBookings = newBookings.filter((booking) => {
-      for (let i = 0; i < bookings.length; i++) {
-        if (bookings[i].equals(booking)) {
+
+    const updateBookings: BookingModel[] = [];
+    const reallyNewBookings = newBookings.filter((newBooking) => {
+
+      // let isContained = false;
+      return bookings.every((oldBooking) => {
+        const bookingStatus = oldBooking.equals(newBooking);
+        if (bookingStatus === "ignore") {
+          // isContained = true;
           return false;
         }
-      }
-      return true;
+        if (bookingStatus === "update") {
+          updateBookings.push(newBooking);
+          // isContained = true;
+          return false;
+        }
+        return true;
+      });
+      // if every is "add"
+      // return !isContained;
     });
 
-    this.setState({upload: filteredNewBookings});
+    this.props.addBookings(reallyNewBookings)
+      .then(() => {
+        // return this.props.editBookings(updateBookings);
+      }).then(() => {
+      console.log("Success");
+    }).catch((err) => {
+      console.log("Error: " + err);
+    });
+    // this.setState({upload: reallyNewBookings});
   }
 
   public onChangeFileInput(files: FileList) {

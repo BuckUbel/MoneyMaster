@@ -1,9 +1,10 @@
 import * as dotenv from "dotenv";
 import express from "express";
 import path from "path";
+import bodyParser from "body-parser";
 
-import { ExpressServer, IDBConfig, IServerConfig } from "./expressServer";
-import { Database, IDatabase } from "./database";
+import {ExpressServer, IDBConfig, IServerConfig} from "./expressServer";
+import {Database, IDatabase} from "./database";
 import ServerRoutes from "./routes";
 import {beautyDateTimeString} from "./util";
 
@@ -30,7 +31,8 @@ const serverConfig: IServerConfig = {
 };
 
 const server = new ExpressServer(app, database, serverConfig, router);
-
+app.use(bodyParser.urlencoded({limit: "50mb", extended: true}));
+app.use(bodyParser.json({limit: "50mb"}));
 // add JS, CSS
 app.use(express.static(server.serverConfig.publicDir));
 

@@ -10,7 +10,7 @@
     "server": "nodemon -L ./private/index.js",
     "preBuild:server": "tslint -c tslint.server.json -p tsconfig.server.json --fix",
     "build:server": "tsc -p tsconfig.server.json -w",
-    "start:server": "nodemon -L --watch ./private --delay 2.5 ./private/index.js"
+    "start:server": "nodemon %NODE_DEBUG_OPTION% -L --watch ./private --delay 2.5 ./private/index.js"
   },
   "license": "ISC",
   "dependencies": {
