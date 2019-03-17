@@ -35,7 +35,7 @@ export default class Booking extends React.Component<IBookingProps, {}> {
       info,
     } = this.props.entity;
 
-    const money = value + " " + currency;
+    const money = value.toFixed(2) + " " + currency;
     const valueColor = value < 0 ? "#f00" : "#0b0";
     const avatarSize = Math.abs(value) > 100 ? 45 : 25;
 

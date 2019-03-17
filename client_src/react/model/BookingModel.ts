@@ -236,9 +236,9 @@ export class BookingModel implements IBookingIdentity {
   }
 
   public equals(object: BookingModel): objectStatus {
-    // TODO: Einige Daten stimmen bisher nicht überein mit denen aus der Datenbank
-    // --> Lösung einmal richtig importieren, danach sollten keine Fehler mehr auftreten
-
+    if (object.info === "Umsatz vorgemerkt") {
+      return "ignore";
+    }
     if (this.orderAccount === object.orderAccount) {
       if (this.bookingType === object.bookingType) {
         if (this.purpose === object.purpose) {
@@ -261,6 +261,7 @@ export class BookingModel implements IBookingIdentity {
                               }
                               return "update";
                             }
+
                             // }
                           }
                         }
