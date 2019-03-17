@@ -51,8 +51,8 @@ export class Booking implements IBookingsObjectProps {
 
   public id: number;
   public orderAccount: string;
-  public bookingDate: string;
-  public validDate: string;
+  public bookingDate: Date;
+  public validDate: Date;
   public bookingType: string;
   public purpose: string;
   public believerId: string;
@@ -70,8 +70,8 @@ export class Booking implements IBookingsObjectProps {
   public constructor(object: IBookingsObjectPropsFromRequest) {
     this.id = object.id;
     this.orderAccount = object.orderAccount;
-    this.bookingDate = dateTo_YMDHMS_String(new Date(object.bookingDate));
-    this.validDate = dateTo_YMDHMS_String(new Date(object.validDate));
+    this.bookingDate = new Date(object.bookingDate);
+    this.validDate = new Date(object.validDate);
     this.bookingType = object.bookingType;
     this.purpose = object.purpose;
     this.believerId = object.believerId;
@@ -254,7 +254,7 @@ export async function insertABooking(db: IDatabase, bookings: IBookingsObjectPro
     "INSERT INTO " + tableName + " (" + rowNames + ") VALUES " + values + ""
   );
 
-  return db.sqlQuery("",
+  return db.sqlQuery(queryString,
   ).then((rows: Query) => {
     return rows;
   }).catch((error) => {

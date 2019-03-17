@@ -8,7 +8,7 @@ import {
 import Button from "@material-ui/core/Button";
 import BookingTable from "../tables/BookingTable";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import {Divider, Grid} from "@material-ui/core";
+import {Divider, Grid, Typography} from "@material-ui/core";
 import {getStringValues} from "../../helper/util";
 
 export interface IBookingViewProps {
@@ -127,7 +127,14 @@ export default class BookingView extends React.Component<IBookingViewProps, IBoo
   public render() {
     const {bookings} = this.props;
     const {uploadThing} = this.state;
-
+    let nowValue = 0;
+    if (bookings.length > 0) {
+      nowValue = bookings.map((b) => {
+        return b.value;
+      }).reduce((accumulator: number, currentValue: number) => {
+        return accumulator + currentValue;
+      });
+    }
     return (
       <Grid item xs={12} container spacing={24}>
         {/*<Grid item>*/}
@@ -145,6 +152,11 @@ export default class BookingView extends React.Component<IBookingViewProps, IBoo
                     }}>
               <CloudUploadIcon/>
             </Button>
+          </Grid>
+          <Grid item key={3}>
+            <Typography component={"h2"}>
+              {nowValue.toFixed(2) + " €"}
+            </Typography>
           </Grid>
         </Grid>
         <Grid item xs={12} key={2}>
