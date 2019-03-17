@@ -1,3 +1,6 @@
+import {promisify} from "util";
+import fs from "fs";
+
 const puppeteer = require("puppeteer");
 const path = require("path");
 require("dotenv").config();
@@ -11,13 +14,15 @@ const waitTimeForGoto: number = 1000;
 const waitTimeForDisplayChanging: number = 10000;
 const waitTimeForDownload: number = 5000;
 
-const downloadPath: string = path.resolve(__dirname + process.env.DOWNLOAD_DIR);
-
 const homeURL: string = "https://www.spk-burgenlandkreis.de/de/home.html";
 const bookingsURL: string = "https://www.spk-burgenlandkreis.de/de/home/onlinebanking/" +
   "umsaetze/umsaetze.html?n=true&stref=hnav";
 
-export async function getCSVDataFromSPKBLK() {
+const readdir = promisify(fs.readdir);
+const stat = promisify(fs.stat);
+const unlink = promisify(fs.unlink);
+
+export async function getCSVDataFromSPKBLK(downloadPath: string) {
 
   const browser = await puppeteer.launch({
     headless: true

@@ -2,6 +2,7 @@ import {IDBCol} from "./DefaultModel";
 import {IDatabase} from "../../database";
 import {any, bool, number, string} from "prop-types";
 import {Query} from "mysql";
+import {BookingModel, IBookingIdentityDefaultStringValues} from "./BookingModel";
 
 export interface IBookingsObjectPropsFromRequest {
   id?: number;
@@ -26,8 +27,8 @@ export interface IBookingsObjectPropsFromRequest {
 export interface IBookingsObjectProps {
   id?: number;
   orderAccount?: string;
-  bookingDate?: Date;
-  validDate?: Date;
+  bookingDate?: string;
+  validDate?: string;
   bookingType?: string;
   purpose?: string;
   believerId?: string;
@@ -51,8 +52,8 @@ export class Booking implements IBookingsObjectProps {
 
   public id: number;
   public orderAccount: string;
-  public bookingDate: Date;
-  public validDate: Date;
+  public bookingDate: string;
+  public validDate: string;
   public bookingType: string;
   public purpose: string;
   public believerId: string;
@@ -67,11 +68,11 @@ export class Booking implements IBookingsObjectProps {
 
   [key: string]: any;
 
-  public constructor(object: IBookingsObjectPropsFromRequest) {
+  public constructor(object: BookingModel) {
     this.id = object.id;
     this.orderAccount = object.orderAccount;
-    this.bookingDate = new Date(object.bookingDate);
-    this.validDate = new Date(object.validDate);
+    this.bookingDate = dateTo_YMDHMS_String(new Date(object.bookingDate));
+    this.validDate = dateTo_YMDHMS_String(new Date(object.validDate));
     this.bookingType = object.bookingType;
     this.purpose = object.purpose;
     this.believerId = object.believerId;
@@ -204,22 +205,11 @@ export async function loadAllBookingsFromDB(db: IDatabase, limit?: number) {
     queryString += "LIMIT " + limit + " ";
   }
 
-  return db.sqlQuery(queryString,
-  ).then((rows: Query) => {
-    return rows;
-  }).catch((error) => {
-    return error;
-  });
+  return await db.sqlQuery(queryString);
 }
 
-export async function insertABooking(db: IDatabase, bookings: IBookingsObjectPropsFromRequest[]) {
+export async function insertABooking(db: IDatabase, bookings: BookingModel[]) {
 
-  // const rowNamesArray = Object.keys(bookingFields).map((key) => {
-  //   if (key === "id") {
-  //     return "";
-  //   }
-  //   return bookingFields[key].fieldName;
-  // });
   const rowNamesArray = Object.keys(bookingFields).reduce((filtered: any[], key) => {
     if (key !== "id") {
       filtered.push(bookingFields[key].fieldName);
@@ -229,12 +219,6 @@ export async function insertABooking(db: IDatabase, bookings: IBookingsObjectPro
   const rowNames = rowNamesArray.join(", ");
 
   const bookingStringArray: string[] = bookings.map((booking): string => {
-    // const valueArray = Object.keys(new Booking(booking)).map((key) => {
-    //   if (key === "id") {
-    //     return "";
-    //   }
-    //   return booking[key];
-    // });
     const newBooking = new Booking(booking);
     const valueArray = Object.keys(newBooking).reduce((filtered: any[], key) => {
       if (key !== "id") {
@@ -247,19 +231,11 @@ export async function insertABooking(db: IDatabase, bookings: IBookingsObjectPro
   });
 
   const values = bookingStringArray.join(", ");
-  // const valueArray = Object.keys(booking).map((key) => booking[key]);
-  // const values = "'" + valueArray.join("', '") + "'";
 
   const queryString = (
     "INSERT INTO " + tableName + " (" + rowNames + ") VALUES " + values + ""
   );
-
-  return db.sqlQuery(queryString,
-  ).then((rows: Query) => {
-    return rows;
-  }).catch((error) => {
-    return error;
-  });
+  return await db.sqlQuery(queryString);
 }
 
 export async function updateABooking(db: IDatabase, booking: IBookingsObjectProps) {
@@ -277,7 +253,7 @@ export async function updateABooking(db: IDatabase, booking: IBookingsObjectProp
   );
 
   return db.sqlQuery("",
-  ).then((rows: Query) => {
+  ).then((rows: any[]) => {
     return rows;
   }).catch((error) => {
     return error;
