@@ -12,6 +12,7 @@ export interface IDBConfig {
 export interface IServerConfig {
   publicDir: string;
   entryFile: string;
+  downloadPath: string;
   port: number;
 }
 

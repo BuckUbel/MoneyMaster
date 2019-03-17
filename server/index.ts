@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 import express from "express";
 import path from "path";
 import bodyParser from "body-parser";
+import {CronJob} from "cron";
 
 import {ExpressServer, IDBConfig, IServerConfig} from "./expressServer";
 import {Database, IDatabase} from "./database";
@@ -28,6 +29,7 @@ const database: IDatabase = new Database(dbConfig);
 const serverConfig: IServerConfig = {
   publicDir: path.join(__dirname, process.env.WEB_PUBLIC_DIR),
   entryFile: path.join(__dirname, process.env.WEB_PUBLIC_DIR, process.env.WEB_INDEX_HTML),
+  downloadPath: path.resolve(__dirname + process.env.DOWNLOAD_DIR),
   port: parseInt(process.env.WEB_PORT, 0),
 };
 
@@ -45,8 +47,17 @@ app.listen(server.serverConfig.port, () => {
   console.log("App is listening on : " + server.serverConfig.port);
 });
 
-// getCSVDataFromSPKBLK().then(() => {
-// //   console.log("CSV is downloaded.");
-// // }).catch(() => {
-// //   console.log("CSV is false downloaded.");
-// // });
+const job = new CronJob("0 0 */6 * * *", () => {
+    console.log("Cron Job to download CSV is started.");
+    getCSVDataFromSPKBLK(server.serverConfig.downloadPath).then(() => {
+      console.log("CSV is downloaded.");
+    }).catch(() => {
+      console.log("CSV is false downloaded.");
+    });
+  }, () => {
+    /* This function is executed when the job stops */
+    console.error("Der Cronjob endete unerwartet");
+  },
+  true /* Start the job right now */
+  /* Time zone of this job. */
+);

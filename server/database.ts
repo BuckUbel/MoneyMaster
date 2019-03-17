@@ -5,7 +5,7 @@ export interface IDatabase {
   config: IDBConfig;
   connection: Connection;
   store: any;
-  sqlQuery: (query: string) => Promise<Query>;
+  sqlQuery: (query: string) => Promise<any[]>;
   init: () => void;
 }
 
@@ -22,7 +22,7 @@ export class Database implements IDatabase {
     this.init();
   }
 
-  public async sqlQuery(query: string): Promise<Query> {
+  public async sqlQuery(query: string): Promise<any[]> {
 
     if (this.connection) {
 
