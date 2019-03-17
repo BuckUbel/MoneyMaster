@@ -7,6 +7,7 @@ import {ExpressServer, IDBConfig, IServerConfig} from "./expressServer";
 import {Database, IDatabase} from "./database";
 import ServerRoutes from "./routes";
 import {beautyDateTimeString} from "./util";
+import {getCSVDataFromSPKBLK} from "./puppeteer/SPK-BLK";
 
 dotenv.config();
 
@@ -43,3 +44,9 @@ app.listen(server.serverConfig.port, () => {
   console.log("Start Time : " + beautyDateTimeString(new Date()));
   console.log("App is listening on : " + server.serverConfig.port);
 });
+
+// getCSVDataFromSPKBLK().then(() => {
+// //   console.log("CSV is downloaded.");
+// // }).catch(() => {
+// //   console.log("CSV is false downloaded.");
+// // });
