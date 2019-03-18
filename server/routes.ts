@@ -158,8 +158,12 @@ export default class ServerRoutes {
           console.log(e);
         }
         try {
-          await insertABooking(this.server.database, result.addBookings);
+          if (result.addBookings.length > 0) {
+            await insertABooking(this.server.database, result.addBookings);
+          }
+          // if (result.editBookings.length > 0) {
           // await updateABooking(this.server.database, result.editBookings);
+          // }
 
           console.log("Bookings are imported.");
         } catch (e) {
