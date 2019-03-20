@@ -3,6 +3,7 @@ node_modules
 dist
 .env
 
+*.map
 Coverage
 coverage
 /.idea

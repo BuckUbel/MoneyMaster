@@ -4,13 +4,14 @@
   "description": "Express, Webpack, React, Typescript(Client)",
   "main": "index.js",
   "scripts": {
-    "buildDev:client": "webpack --mode development --config webpack.dev.config.js",
-    "buildProd:client": "webpack --mode production --config webpack.prod.config.js",
     "building:client": " webpack --mode development --watch --config webpack.dev.config.js ",
+    "build:dev:client": "webpack --mode development --config webpack.dev.config.js",
+    "build:prod:client": "webpack --mode production --config webpack.prod.config.js",
     "server": "nodemon -L ./private/index.js",
-    "preBuild:server": "tslint -c tslint.server.json -p tsconfig.server.json --fix",
     "build:server": "tsc -p tsconfig.server.json -w",
-    "start:server": "nodemon %NODE_DEBUG_OPTION% -L --watch ./private --delay 2.5 ./private/index.js"
+    "start:server": "nodemon %NODE_DEBUG_OPTION% -L --watch ./private --delay 2.5 ./private/index.js",
+    "build:prod:server": "tsc -p tsconfig.server.prod.json",
+    "start:prod:server": "node ./productive/index.js"
   },
   "license": "ISC",
   "dependencies": {

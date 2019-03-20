@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./productive/",
+    "module": "commonjs",
+    "target": "es6",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "sourceMap": false,
+    "inlineSources": false,
+    "allowJs": true,
+    "moduleResolution": "node",
+    "rootDir": "./server/",
+    "noImplicitAny": true,
+    "keyofStringsOnly": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "./server/"
+  ],
+  "exclude": [
+    "node_modules/"
+  ]
+}

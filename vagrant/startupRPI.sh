@@ -7,6 +7,7 @@ echo "------------"
 sudo apt-get update -y
 sudo apt-get upgrade -y
 sudo apt install -y mc zip unzip
+alias ll='ls -alF'
 
 # prepare mysql
 echo "-----------------"
@@ -25,6 +26,7 @@ sudo apt install -y nodejs
 
 sudo npm install yarn pm2 pm2-logrotate -g
 cd /home/pi/MoneyMaster
+mkdir download
 sudo yarn install -y
 
 
