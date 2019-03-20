@@ -1,0 +1,8 @@
+{
+  "apps":[
+    {
+      "name":"MoneyMaster",
+      "script":"private/index.js"
+    }
+  ]
+}
