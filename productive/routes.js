@@ -35,6 +35,7 @@ class ServerRoutes {
     }
     loadDataFromSPKBLK() {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("Start downloading CSV from SPK BLK");
             let result = {
                 addBookings: [],
                 editBookings: [],
