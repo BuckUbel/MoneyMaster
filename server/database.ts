@@ -1,5 +1,12 @@
 import mysql, { Connection, FieldInfo, MysqlError, Query } from "mysql";
-import { IDBConfig } from "./expressServer";
+
+export interface IDBConfig {
+  host: string | undefined;
+  port: number | undefined;
+  databaseName: string | undefined;
+  user: string | undefined;
+  password: string | undefined;
+}
 
 export interface IDatabase {
   config: IDBConfig;
