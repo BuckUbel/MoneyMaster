@@ -35,6 +35,7 @@ export default class ServerRoutes {
   }
 
   public async loadDataFromSPKBLK() {
+    console.log("Start downloading CSV from SPK BLK");
     let result: IDifferentExportedBookings = {
       addBookings: [],
       editBookings: [],
