@@ -4,12 +4,12 @@ import {
   bookingFields,
   BookingModel,
   IBookingIdentity,
-} from "../../model/BookingModel";
+} from "../../../../base/model/BookingModel";
 import Button from "@material-ui/core/Button";
 import BookingTable from "../tables/BookingTable";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import {Divider, Grid, Typography} from "@material-ui/core";
-import {getStringValues} from "../../helper/util";
+import {getStringValues} from "../../../../base/helper/util";
 
 export interface IBookingViewProps {
   bookings: BookingModel[];

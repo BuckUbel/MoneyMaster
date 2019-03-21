@@ -1,5 +1,5 @@
 import { IFailAction, IResultAction, ISuccessAction } from "../api";
-import { BookingModel, IBookingIdentity, IBookingIdentityDefaultStringValues } from "../model/BookingModel";
+import { BookingModel, IBookingIdentity, IBookingIdentityDefaultStringValues } from "../../../base/model/BookingModel";
 import { ActionTypes } from "../actions/Booking";
 
 export interface IState {

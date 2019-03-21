@@ -1,7 +1,7 @@
 import { ICallApiAction, IFailAction, ISuccessAction } from "../api";
 import { Action } from "redux";
 import { IBookingIdentity } from "../model/BookingModel";
-import { dateToDayString } from "../helper/util";
+import { dateToDayString } from "../../../base/helper/util";
 
 export enum ActionTypes {
   ADD_BOOKING_REQUEST = "ADD_BOOKING_REQUEST",

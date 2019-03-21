@@ -12,13 +12,14 @@
     "inlineSources": false,
     "allowJs": true,
     "moduleResolution": "node",
-    "rootDir": "./server/",
+    "rootDir": "./",
     "noImplicitAny": true,
     "keyofStringsOnly": true,
     "esModuleInterop": true
   },
   "include": [
-    "./server/"
+    "./server/",
+    "./base/"
   ],
   "exclude": [
     "node_modules/"
