@@ -1,3 +1,5 @@
+import {Requireable} from "prop-types";
+
 export function dateToDayString(date: Date): string {
   return basicDateToString(date, "-");
 }
@@ -147,4 +149,21 @@ export function getStringValues(element: string, separator: string): string[] {
   return element.split(separator).map((p: string): string => {
     return p ? p.replace(/[\"]/gi, "") : "";
   });
+}
+
+export function dateToDatabaseDateString(d: Date, separator: string): string {
+  const day = d.getDate();
+  const month = d.getMonth() + 1;
+  const year = d.getFullYear();
+  return year + separator + month + separator + day;
+}
+
+export function dateTo_YMDHMS_String(d: Date): string {
+  return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+}
+
+export interface IDBCol<T> {
+  fieldName: string;
+  value: T;
+  type: Requireable<T> | DateConstructor;
 }

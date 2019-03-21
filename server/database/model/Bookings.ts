@@ -1,54 +1,10 @@
-import {IDBCol} from "./DefaultModel";
 import {IDatabase} from "../../database";
-import {any, bool, number, string} from "prop-types";
-import {Query} from "mysql";
-import {BookingModel, IBookingIdentityDefaultStringValues} from "./BookingModel";
+import {bookingFields, BookingModel, IBookingDatabase} from "../../../base/model/BookingModel";
+import {dateTo_YMDHMS_String} from "../../../base/helper/util";
 
-export interface IBookingsObjectPropsFromRequest {
-  id?: number;
-  orderAccount?: string;
-  bookingDate?: string;
-  validDate?: string;
-  bookingType?: string;
-  purpose?: string;
-  believerId?: string;
-  mandateReference?: string;
-  customerReference?: string;
-  payPartner?: string;
-  iban?: string;
-  bic?: string;
-  value?: number;
-  currency?: string;
-  info?: string;
+const tableName: string = process.env.BOOKING_TABLE_NAME;
 
-  [key: string]: any;
-}
-
-export interface IBookingsObjectProps {
-  id?: number;
-  orderAccount?: string;
-  bookingDate?: string;
-  validDate?: string;
-  bookingType?: string;
-  purpose?: string;
-  believerId?: string;
-  mandateReference?: string;
-  customerReference?: string;
-  payPartner?: string;
-  iban?: string;
-  bic?: string;
-  value?: number;
-  currency?: string;
-  info?: string;
-
-  [key: string]: any;
-}
-
-export function dateTo_YMDHMS_String(d: Date): string {
-  return d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-}
-
-export class Booking implements IBookingsObjectProps {
+export class Booking implements IBookingDatabase {
 
   public id: number;
   public orderAccount: string;
@@ -85,108 +41,7 @@ export class Booking implements IBookingsObjectProps {
     this.currency = object.currency;
     this.info = object.info;
   }
-
 }
-
-interface IBookingsFields {
-  id?: IDBCol<number>;
-  orderAccount?: IDBCol<string>;
-  bookingDate?: IDBCol<Date>;
-  validDate?: IDBCol<Date>;
-  bookingType?: IDBCol<string>;
-  purpose?: IDBCol<string>;
-  believerId?: IDBCol<string>;
-  mandateReference?: IDBCol<string>;
-  customerReference?: IDBCol<string>;
-  payPartner?: IDBCol<string>;
-  iban?: IDBCol<string>;
-  bic?: IDBCol<string>;
-  value?: IDBCol<string>;
-  currency?: IDBCol<string>;
-  info?: IDBCol<string>;
-
-  [key: string]: any;
-}
-
-export const bookingFields: IBookingsFields = {
-  id: {
-    fieldName: "id",
-    value: null,
-    type: number,
-  },
-  orderAccount: {
-    fieldName: "orderAccount",
-    value: "",
-    type: string,
-  },
-  bookingDate: {
-    fieldName: "bookingDate",
-    value: null,
-    type: Date,
-  },
-  validDate: {
-    fieldName: "validDate",
-    value: null,
-    type: Date,
-  },
-  bookingType: {
-    fieldName: "bookingType",
-    value: "",
-    type: string,
-  },
-  purpose: {
-    fieldName: "purpose",
-    value: "",
-    type: string,
-  },
-  believerId: {
-    fieldName: "believerId",
-    value: "",
-    type: string,
-  },
-  mandateReference: {
-    fieldName: "mandateReference",
-    value: "",
-    type: string,
-  },
-  customerReference: {
-    fieldName: "customerReference",
-    value: "",
-    type: string,
-  },
-  payPartner: {
-    fieldName: "payPartner",
-    value: "",
-    type: string,
-  },
-  iban: {
-    fieldName: "iban",
-    value: "",
-    type: string,
-  },
-  bic: {
-    fieldName: "bic",
-    value: "",
-    type: string,
-  },
-  value: {
-    fieldName: "value",
-    value: "",
-    type: string,
-  },
-  currency: {
-    fieldName: "currency",
-    value: "",
-    type: string,
-  },
-  info: {
-    fieldName: "info",
-    value: "",
-    type: string,
-  },
-};
-
-const tableName: string = "bookings";
 
 export async function loadAllBookingsFromDB(db: IDatabase, limit?: number) {
 
@@ -238,7 +93,7 @@ export async function insertABooking(db: IDatabase, bookings: BookingModel[]) {
   return await db.sqlQuery(queryString);
 }
 
-export async function updateABooking(db: IDatabase, booking: IBookingsObjectProps) {
+export async function updateABooking(db: IDatabase, booking: IBookingDatabase) {
 
   const rowNamesArray = Object.keys(bookingFields).map((key) => {
     return bookingFields[key].fieldName + " as " + key;
