@@ -6,7 +6,6 @@ import {
 } from "../helper/util";
 import {number, string} from "prop-types";
 
-
 interface IBookingsFields {
   id?: IDBCol<number>;
   orderAccount?: IDBCol<string>;
@@ -121,6 +120,8 @@ export interface IBookingIdentityDefaultStringValues {
   value: string;
   currency: string;
   info: string;
+
+  [key: string]: any;
 }
 
 export interface IBookingIdentity {
@@ -139,6 +140,8 @@ export interface IBookingIdentity {
   value: number;
   currency: string;
   info: string;
+
+  [key: string]: any;
 }
 
 export interface IBookingDatabase {
@@ -174,10 +177,17 @@ export function arrayToBookingModel(arr: string[], categories: string[]): Bookin
       newElement[fieldName] = arr[categoryIndex] ? arr[categoryIndex].trim() : "";
     }
     if (typeOfField === Date) {
-      newElement[fieldName] = arr[categoryIndex] ? stringToDateWithSeparator(addTwentyToYear(arr[categoryIndex], "."), ".") : null;
+      newElement[fieldName] = null;
+      if (arr[categoryIndex]) {
+        const withTwenty = addTwentyToYear(arr[categoryIndex], ".");
+        newElement[fieldName] = stringToDateWithSeparator(withTwenty, ".");
+      }
     }
     if (typeOfField === number) {
-      newElement[fieldName] = arr[categoryIndex] ? Number(arr[categoryIndex].replace(",", ".")) : null;
+      newElement[fieldName] = null;
+      if (arr[categoryIndex]) {
+        newElement[fieldName] = Number(arr[categoryIndex].replace(",", "."));
+      }
     }
   });
   return newElement;
@@ -210,13 +220,22 @@ export class BookingModel implements IBookingIdentity {
     this.id = object && object.id ? Number(object.id) : bookingFields.id.value;
     this.orderAccount = object && object.orderAccount ? object.orderAccount : bookingFields.orderAccount.value;
     this.orderAccount = object && object.orderAccount ? object.orderAccount : bookingFields.orderAccount.value;
-    this.bookingDate = object && object.bookingDate ? stringToDate(object.bookingDate) : bookingFields.bookingDate.value;
+    this.bookingDate = bookingFields.bookingDate.value;
+    if (object && object.bookingDate) {
+      this.bookingDate = stringToDate(object.bookingDate);
+    }
     this.validDate = object && object.validDate ? stringToDate(object.validDate) : bookingFields.validDate.value;
     this.bookingType = object && object.bookingType ? object.bookingType : bookingFields.bookingType.value;
     this.purpose = object && object.purpose ? object.purpose : bookingFields.purpose.value;
     this.believerId = object && object.believerId ? object.believerId : bookingFields.believerId.value;
-    this.mandateReference = object && object.mandateReference ? object.mandateReference : bookingFields.mandateReference.value;
-    this.customerReference = object && object.customerReference ? object.customerReference : bookingFields.customerReference.value;
+    this.mandateReference = bookingFields.mandateReference.value;
+    if (object && object.mandateReference) {
+      this.mandateReference = object.mandateReference;
+    }
+    this.customerReference = bookingFields.customerReference.value;
+    if (object && object.customerReference) {
+      this.customerReference = object.customerReference;
+    }
     this.payPartner = object && object.payPartner ? object.payPartner : bookingFields.payPartner.value;
     this.iban = object && object.iban ? object.iban : bookingFields.iban.value;
     this.bic = object && object.bic ? object.bic : bookingFields.bic.value;

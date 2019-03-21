@@ -10,7 +10,7 @@ import {
   editBookingAction
 } from "../../actions/Booking";
 import BookingView from "../../components/views/BookingView";
-import {IBookingIdentity} from "../../model/BookingModel";
+import {IBookingIdentity} from "../../../../base/model/BookingModel";
 
 const mapsStateToProps = (state: IRootState) => {
   return ({bookings: state.bookings.data});

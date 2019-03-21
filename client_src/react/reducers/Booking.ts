@@ -1,10 +1,9 @@
-import { IFailAction, IResultAction, ISuccessAction } from "../api";
+import { IResultAction } from "../api";
 import { BookingModel, IBookingIdentity, IBookingIdentityDefaultStringValues } from "../../../base/model/BookingModel";
 import { ActionTypes } from "../actions/Booking";
 
 export interface IState {
   data: BookingModel[];
-
 }
 
 const defaultState: IState = {

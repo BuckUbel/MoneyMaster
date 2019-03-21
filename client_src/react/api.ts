@@ -18,11 +18,11 @@ export interface ICallApiAction<T = any> extends Action {
   failAction?: (...param: any[]) => IResultAction;
 }
 
-export interface IResultAction<T= any> extends Action {
+export interface IResultAction extends Action {
+  type: string;
   payload?: {
     [ params: string ]: any;
   };
-  type: string;
   response?: {
     success: true;
     data: any[] | any ;
@@ -31,7 +31,7 @@ export interface IResultAction<T= any> extends Action {
     message: string;
     code?: string;
   };
-  responseData?: IAnyObject;
+  responseData?: IAnyObject | IAnyObject[];
 }
 
 export interface IAnyObject {
@@ -50,7 +50,7 @@ export interface IFailAction extends IResultAction {
     message: string;
     code?: string;
   };
-  responseData?: IAnyObject;
+  responseData?: IAnyObject | IAnyObject[];
 }
 
 // -------------------------------------------
@@ -145,17 +145,3 @@ export const apiMiddleware: Middleware<PromiseDispatch> =
 
         return next(action);
       };
-
-// type PromiseDispatch = <T extends Action>(promise: Promise<T>) => Promise<T>
-//
-// export const apiMiddleware: Middleware<PromiseDispatch> =
-//   ({dispatch}: MiddlewareAPI) =>
-//     next =>
-//       <T extends Action>(action: ISuccessAction | IFailAction | Promise<T>) => {
-//         if (action instanceof Promise) {
-//           action.then(dispatch);
-//           return action;
-//         }
-//
-//         return next(action)
-//       };

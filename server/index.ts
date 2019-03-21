@@ -4,10 +4,10 @@ import {CronJob} from "cron";
 
 import {Database, IDatabase, IDBConfig} from "./database";
 import ServerRoutes from "./routes";
-import {beautyDateTimeString} from "./util";
 import {getCSVDataFromSPKBLK} from "./puppeteer/SPK-BLK";
 import {HapiServer, IServerConfig} from "./HapiServer";
 import * as path from "path";
+import {beautyDateTimeString} from "../base/helper/util";
 
 dotenv.config();
 

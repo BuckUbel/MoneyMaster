@@ -1,13 +1,11 @@
 import * as React from "react";
-import {BookingModel, IBookingDisplay} from "../../model/BookingModel";
 import {Avatar, Card, CardContent, CardHeader, Divider, Grid, Typography} from "@material-ui/core";
 import {beautyDateString} from "../../../../base/helper/util";
+import {BookingModel, IBookingIdentityDefaultStringValues} from "../../../../base/model/BookingModel";
 
 export interface IBookingProps {
   entity: BookingModel;
 }
-
-// export interface IBookingState {}
 
 export default class Booking extends React.Component<IBookingProps, {}> {
 
@@ -24,9 +22,6 @@ export default class Booking extends React.Component<IBookingProps, {}> {
       validDate,
       bookingType,
       purpose,
-      believerId,
-      mandateReference,
-      customerReference,
       payPartner,
       iban,
       bic,
@@ -96,7 +91,7 @@ export function compareOnDate(a: BookingModel, b: BookingModel): number {
   return 0;
 }
 
-export function getDisplayBooking(act: BookingModel): IBookingDisplay {
+export function getDisplayBooking(act: BookingModel): IBookingIdentityDefaultStringValues {
   return ({
     id: String(act.id),
     orderAccount: act.orderAccount,
