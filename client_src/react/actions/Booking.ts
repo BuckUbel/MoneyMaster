@@ -1,7 +1,7 @@
 import { ICallApiAction, IFailAction, ISuccessAction } from "../api";
 import { Action } from "redux";
-import { IBookingIdentity } from "../model/BookingModel";
 import { dateToDayString } from "../../../base/helper/util";
+import {IBookingIdentity} from "../../../base/model/BookingModel";
 
 export enum ActionTypes {
   ADD_BOOKING_REQUEST = "ADD_BOOKING_REQUEST",
@@ -101,7 +101,6 @@ export const editBookingAction = (bookings: IBookingIdentity[]): ICallApiAction 
     failAction: editBookingFailAction,
   });
 };
-
 
 export const loadAllBookingSuccessAction = (bookings: IBookingIdentity[]): ISuccessAction => {
   return ({
