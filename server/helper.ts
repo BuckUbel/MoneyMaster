@@ -1,6 +1,6 @@
 import {promisify} from "util";
 import fs, {Stats} from "fs";
-import {arrayToBookingModel, BookingModel} from "./database/model/BookingModel";
+import {arrayToBookingModel, BookingModel} from "../base/model/BookingModel";
 
 export const readdir = promisify(fs.readdir);
 export const stat = promisify(fs.stat);
@@ -72,5 +72,4 @@ export function extractBookingsFromFile(fileContent: string, bookings: BookingMo
     addBookings: reallyNewBookings,
     editBookings: updateBookings
   };
-  // this.setState({upload: reallyNewBookings});
 }

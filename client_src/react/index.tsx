@@ -12,7 +12,7 @@ import {lightBlue, red, teal} from "@material-ui/core/colors";
 
 export const theme = createMuiTheme({
   palette: {
-    type: "light",
+    type: "dark",
     primary: {
       light: "#c7d656",
       main: "#96a500",

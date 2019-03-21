@@ -1,12 +1,11 @@
-import {addTwentyToYear, beautyDateString, stringToDate, stringToDateWithSeparator} from "../helper/util";
+import {
+  addTwentyToYear,
+  IDBCol,
+  stringToDate,
+  stringToDateWithSeparator
+} from "../helper/util";
 import {number, string} from "prop-types";
-import {Requireable} from "prop-types";
 
-export interface IDBCol<T> {
-  fieldName: string;
-  value: T;
-  type: Requireable<T> | DateConstructor;
-}
 
 interface IBookingsFields {
   id?: IDBCol<number>;
@@ -142,22 +141,22 @@ export interface IBookingIdentity {
   info: string;
 }
 
-export interface IBookingDisplay {
-  id: string;
-  orderAccount: string;
-  bookingDate: string;
-  validDate: string;
-  bookingType: string;
-  purpose: string;
-  believerId: string;
-  mandateReference: string;
-  customerReference: string;
-  payPartner: string;
-  iban: string;
-  bic: string;
-  value: string;
-  currency: string;
-  info: string;
+export interface IBookingDatabase {
+  id?: number;
+  orderAccount?: string;
+  bookingDate?: string;
+  validDate?: string;
+  bookingType?: string;
+  purpose?: string;
+  believerId?: string;
+  mandateReference?: string;
+  customerReference?: string;
+  payPartner?: string;
+  iban?: string;
+  bic?: string;
+  value?: number;
+  currency?: string;
+  info?: string;
 
   [key: string]: any;
 }
@@ -165,7 +164,6 @@ export interface IBookingDisplay {
 export type objectStatus = "add" | "update" | "ignore";
 
 export function arrayToBookingModel(arr: string[], categories: string[]): BookingModel {
-  // const fields = Object.keys(bookingFields);
   const newElement = new BookingModel();
   Object.keys(bookingFields).map((fieldName: string, index: number) => {
     const categoryIndex = categories.indexOf(bookingFields[fieldName].fieldName);
@@ -183,14 +181,6 @@ export function arrayToBookingModel(arr: string[], categories: string[]): Bookin
     }
   });
   return newElement;
-  // const fields = Object.keys(bookingFields);
-  // const newElement = new BookingModel();
-  // bookingFields.forEach((prop: IDBCol<any>, index: number) => {
-  //   const categoryIndex = categories.indexOf(prop.fieldName);
-  //   const propName = fields[index];
-  //   newElement[propName] = arr[categoryIndex];
-  // });
-  // return newElement;
 }
 
 export class BookingModel implements IBookingIdentity {
@@ -236,7 +226,7 @@ export class BookingModel implements IBookingIdentity {
   }
 
   public equals(object: BookingModel): objectStatus {
-    if (object.info === "Umsatz vorgemerkt") {
+    if (this.info === "Umsatz vorgemerkt") {
       return "ignore";
     }
     if (this.orderAccount === object.orderAccount) {
@@ -248,7 +238,7 @@ export class BookingModel implements IBookingIdentity {
                 if (this.payPartner === object.payPartner) {
                   if (this.iban === object.iban) {
                     if (this.bic === object.bic) {
-                      if (this.value === object.value) {
+                      if (Number(this.value) === Number(object.value)) {
                         if (this.currency === object.currency) {
                           if (this.info === object.info) {
                             if (compareDateData(this.bookingDate, object.bookingDate)) {
