@@ -1,7 +1,7 @@
 import * as React from "react";
 import {BookingModel, IBookingDisplay} from "../../model/BookingModel";
 import {Avatar, Card, CardContent, CardHeader, Divider, Grid, Typography} from "@material-ui/core";
-import {beautyDateString} from "../../helper/util";
+import {beautyDateString} from "../../../../base/helper/util";
 
 export interface IBookingProps {
   entity: BookingModel;
