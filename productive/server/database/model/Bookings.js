@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const BookingModel_1 = require("../../../base/model/BookingModel");
 const util_1 = require("../../../base/helper/util");
-const tableName = process.env.BOOKING_TABLE_NAME;
 class Booking {
     constructor(object) {
         this.id = object.id;
@@ -34,11 +33,11 @@ exports.Booking = Booking;
 function loadAllBookingsFromDB(db, limit) {
     return __awaiter(this, void 0, void 0, function* () {
         const rowNamesArray = Object.keys(BookingModel_1.bookingFields).map((key) => {
-            return BookingModel_1.bookingFields[key].fieldName + " as " + key;
+            return "" + BookingModel_1.bookingFields[key].fieldName + " as " + key;
         });
         const rowNames = rowNamesArray.join(", ");
         let queryString = ("SELECT " + rowNames + " " +
-            "FROM " + tableName + " m ");
+            "FROM " + db.config.tableNames.booking + " m ");
         if (limit) {
             queryString += "LIMIT " + limit + " ";
         }
@@ -66,7 +65,7 @@ function insertABooking(db, bookings) {
             return "('" + valueArray.join("', '") + "')";
         });
         const values = bookingStringArray.join(", ");
-        const queryString = ("INSERT INTO " + tableName + " (" + rowNames + ") VALUES " + values + "");
+        const queryString = ("INSERT INTO " + db.config.tableNames.booking + " (" + rowNames + ") VALUES " + values + "");
         return yield db.sqlQuery(queryString);
     });
 }
@@ -79,7 +78,7 @@ function updateABooking(db, booking) {
         const valueArray = Object.keys(booking).map((key) => booking[key]);
         const rowNames = rowNamesArray.join(", ");
         const values = "'" + valueArray.join("', '") + "'";
-        const queryString = ("INSERT INTO " + tableName + " (" + rowNames + ") VALUES (" + values + ")");
+        const queryString = ("INSERT INTO " + db.config.tableNames.booking + " (" + rowNames + ") VALUES (" + values + ")");
         return db.sqlQuery("").then((rows) => {
             return rows;
         }).catch((error) => {

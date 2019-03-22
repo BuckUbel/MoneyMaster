@@ -1,14 +1,14 @@
 div.chartPlaceholder {
-    background: #eee;
-    overflow-x: auto;
-    overflow-y: hidden;
-    position: relative;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid #84919a;
-    border-radius: 4px;
+  background: #eee;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #84919a;
+  border-radius: 4px;
 }
 p.positionChartMiddle {
-    text-align: center;
+  text-align: center;
 }

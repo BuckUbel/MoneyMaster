@@ -2,16 +2,16 @@
   "name": "moneymaster",
   "version": "1.0.0",
   "description": "Express, Webpack, React, Typescript(Client)",
-  "main": "index.js",
+  "main": ".private/server/index.js",
   "scripts": {
     "building:client": " webpack --mode development --watch --config webpack.dev.config.js ",
     "build:dev:client": "webpack --mode development --config webpack.dev.config.js",
     "build:prod:client": "webpack --mode production --config webpack.prod.config.js",
-    "server": "nodemon -L ./private/index.js",
+    "server": "nodemon -L ./private/server/index.js",
     "build:server": "tsc -p tsconfig.server.json -w",
-    "start:server": "nodemon %NODE_DEBUG_OPTION% -L --watch ./private --delay 2.5 ./private/index.js",
+    "start:server": "nodemon %NODE_DEBUG_OPTION% -L --watch ./private --delay 2.5 ./private/server/index.js",
     "build:prod:server": "tsc -p tsconfig.server.prod.json",
-    "start:prod:server": "node ./productive/index.js"
+    "start:prod:server": "node ./productive/server/index.js"
   },
   "license": "ISC",
   "dependencies": {

@@ -31,6 +31,10 @@ const dbConfig = {
     databaseName: process.env.DB_DATABASE,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
+    tableNames: {
+        booking: process.env.BOOKING_TABLE_NAME,
+        virtualAccounts: process.env.VIRTUAL_ACCOUNT_TABLE_NAME,
+    }
 };
 const database = new database_1.Database(dbConfig);
 const serverConfig = {

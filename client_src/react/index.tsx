@@ -11,46 +11,46 @@ import AppContainer from "./containers/AppContainer";
 import {lightBlue, red, teal} from "@material-ui/core/colors";
 
 export const theme = createMuiTheme({
-  palette: {
-    type: "dark",
-    primary: {
-      light: "#c7d656",
-      main: "#96a500",
-      dark: "#687600",
-      contrastText: "#000",
+    palette: {
+        type: "dark",
+        primary: {
+            light: "#c7d656",
+            main: "#96a500",
+            dark: "#687600",
+            contrastText: "#000",
+        },
+        secondary: {
+            light: "#5effb8",
+            main: "#02d188",
+            dark: "#009f5b",
+            contrastText: "#000",
+        },
+        error: red
     },
-    secondary: {
-      light: "#5effb8",
-      main: "#02d188",
-      dark: "#009f5b",
-      contrastText: "#000",
-    },
-    error: red
-  },
-  typography: {
-    fontFamily: [
-      "Roboto",
-      '"Segoe UI"',
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(","),
-    useNextVariants: true
-  }
+    typography: {
+        fontFamily: [
+            "Roboto",
+            '"Segoe UI"',
+            '"Helvetica Neue"',
+            "Arial",
+            "sans-serif",
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(","),
+        useNextVariants: true
+    }
 });
 
 const Root = (
-  <Provider store={store}>
-    <MuiThemeProvider theme={theme}>
-      <AppContainer/>
-    </MuiThemeProvider>
-  </Provider>
+    <Provider store={store}>
+        <MuiThemeProvider theme={theme}>
+            <AppContainer/>
+        </MuiThemeProvider>
+    </Provider>
 );
 
 ReactDOM.render(
-  Root,
-  document.getElementById("react-container"),
+    Root,
+    document.getElementById("react-container"),
 );
