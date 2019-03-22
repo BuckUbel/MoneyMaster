@@ -10,18 +10,17 @@ form.form-multiline label {
 form.form-multiline input {
   margin: 0 0 10px 5px;
 }
-form.form-multiline textArea{
+form.form-multiline textArea {
   height: 100px;
   width: 100%;
   margin: 5px 0 10px 0;
-
 }
 form.form-multiline input[type=submit],
 form.form-multiline input[type=button],
-form.form-multiline button{
+form.form-multiline button {
   border: none;
   padding: 8px 15px 8px 15px;
-  background: #FF8500;
+  background: #ff8500;
   color: #fff;
   border-radius: 3px;
   float: right;

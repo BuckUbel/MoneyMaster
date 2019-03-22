@@ -1,13 +1,12 @@
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 
 import App from "../App";
-import { IRootState } from "../store";
+import {IRootState} from "../store";
 
 const mapStateToProps = (state: IRootState) => {
 
-  return (
-    {
-    });
+    return (
+        {});
 };
 
 const AppContainer = connect(mapStateToProps)(App);

@@ -32,20 +32,16 @@ body {
 .form-multiline label {
   display: block;
 }
-
-.react-bootstrap-table table{
+.react-bootstrap-table table {
   margin: 10px auto 0 auto;
 }
 /* for paginator */
 .show.react-bs-table-sizePerPage-dropdown ul:last-child {
   display: block;
 }
-.react-bootstrap-table-pagination{
- margin: 40px 0 0 0;
+.react-bootstrap-table-pagination {
+  margin: 40px 0 0 0;
 }
-
-
-
 #modal {
   z-index: 998;
   left: 0;
@@ -66,10 +62,10 @@ body {
   padding: 20px;
   position: relative;
   text-align: center;
-  overflow:auto;
+  overflow: auto;
   display: block;
 }
-#modal-Window-Content{
+#modal-Window-Content {
   max-width: none;
 }
 .large#modal-Window {

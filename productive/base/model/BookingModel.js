@@ -4,77 +4,107 @@ const util_1 = require("../helper/util");
 const prop_types_1 = require("prop-types");
 exports.bookingFields = {
     id: {
-        fieldName: "ID",
+        fieldName: "id",
+        labelName: "ID",
+        csvLabelName: "ID",
         value: null,
         type: prop_types_1.number,
     },
     orderAccount: {
-        fieldName: "Auftragskonto",
+        fieldName: "orderAccount",
+        labelName: "Auftragskonto",
+        csvLabelName: "Auftragskonto",
         value: "",
         type: prop_types_1.string,
     },
     bookingDate: {
-        fieldName: "Buchungstag",
+        labelName: "Buchungstag",
+        csvLabelName: "Buchungstag",
+        fieldName: "bookingDate",
         value: null,
         type: Date,
     },
     validDate: {
-        fieldName: "Valutadatum",
+        labelName: "Valutadatum",
+        csvLabelName: "Valutadatum",
+        fieldName: "validDate",
         value: null,
         type: Date,
     },
     bookingType: {
-        fieldName: "Buchungstext",
+        labelName: "Buchungstext",
+        csvLabelName: "Buchungstext",
+        fieldName: "bookingType",
         value: null,
         type: prop_types_1.string,
     },
     purpose: {
-        fieldName: "Verwendungszweck",
+        labelName: "Verwendungszweck",
+        csvLabelName: "Verwendungszweck",
+        fieldName: "purpose",
         value: "",
         type: prop_types_1.string,
     },
     believerId: {
-        fieldName: "Glaeubiger ID",
+        labelName: "Glaeubiger ID",
+        csvLabelName: "Glaeubiger ID",
+        fieldName: "believerId",
         value: "",
         type: prop_types_1.string,
     },
     mandateReference: {
-        fieldName: "Mandatsreferenz",
+        labelName: "Mandatsreferenz",
+        csvLabelName: "Mandatsreferenz",
+        fieldName: "mandateReference",
         value: "",
         type: prop_types_1.string,
     },
     customerReference: {
-        fieldName: "Kundenreferenz (End-to-End)",
+        labelName: "Kundenreferenz (End-to-End)",
+        csvLabelName: "Kundenreferenz (End-to-End)",
+        fieldName: "customerReference",
         value: "",
         type: prop_types_1.string,
     },
     payPartner: {
-        fieldName: "Beguenstigter/Zahlungspflichtiger",
+        labelName: "Beguenstigter/Zahlungspflichtiger",
+        csvLabelName: "Beguenstigter/Zahlungspflichtiger",
+        fieldName: "payPartner",
         value: "",
         type: prop_types_1.string,
     },
     iban: {
-        fieldName: "Kontonummer/IBAN",
+        labelName: "Kontonummer/IBAN",
+        csvLabelName: "Kontonummer/IBAN",
+        fieldName: "iban",
         value: "",
         type: prop_types_1.string,
     },
     bic: {
-        fieldName: "BIC (SWIFT-Code)",
+        labelName: "BIC (SWIFT-Code)",
+        csvLabelName: "BIC (SWIFT-Code)",
+        fieldName: "bic",
         value: "",
         type: prop_types_1.string,
     },
     value: {
-        fieldName: "Betrag",
+        labelName: "Betrag",
+        csvLabelName: "Betrag",
+        fieldName: "value",
         value: null,
         type: prop_types_1.number,
     },
     currency: {
-        fieldName: "Waehrung",
+        labelName: "Waehrung",
+        csvLabelName: "Waehrung",
+        fieldName: "currency",
         value: "",
         type: prop_types_1.string,
     },
     info: {
-        fieldName: "Info",
+        labelName: "Info",
+        csvLabelName: "Info",
+        fieldName: "info",
         value: "",
         type: prop_types_1.string,
     },
@@ -82,7 +112,7 @@ exports.bookingFields = {
 function arrayToBookingModel(arr, categories) {
     const newElement = new BookingModel();
     Object.keys(exports.bookingFields).map((fieldName, index) => {
-        const categoryIndex = categories.indexOf(exports.bookingFields[fieldName].fieldName);
+        const categoryIndex = categories.indexOf(exports.bookingFields[fieldName].csvLabelName);
         const typeOfField = exports.bookingFields[fieldName].type;
         if (typeOfField === prop_types_1.string) {
             newElement[fieldName] = arr[categoryIndex] ? arr[categoryIndex].trim() : "";
@@ -139,42 +169,27 @@ class BookingModel {
         if (this.info === "Umsatz vorgemerkt") {
             return "ignore";
         }
-        if (this.orderAccount === object.orderAccount) {
-            if (this.bookingType === object.bookingType) {
-                if (this.purpose === object.purpose) {
-                    if (this.believerId === object.believerId) {
-                        if (this.mandateReference === object.mandateReference) {
-                            if (this.customerReference === object.customerReference) {
-                                if (this.payPartner === object.payPartner) {
-                                    if (this.iban === object.iban) {
-                                        if (this.bic === object.bic) {
-                                            if (Number(this.value) === Number(object.value)) {
-                                                if (this.currency === object.currency) {
-                                                    if (this.info === object.info) {
-                                                        if (compareDateData(this.bookingDate, object.bookingDate)) {
-                                                            // if (this.bookingDate.getTime() === object.bookingDate.getTime()) {
-                                                            // Hinweis auf neue Buchung, andere sind veraltet
-                                                            if (compareDateData(this.validDate, object.validDate)) {
-                                                                // if (this.validDate.getTime() === object.validDate.getTime()) {
-                                                                return "ignore";
-                                                                // }
-                                                            }
-                                                            return "update";
-                                                        }
-                                                        // }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+        const hasSimpleSameData = (this.orderAccount === object.orderAccount)
+            && (this.bookingType === object.bookingType)
+            && (this.purpose === object.purpose)
+            && (this.believerId === object.believerId)
+            && (this.mandateReference === object.mandateReference)
+            && (this.customerReference === object.customerReference)
+            && (this.payPartner === object.payPartner)
+            && (this.iban === object.iban)
+            && (this.bic === object.bic)
+            && (Number(this.value) === Number(object.value))
+            && (this.currency === object.currency)
+            && (this.info === object.info);
+        if (hasSimpleSameData) {
+            if (compareDateData(this.bookingDate, object.bookingDate)) {
+                if (compareDateData(this.validDate, object.validDate)) {
+                    return "ignore"; // Beide Buchungen sind komplett gleich
                 }
+                return "update"; // Hinweis auf neue Buchung, andere sind veraltet
             }
         }
-        return "add";
+        return "add"; // Diese Buchung ist noch nicht vorhanden
     }
 }
 exports.BookingModel = BookingModel;

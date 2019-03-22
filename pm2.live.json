@@ -2,7 +2,7 @@
   "apps":[
     {
       "name":"MoneyMaster",
-      "script":"productive/index.js"
+      "script":"productive/server/index.js"
     }
   ]
 }
