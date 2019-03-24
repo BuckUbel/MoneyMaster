@@ -57,3 +57,42 @@ function dateTo_YMDHMS_String(d) {
         + d.getMinutes() + ":" + d.getSeconds();
 }
 exports.dateTo_YMDHMS_String = dateTo_YMDHMS_String;
+exports.apiPath = "/api";
+exports.standardApiCallPaths = {
+    create: "/create",
+    read: "/load",
+    readOne: "/{index*}",
+    update: "/update",
+    delete: "/delete",
+};
+function createApiCallPathObject(entityString) {
+    return {
+        create: exports.apiPath + entityString + exports.standardApiCallPaths.create,
+        read: exports.apiPath + entityString + exports.standardApiCallPaths.read,
+        readOne: exports.apiPath + entityString + exports.standardApiCallPaths.readOne,
+        update: exports.apiPath + entityString + exports.standardApiCallPaths.update,
+        delete: exports.apiPath + entityString + exports.standardApiCallPaths.delete,
+    };
+}
+exports.createApiCallPathObject = createApiCallPathObject;
+function createEntityForDB(object) {
+    return object.getDBObject();
+}
+exports.createEntityForDB = createEntityForDB;
+class Entity {
+    static createEntity(object) {
+        const entity = new Entity();
+        entity.set(object);
+        return entity;
+    }
+    constructor() {
+        this.id = 0;
+    }
+    set(object) {
+        this.id = object.id ? Number(object.id) : null;
+    }
+    getDBObject() {
+        return { id: this.id };
+    }
+}
+exports.Entity = Entity;

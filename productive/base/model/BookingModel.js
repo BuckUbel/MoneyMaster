@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const util_1 = require("../helper/util");
 const prop_types_1 = require("prop-types");
+const AccountModel_1 = require("./AccountModel");
+exports.bookingApiCallPaths = util_1.createApiCallPathObject("/bookings");
 exports.bookingFields = {
     id: {
         fieldName: "id",
@@ -134,9 +136,11 @@ function arrayToBookingModel(arr, categories) {
     return newElement;
 }
 exports.arrayToBookingModel = arrayToBookingModel;
-class BookingModel {
-    constructor() {
-        this.id = 0;
+class BookingModel extends util_1.Entity {
+    static createEntity(object) {
+        const entity = new AccountModel_1.AccountModel();
+        entity.set(object);
+        return entity;
     }
     set(object) {
         this.id = object && object.id ? Number(object.id) : exports.bookingFields.id.value;
@@ -164,6 +168,25 @@ class BookingModel {
         this.value = object && object.value ? parseFloat(object.value.replace(",", ".")) : exports.bookingFields.value.value;
         this.currency = object && object.currency ? object.currency : exports.bookingFields.currency.value;
         this.info = object && object.info ? object.info : exports.bookingFields.info.value;
+    }
+    getDBObject() {
+        return {
+            id: this.id,
+            orderAccount: this.orderAccount,
+            bookingDate: util_1.dateTo_YMDHMS_String(new Date(this.bookingDate)),
+            validDate: util_1.dateTo_YMDHMS_String(new Date(this.validDate)),
+            bookingType: this.bookingType,
+            purpose: this.purpose,
+            believerId: this.believerId,
+            mandateReference: this.mandateReference,
+            customerReference: this.customerReference,
+            payPartner: this.payPartner,
+            iban: this.iban,
+            bic: this.bic,
+            value: this.value,
+            currency: this.currency,
+            info: this.info
+        };
     }
     equals(object) {
         if (this.info === "Umsatz vorgemerkt") {

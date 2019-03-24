@@ -7,10 +7,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const Bookings_1 = require("./database/model/Bookings");
-const SPK_BLK_1 = require("./puppeteer/SPK-BLK");
-const helper_1 = require("./helper");
+const bookings_1 = __importDefault(require("./routes/bookings"));
+const AccountModel_1 = require("../base/model/AccountModel");
+const BookingModel_1 = require("../base/model/BookingModel");
+const ShortDescriptionModel_1 = require("../base/model/ShortDescriptionModel");
+const CategoryModel_1 = require("../base/model/CategoryModel");
+const enities_1 = require("./routes/enities");
 class ServerRoutes {
     constructor(server) {
         this.server = server;
@@ -33,98 +39,19 @@ class ServerRoutes {
             }
         });
     }
-    loadDataFromSPKBLK() {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log("Start downloading CSV from SPK BLK");
-            let result = {
-                addBookings: [],
-                editBookings: [],
-            };
-            try {
-                yield SPK_BLK_1.getCSVDataFromSPKBLK(this.server.serverConfig.downloadPath);
-                console.log("CSV is downloaded.");
-            }
-            catch (e) {
-                console.log("CSV is false downloaded.");
-            }
-            try {
-                const file = yield helper_1.getLastModifiedFileInDir(this.server.serverConfig.downloadPath);
-                result = yield this.updateDatabaseBookings(file);
-                console.log("CSV was read successfully:");
-                console.log("Items to add:" + result.addBookings.length);
-                console.log("Items to edit:" + result.editBookings.length);
-            }
-            catch (e) {
-                console.log("CSV was not read.");
-                console.log(e);
-            }
-            try {
-                if (result.addBookings.length > 0) {
-                    yield Bookings_1.insertABooking(this.server.database, result.addBookings);
-                }
-                // if (result.editBookings.length > 0) {
-                // await updateABooking(this.server.database, result.editBookings);
-                // }
-                console.log("Bookings are imported.");
-            }
-            catch (e) {
-                console.log("Bookings are not imported:");
-                console.log(e);
-            }
-        });
-    }
-    updateDatabaseBookings(file) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const rows = yield Bookings_1.loadAllBookingsFromDB(this.server.database);
-            const fileContent = yield helper_1.readFile(file, "binary");
-            return helper_1.extractBookingsFromFile(fileContent, rows);
-            // return await updateABooking(this.server.database, result.editBookings);
-        });
+    restAPIRouting() {
+        enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.bookings, BookingModel_1.bookingFields, BookingModel_1.bookingApiCallPaths, BookingModel_1.BookingModel.createEntity);
+        enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.accounts, AccountModel_1.accountFields, AccountModel_1.accountApiCallPaths, AccountModel_1.AccountModel.createEntity);
+        enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.shortDescriptions, ShortDescriptionModel_1.shortDescriptionFields, ShortDescriptionModel_1.shortDescriptionApiCallPaths, ShortDescriptionModel_1.ShortDescriptionModel.createEntity);
+        enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.categories, CategoryModel_1.categoryFields, CategoryModel_1.categoryApiCallPaths, CategoryModel_1.CategoryModel.createEntity);
     }
     init() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.server.app.register(require("inert"));
             this.staticFileRouting();
-            this.server.app.route({
-                method: "GET",
-                path: "/api/bookings/load",
-                handler: (request, h) => {
-                    return Bookings_1.loadAllBookingsFromDB(this.server.database)
-                        .then((result) => {
-                        return result;
-                    }).catch((error) => {
-                        console.error(error);
-                        return error;
-                    });
-                }
-            });
-            this.server.app.route({
-                method: "POST",
-                path: "/api/bookings/edit",
-                handler: (request, h) => {
-                    // TODO: Überarbeiten
-                    /*
-                    const object: IBookingsObjectProps = request.params.body;
-                            console.log(object);
-                            const rows = updateABooking(this.server.database, object)
-                              .then((result) => {
-                                return result;
-                              }).catch((error) => {
-                                return error;
-                              });
-                            return rows;
-                            */
-                    return null;
-                }
-            });
-            this.server.app.route({
-                method: "GET",
-                path: "/api/bookings/loadFromSPK",
-                handler: (request, h) => {
-                    this.loadDataFromSPKBLK();
-                    return "Data will imported and will save in the database";
-                }
-            });
+            this.restAPIRouting();
+            const bookingRoutes = new bookings_1.default(this.server);
+            yield bookingRoutes.init();
         });
     }
 }

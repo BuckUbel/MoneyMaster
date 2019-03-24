@@ -1,4 +1,5 @@
 import {Requireable} from "prop-types";
+import {AccountModel, IAccountDatabase, IAccountIdentityDefaultStringValues} from "../model/AccountModel";
 
 export function dateToDayString(date: Date): string {
     return basicDateToString(date, "-");
@@ -57,6 +58,84 @@ export function dateTo_YMDHMS_String(d: Date): string {
     return d.getFullYear() + "-" + (d.getMonth() + 1)
         + "-" + d.getDate() + " " + d.getHours() + ":"
         + d.getMinutes() + ":" + d.getSeconds();
+}
+
+export interface IRestCallApiPaths {
+    create: string;
+    read: string;
+    readOne: string;
+    update: string;
+    delete: string;
+}
+
+export const apiPath: string = "/api";
+
+export const standardApiCallPaths: IRestCallApiPaths = {
+    create: "/create",
+    read: "/load",
+    readOne: "/{index*}",
+    update: "/update",
+    delete: "/delete",
+};
+
+export function createApiCallPathObject(entityString: string): IRestCallApiPaths {
+    return {
+        create: apiPath + entityString + standardApiCallPaths.create,
+        read: apiPath + entityString + standardApiCallPaths.read,
+        readOne: apiPath + entityString + standardApiCallPaths.readOne,
+        update: apiPath + entityString + standardApiCallPaths.update,
+        delete: apiPath + entityString + standardApiCallPaths.delete,
+    };
+}
+
+export function createEntityForDB(object: IEntityClass): IDatabaseClass {
+    return object.getDBObject();
+}
+
+export interface IEntityStringClass {
+    id: string;
+
+    [key: string]: any;
+}
+
+export interface IEntityClass {
+    id: number;
+
+    [key: string]: any;
+}
+
+export class Entity implements IEntityClass {
+    public static createEntity(object: IEntityStringClass): IEntityClass {
+        const entity = new Entity();
+        entity.set(object);
+        return entity;
+    }
+
+    [key: string]: any;
+
+    public id: number;
+
+    public constructor() {
+        this.id = 0;
+    }
+
+    public set(object: IEntityStringClass) {
+        this.id = object.id ? Number(object.id) : null;
+    }
+
+    public getDBObject(): IDatabaseClass {
+        return {id: this.id};
+    }
+}
+
+export interface IDatabaseClass {
+    id: number;
+
+    [key: string]: any;
+}
+
+export interface IDatabaseFields {
+    [key: string]: IDBCol<any>;
 }
 
 export interface IDBCol<T> {

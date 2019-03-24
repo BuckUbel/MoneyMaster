@@ -51,7 +51,7 @@ export async function loadAllBookingsFromDB(db: IDatabase, limit?: number) {
 
     let queryString = (
         "SELECT " + rowNames + " " +
-        "FROM " + db.config.tableNames.booking + " m "
+        "FROM " + db.config.tableNames.bookings + " m "
     );
 
     if (limit) {
@@ -86,7 +86,7 @@ export async function insertABooking(db: IDatabase, bookings: BookingModel[]) {
     const values = bookingStringArray.join(", ");
 
     const queryString = (
-        "INSERT INTO " + db.config.tableNames.booking + " (" + rowNames + ") VALUES " + values + ""
+        "INSERT INTO " + db.config.tableNames.bookings + " (" + rowNames + ") VALUES " + values + ""
     );
     return await db.sqlQuery(queryString);
 }
@@ -102,7 +102,7 @@ export async function updateABooking(db: IDatabase, booking: IBookingDatabase) {
     const values = "'" + valueArray.join("', '") + "'";
 
     const queryString = (
-        "INSERT INTO " + db.config.tableNames.booking + " (" + rowNames + ") VALUES (" + values + ")"
+        "INSERT INTO " + db.config.tableNames.bookings + " (" + rowNames + ") VALUES (" + values + ")"
     );
 
     return db.sqlQuery("",

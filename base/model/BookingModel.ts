@@ -1,12 +1,15 @@
 import {
-    addTwentyToYear,
-    IDBCol,
+    addTwentyToYear, createApiCallPathObject, dateTo_YMDHMS_String, Entity, IDatabaseClass, IDatabaseFields,
+    IDBCol, IEntityClass, IEntityStringClass, IRestCallApiPaths,
     stringToDate,
     stringToDateWithSeparator
 } from "../helper/util";
 import {number, string} from "prop-types";
+import {AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "./AccountModel";
 
-interface IBookingsFields {
+export const bookingApiCallPaths: IRestCallApiPaths = createApiCallPathObject("/bookings");
+
+interface IBookingsFields extends IDatabaseFields {
     id?: IDBCol<number>;
     orderAccount?: IDBCol<string>;
     bookingDate?: IDBCol<Date>;
@@ -22,8 +25,6 @@ interface IBookingsFields {
     value?: IDBCol<number>;
     currency?: IDBCol<string>;
     info?: IDBCol<string>;
-
-    [key: string]: any;
 }
 
 export const bookingFields: IBookingsFields = {
@@ -134,7 +135,7 @@ export const bookingFields: IBookingsFields = {
     },
 };
 
-export interface IBookingIdentityDefaultStringValues {
+export interface IBookingIdentityDefaultStringValues extends IEntityStringClass {
     id: string;
     orderAccount: string;
     bookingDate: string;
@@ -150,11 +151,9 @@ export interface IBookingIdentityDefaultStringValues {
     value: string;
     currency: string;
     info: string;
-
-    [key: string]: any;
 }
 
-export interface IBookingIdentity {
+export interface IBookingIdentity extends IEntityClass {
     id: number;
     orderAccount: string;
     bookingDate: Date;
@@ -170,12 +169,9 @@ export interface IBookingIdentity {
     value: number;
     currency: string;
     info: string;
-
-    [key: string]: any;
 }
 
-export interface IBookingDatabase {
-    id?: number;
+export interface IBookingDatabase extends IDatabaseClass {
     orderAccount?: string;
     bookingDate?: string;
     validDate?: string;
@@ -190,8 +186,6 @@ export interface IBookingDatabase {
     value?: number;
     currency?: string;
     info?: string;
-
-    [key: string]: any;
 }
 
 export type objectStatus = "add" | "update" | "ignore";
@@ -223,8 +217,14 @@ export function arrayToBookingModel(arr: string[], categories: string[]): Bookin
     return newElement;
 }
 
-export class BookingModel implements IBookingIdentity {
-    public id: number;
+export class BookingModel extends Entity implements IBookingIdentity {
+
+    public static createEntity(object: IAccountIdentityDefaultStringValues): IAccountIdentity {
+        const entity = new AccountModel();
+        entity.set(object);
+        return entity;
+    }
+
     public orderAccount: string;
     public bookingDate: Date;
     public validDate: Date;
@@ -239,12 +239,6 @@ export class BookingModel implements IBookingIdentity {
     public value: number;
     public currency: string;
     public info: string;
-
-    [key: string]: any;
-
-    public constructor() {
-        this.id = 0;
-    }
 
     public set(object: IBookingIdentityDefaultStringValues) {
         this.id = object && object.id ? Number(object.id) : bookingFields.id.value;
@@ -274,7 +268,27 @@ export class BookingModel implements IBookingIdentity {
         this.info = object && object.info ? object.info : bookingFields.info.value;
     }
 
-    public  equals(object: BookingModel): objectStatus {
+    public getDBObject(): IBookingDatabase {
+        return {
+            id: this.id,
+            orderAccount: this.orderAccount,
+            bookingDate: dateTo_YMDHMS_String(new Date(this.bookingDate)),
+            validDate: dateTo_YMDHMS_String(new Date(this.validDate)),
+            bookingType: this.bookingType,
+            purpose: this.purpose,
+            believerId: this.believerId,
+            mandateReference: this.mandateReference,
+            customerReference: this.customerReference,
+            payPartner: this.payPartner,
+            iban: this.iban,
+            bic: this.bic,
+            value: this.value,
+            currency: this.currency,
+            info: this.info
+        };
+    }
+
+    public equals(object: BookingModel): objectStatus {
         if (this.info === "Umsatz vorgemerkt") {
             return "ignore";
         }
@@ -291,7 +305,6 @@ export class BookingModel implements IBookingIdentity {
             && (Number(this.value) === Number(object.value))
             && (this.currency === object.currency)
             && (this.info === object.info);
-
 
         if (hasSimpleSameData) {
             if (compareDateData(this.bookingDate, object.bookingDate)) {

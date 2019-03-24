@@ -7,12 +7,14 @@ import Button from "@material-ui/core/Button";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import {Divider, Grid, Typography} from "@material-ui/core";
 import Booking, {compareOnDate} from "../core/Booking";
+import {IAccountIdentity} from "../../../../base/model/AccountModel";
 
 export interface IBookingViewProps {
     bookings: BookingModel[];
     fetchAllBookings: () => Promise<any>;
     addBookings: (bookings: IBookingIdentity[]) => Promise<any>;
     editBookings: (bookings: IBookingIdentity[]) => Promise<any>;
+    addAccount: (accounts: IAccountIdentity[]) => Promise<any>,
 }
 
 export interface IBookingViewState {
@@ -33,7 +35,7 @@ export default class BookingView extends React.Component<IBookingViewProps, IBoo
         super(props);
         this.loadForTable = this.loadForTable.bind(this);
         this.resetMonth = this.resetMonth.bind(this);
-        this.setUploadField = this.setUploadField.bind(this);
+        this.addAccount = this.addAccount.bind(this);
     }
 
     public componentDidMount() {
@@ -55,15 +57,24 @@ export default class BookingView extends React.Component<IBookingViewProps, IBoo
         this.setState(defaultState);
     }
 
-    public setUploadField(ref: any) {
-        this.setState({
-            uploadThing: ref
+    public addAccount() {
+        this.props.addAccount([{
+            id: null,
+            name: "Sparkonto",
+            description: "Dieses Konto ist zum Sparen da.",
+            value: 0,
+            color: "#0FF00F",
+            isCore: false,
+            isReal: false
+        }]).then(() => {
+            console.log("Success");
+        }).catch(() => {
+            console.log("error");
         });
     }
 
     public render() {
         const {bookings} = this.props;
-        const {uploadThing} = this.state;
         let nowValue = 0;
         if (bookings.length > 0) {
             nowValue = bookings.map((b) => {
@@ -80,11 +91,8 @@ export default class BookingView extends React.Component<IBookingViewProps, IBoo
                             laden</Button>
                     </Grid>
                     <Grid item key={2}>
-                        <input id="myInput" type="file" ref={this.setUploadField} style={{display: "none"}}/>
                         <Button color={"secondary"} variant={"contained"} className={"roundButton menuToggleButton"}
-                                onClick={(e) => {
-                                    uploadThing.click();
-                                }}>
+                                onClick={this.addAccount}>
                             <CloudUploadIcon/>
                         </Button>
                     </Grid>

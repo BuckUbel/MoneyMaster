@@ -1,8 +1,10 @@
 import mysql, {Connection, FieldInfo, MysqlError, Query} from "mysql";
 
 export interface IDBTableNames {
-    booking: string;
-    virtualAccounts: string;
+    bookings: string;
+    accounts: string;
+    categories: string;
+    shortDescriptions: string;
 }
 
 export interface IDBConfig {

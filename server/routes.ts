@@ -1,11 +1,18 @@
-import {
-    insertABooking,
-    loadAllBookingsFromDB,
-} from "./database/model/Bookings";
 import * as Hapi from "hapi";
-import {getCSVDataFromSPKBLK} from "./puppeteer/SPK-BLK";
 import {IHapiServer} from "./HapiServer";
-import {extractBookingsFromFile, getLastModifiedFileInDir, IDifferentExportedBookings, readFile} from "./helper";
+import BookingRoutes from "./routes/bookings";
+import {
+    accountApiCallPaths,
+    accountFields, AccountModel,
+} from "../base/model/AccountModel";
+import {bookingApiCallPaths, bookingFields, BookingModel} from "../base/model/BookingModel";
+import {
+    shortDescriptionApiCallPaths,
+    shortDescriptionFields,
+    ShortDescriptionModel
+} from "../base/model/ShortDescriptionModel";
+import {categoryApiCallPaths, categoryFields, CategoryModel} from "../base/model/CategoryModel";
+import {standardEntityRouting} from "./routes/enities";
 
 export default class ServerRoutes {
 
@@ -34,96 +41,44 @@ export default class ServerRoutes {
         });
     }
 
-    public async loadDataFromSPKBLK() {
-        console.log("Start downloading CSV from SPK BLK");
-        let result: IDifferentExportedBookings = {
-            addBookings: [],
-            editBookings: [],
-        };
-        try {
-            await getCSVDataFromSPKBLK(this.server.serverConfig.downloadPath);
-            console.log("CSV is downloaded.");
-        } catch (e) {
-            console.log("CSV is false downloaded.");
-        }
-        try {
-            const file = await getLastModifiedFileInDir(this.server.serverConfig.downloadPath);
-            result = await this.updateDatabaseBookings(file);
-            console.log("CSV was read successfully:");
-            console.log("Items to add:" + result.addBookings.length);
-            console.log("Items to edit:" + result.editBookings.length);
-        } catch (e) {
-            console.log("CSV was not read.");
-            console.log(e);
-        }
-        try {
-            if (result.addBookings.length > 0) {
-                await insertABooking(this.server.database, result.addBookings);
-            }
-            // if (result.editBookings.length > 0) {
-            // await updateABooking(this.server.database, result.editBookings);
-            // }
-
-            console.log("Bookings are imported.");
-        } catch (e) {
-            console.log("Bookings are not imported:");
-            console.log(e);
-        }
-    }
-
-    public async updateDatabaseBookings(file: string) {
-        const rows = await loadAllBookingsFromDB(this.server.database);
-        const fileContent = await readFile(file, "binary");
-        return extractBookingsFromFile(fileContent, rows);
-        // return await updateABooking(this.server.database, result.editBookings);
+    public restAPIRouting() {
+        standardEntityRouting(
+            this.server,
+            this.server.database.config.tableNames.bookings,
+            bookingFields,
+            bookingApiCallPaths,
+            BookingModel.createEntity
+        );
+        standardEntityRouting(
+            this.server,
+            this.server.database.config.tableNames.accounts,
+            accountFields,
+            accountApiCallPaths,
+            AccountModel.createEntity
+        );
+        standardEntityRouting(
+            this.server,
+            this.server.database.config.tableNames.shortDescriptions,
+            shortDescriptionFields,
+            shortDescriptionApiCallPaths,
+            ShortDescriptionModel.createEntity
+        );
+        standardEntityRouting(
+            this.server,
+            this.server.database.config.tableNames.categories,
+            categoryFields,
+            categoryApiCallPaths,
+            CategoryModel.createEntity
+        );
     }
 
     public async init() {
 
         await this.server.app.register(require("inert"));
         this.staticFileRouting();
+        this.restAPIRouting();
 
-        this.server.app.route({
-            method: "GET",
-            path: "/api/bookings/load",
-            handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-                return loadAllBookingsFromDB(this.server.database)
-                    .then((result) => {
-                        return result;
-                    }).catch((error) => {
-                        console.error(error);
-                        return error;
-                    });
-            }
-        });
-
-        this.server.app.route({
-            method: "POST",
-            path: "/api/bookings/edit",
-            handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-                // TODO: Überarbeiten
-                /*
-                const object: IBookingsObjectProps = request.params.body;
-                        console.log(object);
-                        const rows = updateABooking(this.server.database, object)
-                          .then((result) => {
-                            return result;
-                          }).catch((error) => {
-                            return error;
-                          });
-                        return rows;
-                        */
-                return null;
-            }
-        });
-
-        this.server.app.route({
-            method: "GET",
-            path: "/api/bookings/loadFromSPK",
-            handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-                this.loadDataFromSPKBLK();
-                return "Data will imported and will save in the database";
-            }
-        });
+        const bookingRoutes = new BookingRoutes(this.server);
+        await bookingRoutes.init();
     }
 }
