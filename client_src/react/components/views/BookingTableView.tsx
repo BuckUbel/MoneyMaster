@@ -5,15 +5,13 @@ import {
 } from "../../../../base/model/BookingModel";
 import Button from "@material-ui/core/Button";
 import {Divider, Grid, Typography} from "@material-ui/core";
-import Booking from "../core/Booking";
-import {IAccountIdentity} from "../../../../base/model/AccountModel";
+import BookingTable from "../tables/BookingTable";
 
 export interface IBookingViewProps {
     bookings: BookingModel[];
     fetchAllBookings: () => Promise<any>;
     addBookings: (bookings: IBookingIdentity[]) => Promise<any>;
     editBookings: (bookings: IBookingIdentity[]) => Promise<any>;
-    addAccount: (accounts: IAccountIdentity[]) => Promise<any>,
 }
 
 export interface IBookingViewState {
@@ -22,7 +20,7 @@ export interface IBookingViewState {
 const defaultState: IBookingViewState = {
 };
 
-export default class BookingView extends React.Component<IBookingViewProps, IBookingViewState> {
+export default class BookingTableView extends React.Component<IBookingViewProps, IBookingViewState> {
 
     public state: IBookingViewState = defaultState;
 
@@ -78,13 +76,7 @@ export default class BookingView extends React.Component<IBookingViewProps, IBoo
                     <Divider variant={"middle"}/>
                 </Grid>
                 <Grid item xs={12} container spacing={32} key={3}>
-                    {bookings.sort(Booking.compareOnDate).map((booking, index) => {
-                        return (
-                            <Grid key={index} item xs={6}>
-                                <Booking entity={booking}/>
-                            </Grid>
-                        );
-                    })}
+                    <BookingTable bookings={bookings}/>
                 </Grid>
             </Grid>
         );

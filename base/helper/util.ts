@@ -1,5 +1,6 @@
+import {basicStringDMYToDate, isDMYDateString} from "./time/dateHelper";
 import {Requireable} from "prop-types";
-import {AccountModel, IAccountDatabase, IAccountIdentityDefaultStringValues} from "../model/AccountModel";
+import {AccountModel} from "../model/AccountModel";
 
 export function dateToDayString(date: Date): string {
     return basicDateToString(date, "-");
@@ -88,60 +89,57 @@ export function createApiCallPathObject(entityString: string): IRestCallApiPaths
     };
 }
 
-export function createEntityForDB(object: IEntityClass): IDatabaseClass {
-    return object.getDBObject();
-}
+export type TypesAsString = "boolean" | "string" | "number" | "date" | "object";
 
-export interface IEntityStringClass {
-    id: string;
-
-    [key: string]: any;
-}
-
-export interface IEntityClass {
-    id: number;
-
-    [key: string]: any;
-}
-
-export class Entity implements IEntityClass {
-    public static createEntity(object: IEntityStringClass): IEntityClass {
-        const entity = new Entity();
-        entity.set(object);
-        return entity;
-    }
-
-    [key: string]: any;
-
-    public id: number;
-
-    public constructor() {
-        this.id = 0;
-    }
-
-    public set(object: IEntityStringClass) {
-        this.id = object.id ? Number(object.id) : null;
-    }
-
-    public getDBObject(): IDatabaseClass {
-        return {id: this.id};
-    }
-}
-
-export interface IDatabaseClass {
-    id: number;
-
-    [key: string]: any;
-}
-
-export interface IDatabaseFields {
-    [key: string]: IDBCol<any>;
-}
 
 export interface IDBCol<T> {
     fieldName: string;
     labelName: string;
     csvLabelName?: string;
     value: T;
-    type: Requireable<T> | DateConstructor;
+    type: TypesAsString;
+}
+
+export function uniqueArray(value: any, index: number, self: any[]): boolean {
+    return self.indexOf(value) === index;
+}
+
+export function defaultCompare(a: any, b: any) {
+    const typeOfVar = typeof a;
+    if (typeOfVar === "boolean") {
+        return a === b ? 0 : a ? -1 : 1;
+    }
+    if (typeOfVar === "string") {
+        const isDate = isDMYDateString(a);
+        if (isDate) {
+            const elementA: number = a ? basicStringDMYToDate(a, ".").getTime() : 0;
+            const elementB: number = b ? basicStringDMYToDate(b, ".").getTime() : 0;
+            return elementA - elementB;
+        } else {
+            return a.localeCompare(b);
+        }
+    }
+    if (typeOfVar === "number") {
+        return a - b;
+
+    }
+    if (typeOfVar === "object") {
+        return 0;
+    }
+}
+
+export function getAllNumbersBetweenTwoNumbers(x: number, y: number): number[] {
+    const nums: number[] = [];
+    for (let i = x; i <= y; i++) {
+        nums.push(i);
+    }
+    return nums;
+}
+
+export interface IObjectWithKeyLiterals {
+    [key: string]: any
+}
+
+export function getArrayFromObject(obj: IObjectWithKeyLiterals): any {
+    return Object.keys(obj).map((key) => obj[key]);
 }

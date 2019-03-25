@@ -1,11 +1,8 @@
 import {
-    createApiCallPathObject, Entity,
-    IDatabaseClass,
-    IDatabaseFields,
-    IDBCol,
-    IEntityClass, IEntityStringClass,
-    IRestCallApiPaths
+    createApiCallPathObject,
+    IDBCol, IRestCallApiPaths,
 } from "../helper/util";
+import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
 import {number, string, bool} from "prop-types";
 import {AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "./AccountModel";
 
@@ -22,19 +19,19 @@ export const shortDescriptionFields: IShortDescriptionFields = {
         fieldName: "id",
         labelName: "ID",
         value: null,
-        type: number,
+        type: "number",
     },
     originalContent: {
         fieldName: "originalContent",
         labelName: "Original Inhalt",
         value: "",
-        type: string,
+        type: "string",
     },
     replaceContent: {
         fieldName: "replaceContent",
         labelName: "Ersatz Inhalt",
         value: "",
-        type: string,
+        type: "string",
     }
 };
 

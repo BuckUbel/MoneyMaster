@@ -1,0 +1,68 @@
+import * as React from "react";
+import {ICol, IObjectWithEntityProp, IRow} from "./default/helper";
+import {RenderThings} from "../../helper/util";
+import DataTable from "./default/DataTable";
+import {Entity} from "../../../../base/helper/Entity";
+import {getArrayFromObject} from "../../../../base/helper/util";
+
+export interface IEntityTableInformations<T extends RenderThings | ICol> {
+    id: T;
+
+    [key: string]: T;
+}
+
+export interface IBookingTableProps {
+    entities: Entity[];
+    compareFunction: (a: Entity, b: Entity) => number;
+    getDisplay: (a: Entity) => IEntityTableInformations<RenderThings>;
+    entityTableConfiguration: any;
+    baseClass: React.ComponentType<IObjectWithEntityProp>;
+}
+
+export default class EntityTable extends React.Component<IBookingTableProps, {}> {
+
+    constructor(props: IBookingTableProps) {
+        super(props);
+    }
+
+    public render() {
+        const {
+            entities, compareFunction,
+            getDisplay, entityTableConfiguration, baseClass
+        } = this.props;
+
+        let data: IRow[] = [];
+        let header: ICol[] = [];
+
+        if (entities.length > 0) {
+            data = entities.sort(compareFunction).reverse().map((entity: Entity): IRow => {
+                return {id: Number(entity.id), content: getArrayFromObject(getDisplay(entity))};
+            });
+            header = Object.keys(getDisplay(entities[0])).map((prop): ICol => {
+                return ({
+                    key: prop,
+                    name: entityTableConfiguration[prop].name,
+                    type: entityTableConfiguration[prop].type,
+                    filtering: entityTableConfiguration[prop].filtering,
+                    filterOptions: entityTableConfiguration[prop].filterOptions,
+                    sorting: entityTableConfiguration[prop].sorting,
+                    hidden: entityTableConfiguration[prop].hidden
+                });
+            });
+        }
+
+        return (
+            <React.Fragment>
+                {entities.length > 0 &&
+                <DataTable
+                  rowData={data}
+                  colData={header}
+                  baseData={entities}
+                  baseClass={baseClass}
+                  defaultSortRow={6}
+                />
+                }
+            </React.Fragment>
+        );
+    }
+}

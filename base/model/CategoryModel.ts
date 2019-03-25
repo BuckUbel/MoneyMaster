@@ -1,11 +1,8 @@
 import {
-    createApiCallPathObject, Entity,
-    IDatabaseClass,
-    IDatabaseFields,
-    IDBCol,
-    IEntityClass, IEntityStringClass,
-    IRestCallApiPaths
+    createApiCallPathObject,
+    IDBCol, IRestCallApiPaths,
 } from "../helper/util";
+import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
 import {number, string, bool} from "prop-types";
 import {AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "./AccountModel";
 
@@ -24,31 +21,31 @@ export const categoryFields: ICategoriesFields = {
         fieldName: "id",
         labelName: "ID",
         value: null,
-        type: number,
+        type: "number",
     },
     name: {
         fieldName: "name",
         labelName: "Kategorie",
         value: "",
-        type: string,
+        type: "string",
     },
     description: {
         fieldName: "description",
         labelName: "Beschreibung",
         value: "",
-        type: string,
+        type: "string",
     },
     color: {
         fieldName: "color",
         labelName: "Farbe",
         value: "",
-        type: string,
+        type: "string",
     },
     isStandard: {
         fieldName: "isStandard",
         labelName: "Standard-Kategorie",
         value: false,
-        type: bool,
+        type: "boolean",
     },
 };
 

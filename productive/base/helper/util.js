@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const dateHelper_1 = require("./time/dateHelper");
 function dateToDayString(date) {
     return basicDateToString(date, "-");
 }
@@ -75,24 +76,43 @@ function createApiCallPathObject(entityString) {
     };
 }
 exports.createApiCallPathObject = createApiCallPathObject;
-function createEntityForDB(object) {
-    return object.getDBObject();
+function uniqueArray(value, index, self) {
+    return self.indexOf(value) === index;
 }
-exports.createEntityForDB = createEntityForDB;
-class Entity {
-    static createEntity(object) {
-        const entity = new Entity();
-        entity.set(object);
-        return entity;
+exports.uniqueArray = uniqueArray;
+function defaultCompare(a, b) {
+    const typeOfVar = typeof a;
+    if (typeOfVar === "boolean") {
+        return a === b ? 0 : a ? -1 : 1;
     }
-    constructor() {
-        this.id = 0;
+    if (typeOfVar === "string") {
+        const isDate = dateHelper_1.isDMYDateString(a);
+        if (isDate) {
+            const elementA = a ? dateHelper_1.basicStringDMYToDate(a, ".").getTime() : 0;
+            const elementB = b ? dateHelper_1.basicStringDMYToDate(b, ".").getTime() : 0;
+            return elementA - elementB;
+        }
+        else {
+            return a.localeCompare(b);
+        }
     }
-    set(object) {
-        this.id = object.id ? Number(object.id) : null;
+    if (typeOfVar === "number") {
+        return a - b;
     }
-    getDBObject() {
-        return { id: this.id };
+    if (typeOfVar === "object") {
+        return 0;
     }
 }
-exports.Entity = Entity;
+exports.defaultCompare = defaultCompare;
+function getAllNumbersBetweenTwoNumbers(x, y) {
+    const nums = [];
+    for (let i = x; i <= y; i++) {
+        nums.push(i);
+    }
+    return nums;
+}
+exports.getAllNumbersBetweenTwoNumbers = getAllNumbersBetweenTwoNumbers;
+function getArrayFromObject(obj) {
+    return Object.keys(obj).map((key) => obj[key]);
+}
+exports.getArrayFromObject = getArrayFromObject;

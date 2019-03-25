@@ -1,9 +1,10 @@
 import {
-    addTwentyToYear, createApiCallPathObject, dateTo_YMDHMS_String, Entity, IDatabaseClass, IDatabaseFields,
-    IDBCol, IEntityClass, IEntityStringClass, IRestCallApiPaths,
+    addTwentyToYear, createApiCallPathObject, dateTo_YMDHMS_String,
+    IDBCol, IRestCallApiPaths,
     stringToDate,
     stringToDateWithSeparator
 } from "../helper/util";
+import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
 import {number, string} from "prop-types";
 import {AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "./AccountModel";
 
@@ -33,105 +34,105 @@ export const bookingFields: IBookingsFields = {
         labelName: "ID",
         csvLabelName: "ID",
         value: null,
-        type: number,
+        type: "number",
     },
     orderAccount: {
         fieldName: "orderAccount",
         labelName: "Auftragskonto",
         csvLabelName: "Auftragskonto",
         value: "",
-        type: string,
+        type: "string",
     },
     bookingDate: {
         labelName: "Buchungstag",
         csvLabelName: "Buchungstag",
         fieldName: "bookingDate",
         value: null,
-        type: Date,
+        type: "date",
     },
     validDate: {
         labelName: "Valutadatum",
         csvLabelName: "Valutadatum",
         fieldName: "validDate",
         value: null,
-        type: Date,
+        type: "date",
     },
     bookingType: {
         labelName: "Buchungstext",
         csvLabelName: "Buchungstext",
         fieldName: "bookingType",
         value: null,
-        type: string,
+        type: "string",
     },
     purpose: {
         labelName: "Verwendungszweck",
         csvLabelName: "Verwendungszweck",
         fieldName: "purpose",
         value: "",
-        type: string,
+        type: "string",
     },
     believerId: {
         labelName: "Glaeubiger ID",
         csvLabelName: "Glaeubiger ID",
         fieldName: "believerId",
         value: "",
-        type: string,
+        type: "string",
     },
     mandateReference: {
         labelName: "Mandatsreferenz",
         csvLabelName: "Mandatsreferenz",
         fieldName: "mandateReference",
         value: "",
-        type: string,
+        type: "string",
     },
     customerReference: {
         labelName: "Kundenreferenz (End-to-End)",
         csvLabelName: "Kundenreferenz (End-to-End)",
         fieldName: "customerReference",
         value: "",
-        type: string,
+        type: "string",
     },
     payPartner: {
         labelName: "Beguenstigter/Zahlungspflichtiger",
         csvLabelName: "Beguenstigter/Zahlungspflichtiger",
         fieldName: "payPartner",
         value: "",
-        type: string,
+        type: "string",
     },
     iban: {
         labelName: "Kontonummer/IBAN",
         csvLabelName: "Kontonummer/IBAN",
         fieldName: "iban",
         value: "",
-        type: string,
+        type: "string",
     },
     bic: {
         labelName: "BIC (SWIFT-Code)",
         csvLabelName: "BIC (SWIFT-Code)",
         fieldName: "bic",
         value: "",
-        type: string,
+        type: "string",
     },
     value: {
         labelName: "Betrag",
         csvLabelName: "Betrag",
         fieldName: "value",
         value: null,
-        type: number,
+        type: "number",
     },
     currency: {
         labelName: "Waehrung",
         csvLabelName: "Waehrung",
         fieldName: "currency",
         value: "",
-        type: string,
+        type: "string",
     },
     info: {
         labelName: "Info",
         csvLabelName: "Info",
         fieldName: "info",
         value: "",
-        type: string,
+        type: "string",
     },
 };
 
@@ -197,17 +198,17 @@ export function arrayToBookingModel(arr: string[], categories: string[]): Bookin
 
         const typeOfField = bookingFields[fieldName].type;
 
-        if (typeOfField === string) {
+        if (typeOfField === "string") {
             newElement[fieldName] = arr[categoryIndex] ? arr[categoryIndex].trim() : "";
         }
-        if (typeOfField === Date) {
+        if (typeOfField === "date") {
             newElement[fieldName] = null;
             if (arr[categoryIndex]) {
                 const withTwenty = addTwentyToYear(arr[categoryIndex], ".");
                 newElement[fieldName] = stringToDateWithSeparator(withTwenty, ".");
             }
         }
-        if (typeOfField === number) {
+        if (typeOfField === "number") {
             newElement[fieldName] = null;
             if (arr[categoryIndex]) {
                 newElement[fieldName] = Number(arr[categoryIndex].replace(",", "."));

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const util_1 = require("../helper/util");
-const prop_types_1 = require("prop-types");
+const Entity_1 = require("../helper/Entity");
 const AccountModel_1 = require("./AccountModel");
 exports.bookingApiCallPaths = util_1.createApiCallPathObject("/bookings");
 exports.bookingFields = {
@@ -10,105 +10,105 @@ exports.bookingFields = {
         labelName: "ID",
         csvLabelName: "ID",
         value: null,
-        type: prop_types_1.number,
+        type: "number",
     },
     orderAccount: {
         fieldName: "orderAccount",
         labelName: "Auftragskonto",
         csvLabelName: "Auftragskonto",
         value: "",
-        type: prop_types_1.string,
+        type: "string",
     },
     bookingDate: {
         labelName: "Buchungstag",
         csvLabelName: "Buchungstag",
         fieldName: "bookingDate",
         value: null,
-        type: Date,
+        type: "date",
     },
     validDate: {
         labelName: "Valutadatum",
         csvLabelName: "Valutadatum",
         fieldName: "validDate",
         value: null,
-        type: Date,
+        type: "date",
     },
     bookingType: {
         labelName: "Buchungstext",
         csvLabelName: "Buchungstext",
         fieldName: "bookingType",
         value: null,
-        type: prop_types_1.string,
+        type: "string",
     },
     purpose: {
         labelName: "Verwendungszweck",
         csvLabelName: "Verwendungszweck",
         fieldName: "purpose",
         value: "",
-        type: prop_types_1.string,
+        type: "string",
     },
     believerId: {
         labelName: "Glaeubiger ID",
         csvLabelName: "Glaeubiger ID",
         fieldName: "believerId",
         value: "",
-        type: prop_types_1.string,
+        type: "string",
     },
     mandateReference: {
         labelName: "Mandatsreferenz",
         csvLabelName: "Mandatsreferenz",
         fieldName: "mandateReference",
         value: "",
-        type: prop_types_1.string,
+        type: "string",
     },
     customerReference: {
         labelName: "Kundenreferenz (End-to-End)",
         csvLabelName: "Kundenreferenz (End-to-End)",
         fieldName: "customerReference",
         value: "",
-        type: prop_types_1.string,
+        type: "string",
     },
     payPartner: {
         labelName: "Beguenstigter/Zahlungspflichtiger",
         csvLabelName: "Beguenstigter/Zahlungspflichtiger",
         fieldName: "payPartner",
         value: "",
-        type: prop_types_1.string,
+        type: "string",
     },
     iban: {
         labelName: "Kontonummer/IBAN",
         csvLabelName: "Kontonummer/IBAN",
         fieldName: "iban",
         value: "",
-        type: prop_types_1.string,
+        type: "string",
     },
     bic: {
         labelName: "BIC (SWIFT-Code)",
         csvLabelName: "BIC (SWIFT-Code)",
         fieldName: "bic",
         value: "",
-        type: prop_types_1.string,
+        type: "string",
     },
     value: {
         labelName: "Betrag",
         csvLabelName: "Betrag",
         fieldName: "value",
         value: null,
-        type: prop_types_1.number,
+        type: "number",
     },
     currency: {
         labelName: "Waehrung",
         csvLabelName: "Waehrung",
         fieldName: "currency",
         value: "",
-        type: prop_types_1.string,
+        type: "string",
     },
     info: {
         labelName: "Info",
         csvLabelName: "Info",
         fieldName: "info",
         value: "",
-        type: prop_types_1.string,
+        type: "string",
     },
 };
 function arrayToBookingModel(arr, categories) {
@@ -116,17 +116,17 @@ function arrayToBookingModel(arr, categories) {
     Object.keys(exports.bookingFields).map((fieldName, index) => {
         const categoryIndex = categories.indexOf(exports.bookingFields[fieldName].csvLabelName);
         const typeOfField = exports.bookingFields[fieldName].type;
-        if (typeOfField === prop_types_1.string) {
+        if (typeOfField === "string") {
             newElement[fieldName] = arr[categoryIndex] ? arr[categoryIndex].trim() : "";
         }
-        if (typeOfField === Date) {
+        if (typeOfField === "date") {
             newElement[fieldName] = null;
             if (arr[categoryIndex]) {
                 const withTwenty = util_1.addTwentyToYear(arr[categoryIndex], ".");
                 newElement[fieldName] = util_1.stringToDateWithSeparator(withTwenty, ".");
             }
         }
-        if (typeOfField === prop_types_1.number) {
+        if (typeOfField === "number") {
             newElement[fieldName] = null;
             if (arr[categoryIndex]) {
                 newElement[fieldName] = Number(arr[categoryIndex].replace(",", "."));
@@ -136,7 +136,7 @@ function arrayToBookingModel(arr, categories) {
     return newElement;
 }
 exports.arrayToBookingModel = arrayToBookingModel;
-class BookingModel extends util_1.Entity {
+class BookingModel extends Entity_1.Entity {
     static createEntity(object) {
         const entity = new AccountModel_1.AccountModel();
         entity.set(object);

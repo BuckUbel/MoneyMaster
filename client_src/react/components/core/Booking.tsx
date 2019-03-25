@@ -2,12 +2,37 @@ import * as React from "react";
 import {Avatar, Card, CardContent, CardHeader, Divider, Grid, Typography} from "@material-ui/core";
 import {beautyDateString} from "../../../../base/helper/util";
 import {bookingFields, BookingModel, IBookingIdentityDefaultStringValues} from "../../../../base/model/BookingModel";
+import {RenderThings} from "../../helper/util";
+import {IBookingTableInformations} from "../tables/BookingTable";
 
 export interface IBookingProps {
     entity: BookingModel;
 }
 
 export default class Booking extends React.Component<IBookingProps, {}> {
+
+    public static compareOnDate(a: BookingModel, b: BookingModel): number {
+        if (a.bookingDate < b.bookingDate) {
+            return 1;
+        }
+        if (a.bookingDate > b.bookingDate) {
+            return -1;
+        }
+        return 0;
+    }
+
+    public static getDisplay(act: BookingModel): IBookingTableInformations<RenderThings> {
+        return ({
+            id: String(act.id),
+            orderAccount: act.orderAccount,
+            bookingDate: beautyDateString(act.bookingDate),
+            validDate: beautyDateString(act.validDate),
+            bookingType: act.bookingType,
+            purpose: act.purpose,
+            payPartner: act.payPartner,
+            value: act.value.toFixed(2),
+        });
+    }
 
     public state: {} = {};
 
@@ -79,39 +104,4 @@ export default class Booking extends React.Component<IBookingProps, {}> {
             </React.Fragment>
         );
     }
-}
-
-export function compareOnDate(a: BookingModel, b: BookingModel): number {
-    if (a.bookingDate < b.bookingDate) {
-        return 1;
-    }
-    if (a.bookingDate > b.bookingDate) {
-        return -1;
-    }
-    return 0;
-}
-
-export function getDisplayBooking(act: BookingModel): IBookingIdentityDefaultStringValues {
-    return ({
-        id: String(act.id),
-        orderAccount: act.orderAccount,
-        bookingDate: beautyDateString(act.bookingDate),
-        validDate: beautyDateString(act.validDate),
-        bookingType: act.bookingType,
-        purpose: act.purpose,
-        believerId: act.believerId,
-        mandateReference: act.mandateReference,
-        customerReference: act.customerReference,
-        payPartner: act.payPartner,
-        iban: act.iban,
-        bic: act.bic,
-        value: act.value.toFixed(2),
-        currency: act.currency,
-        info: act.info,
-    });
-}
-
-export function getDisplayBookingArray(act: BookingModel): string[] {
-    const obj = getDisplayBooking(act);
-    return Object.keys(obj).map((key) => obj[key]);
 }

@@ -3,6 +3,7 @@ import {Route, RouteComponentProps, Switch, withRouter} from "react-router";
 import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
 import {SvgIconProps} from "@material-ui/core/SvgIcon/SvgIcon";
 import BookingViewContainer from "../../containers/views/BookingViewContainer";
+import AccountViewContainer from "../../containers/views/AccountViewContainer";
 
 export interface IAppRoute {
     component: React.ComponentClass;
@@ -18,6 +19,12 @@ export const routeList: IAppRoute[] =
             icon: DirectionsRunIcon,
             path: "/bookings",
             title: "Buchungen",
+        },
+        {
+            component: AccountViewContainer,
+            icon: DirectionsRunIcon,
+            path: "/accounts",
+            title: "Konten",
         }
     ];
 

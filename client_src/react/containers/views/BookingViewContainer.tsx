@@ -6,13 +6,10 @@ import {load} from "../../api";
 import {IRootState} from "../../store";
 import {
     loadAllBookingAction,
-    addBookingAction,
-    editBookingAction
+    addBookingAction, editBookingAction,
 } from "../../actions/Booking";
-import BookingView from "../../components/views/BookingView";
 import {IBookingIdentity} from "../../../../base/model/BookingModel";
-import {addAccountAction} from "../../actions/Account";
-import {IAccountIdentity} from "../../../../base/model/AccountModel";
+import BookingTableView from "../../components/views/BookingTableView";
 
 const mapsStateToProps = (state: IRootState) => {
     return ({bookings: state.bookings.data});
@@ -20,7 +17,7 @@ const mapsStateToProps = (state: IRootState) => {
 const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) => ({
     fetchAllBookings: () => dispatch(load(loadAllBookingAction)),
     addBookings: (bookings: IBookingIdentity[]) => dispatch(load(addBookingAction(bookings))),
-    addAccount: (accounts: IAccountIdentity[]) => dispatch(load(addAccountAction(accounts))),
+    editBookings: (bookings: IBookingIdentity[]) => dispatch(load(editBookingAction(bookings))),
 });
-const BookingViewContainer = connect(mapsStateToProps, mapDispatchToProps)(BookingView);
+const BookingViewContainer = connect(mapsStateToProps, mapDispatchToProps)(BookingTableView);
 export default BookingViewContainer;

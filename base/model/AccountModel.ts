@@ -1,11 +1,8 @@
 import {
-    createApiCallPathObject, Entity,
-    IDatabaseClass,
-    IDatabaseFields,
-    IDBCol,
-    IEntityClass, IEntityStringClass,
-    IRestCallApiPaths
+    createApiCallPathObject,
+    IDBCol, IRestCallApiPaths,
 } from "../helper/util";
+import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
 import {number, string, bool} from "prop-types";
 
 export const accountApiCallPaths: IRestCallApiPaths = createApiCallPathObject("/accounts");
@@ -25,43 +22,43 @@ export const accountFields: IAccountFields = {
         fieldName: "id",
         labelName: "ID",
         value: null,
-        type: number,
+        type: "number",
     },
     name: {
         fieldName: "name",
         labelName: "Kontoname",
         value: "",
-        type: string,
+        type: "string",
     },
     value: {
         fieldName: "value",
         labelName: "Wert",
         value: null,
-        type: number,
+        type: "number",
     },
     description: {
         fieldName: "description",
         labelName: "Beschreibung",
         value: "",
-        type: string,
+        type: "string",
     },
     color: {
         fieldName: "color",
         labelName: "Farbe",
         value: "",
-        type: string,
+        type: "string",
     },
     isReal: {
         fieldName: "isReal",
         labelName: "Reales Konto",
         value: false,
-        type: bool,
+        type: "boolean",
     },
     isCore: {
         fieldName: "isCore",
         labelName: "Kern-Konto",
         value: false,
-        type: bool,
+        type: "boolean",
     },
 };
 

@@ -1,7 +1,8 @@
 import {IHapiServer} from "../HapiServer";
-import {IDatabaseFields, IEntityClass, IEntityStringClass, IRestCallApiPaths} from "../../base/helper/util";
+import {IRestCallApiPaths} from "../../base/helper/util";
 import * as Hapi from "hapi";
 import {insertEntities, loadAllEntitiesFromDB} from "../database/basicActions";
+import {IDatabaseFields, IEntityClass, IEntityStringClass} from "../../base/helper/Entity";
 
 export function standardEntityRouting(
     server: IHapiServer,

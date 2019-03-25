@@ -1,5 +1,5 @@
 import {IDatabase} from "../database";
-import {createEntityForDB, IDatabaseClass, IDatabaseFields, IEntityClass} from "../../base/helper/util";
+import {createEntityForDB, IDatabaseClass, IDatabaseFields, IEntityClass} from "../../base/helper/Entity";
 
 export async function loadAllEntitiesFromDB(
     db: IDatabase,
