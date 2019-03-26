@@ -1,14 +1,14 @@
 import {
-    addTwentyToYear, createApiCallPathObject, dateTo_YMDHMS_String,
-    IDBCol, IRestCallApiPaths,
+    addTwentyToYear, dateTo_YMDHMS_String,
+    IDBCol,
     stringToDate,
     stringToDateWithSeparator
 } from "../helper/util";
 import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
-import {number, string} from "prop-types";
 import {AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "./AccountModel";
+import {createEntityActions, IEntityActionsObject} from "../actions/Entity";
 
-export const bookingApiCallPaths: IRestCallApiPaths = createApiCallPathObject("/bookings");
+export const bookingActions: IEntityActionsObject = createEntityActions("booking");
 
 interface IBookingsFields extends IDatabaseFields {
     id?: IDBCol<number>;

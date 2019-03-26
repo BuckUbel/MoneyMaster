@@ -1,12 +1,11 @@
 import {
-    createApiCallPathObject,
-    IDBCol, IRestCallApiPaths,
+    IDBCol,
 } from "../helper/util";
 import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
-import {number, string, bool} from "prop-types";
 import {AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "./AccountModel";
+import {createEntityActions, IEntityActionsObject} from "../actions/Entity";
 
-export const shortDescriptionApiCallPaths: IRestCallApiPaths = createApiCallPathObject("/short-descriptions");
+export const shortDescriptionActions: IEntityActionsObject = createEntityActions("short-descriptions");
 
 interface IShortDescriptionFields extends IDatabaseFields {
     id?: IDBCol<number>;
@@ -56,7 +55,7 @@ export interface IShortDescriptionDatabase extends IDatabaseClass {
     replaceContent: string;
 }
 
-export class ShortDescriptionModel  extends Entity implements IShortDescriptionIdentity {
+export class ShortDescriptionModel extends Entity implements IShortDescriptionIdentity {
 
     public static createEntity(object: IAccountIdentityDefaultStringValues): IAccountIdentity {
         const entity = new AccountModel();

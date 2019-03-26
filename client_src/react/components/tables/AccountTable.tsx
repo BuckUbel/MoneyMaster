@@ -18,7 +18,7 @@ export default class AccountTable extends React.Component<IAccountTableProps, {}
     public render() {
         const {accounts} = this.props;
 
-        return(
+        return (
             <React.Fragment>
                 <EntityTable
                     entities={accounts}
@@ -39,6 +39,7 @@ export interface IAccountTableInformations<T extends RenderThings | ICol> extend
     color: T;
     isReal: T;
     isCore: T;
+
     [key: string]: T;
 }
 

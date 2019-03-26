@@ -19,7 +19,7 @@ export default class BookingTable extends React.Component<IBookingTableProps, {}
     public render() {
         const {bookings} = this.props;
 
-        return(
+        return (
             <React.Fragment>
                 <EntityTable
                     entities={bookings}
@@ -33,7 +33,7 @@ export default class BookingTable extends React.Component<IBookingTableProps, {}
     }
 }
 
-export interface IBookingTableInformations<T extends RenderThings | ICol> extends IEntityTableInformations<T>{
+export interface IBookingTableInformations<T extends RenderThings | ICol> extends IEntityTableInformations<T> {
     orderAccount: T;
     bookingDate: T;
     validDate: T;

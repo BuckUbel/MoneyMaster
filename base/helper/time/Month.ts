@@ -1,18 +1,19 @@
 export class Month {
-  public fullWidth: number;
-  public shortWidth: number;
-  public fullName: string;
-  public shortName: string;
-  public letter: string;
+    public fullWidth: number;
+    public shortWidth: number;
+    public fullName: string;
+    public shortName: string;
+    public letter: string;
 
-  constructor(fullWidth: number, shortWidth: number, fullName: string, shortName: string, letter: string) {
-    this.fullWidth = fullWidth;
-    this.shortWidth = shortWidth;
-    this.fullName = fullName;
-    this.shortName = shortName;
-    this.letter = letter;
-  }
+    constructor(fullWidth: number, shortWidth: number, fullName: string, shortName: string, letter: string) {
+        this.fullWidth = fullWidth;
+        this.shortWidth = shortWidth;
+        this.fullName = fullName;
+        this.shortName = shortName;
+        this.letter = letter;
+    }
 }
+
 //
 // export const monthObjects = [
 //   new Month(63, 43, "Januar", "Jan.", "J"),

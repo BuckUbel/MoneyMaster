@@ -46,7 +46,8 @@ export default class EntityTable extends React.Component<IBookingTableProps, {}>
                     filtering: entityTableConfiguration[prop].filtering,
                     filterOptions: entityTableConfiguration[prop].filterOptions,
                     sorting: entityTableConfiguration[prop].sorting,
-                    hidden: entityTableConfiguration[prop].hidden
+                    hidden: entityTableConfiguration[prop].hidden,
+                    style: entityTableConfiguration[prop].style
                 });
             });
         }

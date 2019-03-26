@@ -4,20 +4,18 @@ import {ThunkDispatch} from "redux-thunk";
 
 import {load} from "../../api";
 import {IRootState} from "../../store";
-import {
-    loadAllBookingAction,
-    addBookingAction, editBookingAction,
-} from "../../actions/Booking";
-import {IBookingIdentity} from "../../../../base/model/BookingModel";
+import {bookingActions, IBookingIdentity} from "../../../../base/model/BookingModel";
 import BookingTableView from "../../components/views/BookingTableView";
+import BookingView from "../../components/views/BookingView";
 
 const mapsStateToProps = (state: IRootState) => {
     return ({bookings: state.bookings.data});
 };
 const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) => ({
-    fetchAllBookings: () => dispatch(load(loadAllBookingAction)),
-    addBookings: (bookings: IBookingIdentity[]) => dispatch(load(addBookingAction(bookings))),
-    editBookings: (bookings: IBookingIdentity[]) => dispatch(load(editBookingAction(bookings))),
+    fetchAllBookings: () => dispatch(load(bookingActions.actions.loadAll())),
+    addBookings: (bookings: IBookingIdentity[]) => dispatch(load(bookingActions.actions.add(bookings))),
+    editBookings: (bookings: IBookingIdentity[]) => dispatch(load(bookingActions.actions.edit(bookings))),
 });
-const BookingViewContainer = connect(mapsStateToProps, mapDispatchToProps)(BookingTableView);
-export default BookingViewContainer;
+export const BookingViewContainer = connect(mapsStateToProps, mapDispatchToProps)(BookingView);
+
+export const BookingTableViewContainer = connect(mapsStateToProps, mapDispatchToProps)(BookingTableView);

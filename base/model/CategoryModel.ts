@@ -1,12 +1,11 @@
 import {
-    createApiCallPathObject,
-    IDBCol, IRestCallApiPaths,
+    IDBCol,
 } from "../helper/util";
 import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
-import {number, string, bool} from "prop-types";
 import {AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "./AccountModel";
+import {createEntityActions, IEntityActionsObject} from "../actions/Entity";
 
-export const categoryApiCallPaths: IRestCallApiPaths = createApiCallPathObject("/categories");
+export const categoryActions: IEntityActionsObject = createEntityActions("category");
 
 interface ICategoriesFields extends IDatabaseFields {
     id?: IDBCol<number>;

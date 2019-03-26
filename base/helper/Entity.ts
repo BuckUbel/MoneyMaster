@@ -3,6 +3,15 @@ import {IDBCol} from "./util";
 export function createEntityForDB(object: IEntityClass): IDatabaseClass {
     return object.getDBObject();
 }
+export interface IAddActionPayload {
+    entities: IEntityClass[];
+}
+export interface IUpdateActionPayload {
+    entities: IEntityClass[];
+}
+export interface IDeleteActionPayload {
+    ids: number[];
+}
 
 export interface IEntityStringClass {
     id: string;
@@ -15,6 +24,7 @@ export interface IEntityClass {
 
     [key: string]: any;
 }
+
 export interface IDatabaseClass {
     id: number;
 

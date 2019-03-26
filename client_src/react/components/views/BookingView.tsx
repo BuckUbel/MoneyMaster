@@ -6,23 +6,37 @@ import {
 import Button from "@material-ui/core/Button";
 import {Divider, Grid, Typography} from "@material-ui/core";
 import Booking from "../core/Booking";
-import {IAccountIdentity} from "../../../../base/model/AccountModel";
+import {changeDateMonthFirstDay, changeDateMonthLastDay} from "../../../../base/helper/time/dateHelper";
 
 export interface IBookingViewProps {
     bookings: BookingModel[];
     fetchAllBookings: () => Promise<any>;
     addBookings: (bookings: IBookingIdentity[]) => Promise<any>;
     editBookings: (bookings: IBookingIdentity[]) => Promise<any>;
-    addAccount: (accounts: IAccountIdentity[]) => Promise<any>,
 }
 
 export interface IBookingViewState {
+    filteredBookings: BookingModel[];
 }
 
 const defaultState: IBookingViewState = {
+    filteredBookings: []
 };
 
 export default class BookingView extends React.Component<IBookingViewProps, IBookingViewState> {
+
+    public static getDerivedStateFromProps(newProps: IBookingViewProps, oldState: IBookingViewState): IBookingViewState {
+        const {bookings} = newProps;
+
+        const prevDay = changeDateMonthLastDay(new Date(), -1).getTime();
+        const newFilteredBooking = bookings.filter((booking: BookingModel): boolean => {
+            return booking.bookingDate ? booking.bookingDate.getTime() > prevDay : false;
+        }).sort(Booking.compareOnDate);
+
+        return {
+            filteredBookings: newFilteredBooking
+        };
+    }
 
     public state: IBookingViewState = defaultState;
 
@@ -53,14 +67,16 @@ export default class BookingView extends React.Component<IBookingViewProps, IBoo
 
     public render() {
         const {bookings} = this.props;
-        let nowValue = 0;
-        if (bookings.length > 0) {
-            nowValue = bookings.map((b) => {
-                return b.value;
-            }).reduce((accumulator: number, currentValue: number) => {
-                return accumulator + currentValue;
-            });
-        }
+        const {filteredBookings} = this.state;
+
+        const nowValue = 584.70;
+        // if (bookings.length > 0) {
+        //     nowValue = bookings.map((b) => {
+        //         return b.value;
+        //     }).reduce((accumulator: number, currentValue: number) => {
+        //         return accumulator + currentValue;
+        //     });
+        // }
         return (
             <Grid item xs={12} container spacing={24}>
                 <Grid key={1} item xs={12} container spacing={16}>
@@ -78,7 +94,7 @@ export default class BookingView extends React.Component<IBookingViewProps, IBoo
                     <Divider variant={"middle"}/>
                 </Grid>
                 <Grid item xs={12} container spacing={32} key={3}>
-                    {bookings.sort(Booking.compareOnDate).map((booking, index) => {
+                    {filteredBookings.map((booking, index) => {
                         return (
                             <Grid key={index} item xs={6}>
                                 <Booking entity={booking}/>

@@ -10,11 +10,19 @@ function standardEntityRouting(server, dbTable, dbFields, routes, newEntity) {
         }
     });
     server.app.route({
+        method: "GET",
+        path: routes.readOne + "{index*}",
+        handler: (request, h) => {
+            // load one Entity
+            return "";
+        }
+    });
+    server.app.route({
         method: "POST",
         path: routes.create,
         handler: (request, h) => {
             const requestBody = request.payload;
-            const objects = requestBody.elements;
+            const objects = requestBody.entities;
             const entityObjects = objects.map((object) => {
                 return newEntity(object);
             });

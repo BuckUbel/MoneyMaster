@@ -40,10 +40,10 @@ class ServerRoutes {
         });
     }
     restAPIRouting() {
-        enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.bookings, BookingModel_1.bookingFields, BookingModel_1.bookingApiCallPaths, BookingModel_1.BookingModel.createEntity);
-        enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.accounts, AccountModel_1.accountFields, AccountModel_1.accountApiCallPaths, AccountModel_1.AccountModel.createEntity);
-        enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.shortDescriptions, ShortDescriptionModel_1.shortDescriptionFields, ShortDescriptionModel_1.shortDescriptionApiCallPaths, ShortDescriptionModel_1.ShortDescriptionModel.createEntity);
-        enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.categories, CategoryModel_1.categoryFields, CategoryModel_1.categoryApiCallPaths, CategoryModel_1.CategoryModel.createEntity);
+        enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.bookings, BookingModel_1.bookingFields, BookingModel_1.bookingActions.apiPaths, BookingModel_1.BookingModel.createEntity);
+        enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.accounts, AccountModel_1.accountFields, AccountModel_1.accountActions.apiPaths, AccountModel_1.AccountModel.createEntity);
+        enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.shortDescriptions, ShortDescriptionModel_1.shortDescriptionFields, ShortDescriptionModel_1.shortDescriptionActions.apiPaths, ShortDescriptionModel_1.ShortDescriptionModel.createEntity);
+        enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.categories, CategoryModel_1.categoryFields, CategoryModel_1.categoryActions.apiPaths, CategoryModel_1.CategoryModel.createEntity);
     }
     init() {
         return __awaiter(this, void 0, void 0, function* () {

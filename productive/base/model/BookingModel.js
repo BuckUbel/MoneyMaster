@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const util_1 = require("../helper/util");
 const Entity_1 = require("../helper/Entity");
 const AccountModel_1 = require("./AccountModel");
-exports.bookingApiCallPaths = util_1.createApiCallPathObject("/bookings");
+const Entity_2 = require("../actions/Entity");
+exports.bookingActions = Entity_2.createEntityActions("booking");
 exports.bookingFields = {
     id: {
         fieldName: "id",

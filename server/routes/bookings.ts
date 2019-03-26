@@ -6,7 +6,6 @@ import * as Hapi from "hapi";
 import {getCSVDataFromSPKBLK} from "../puppeteer/SPK-BLK";
 import {IHapiServer} from "../HapiServer";
 import {extractBookingsFromFile, getLastModifiedFileInDir, IDifferentExportedBookings, readFile} from "../helper";
-import {bookingApiCallPaths} from "../../base/model/BookingModel";
 
 export default class BookingRoutes {
 

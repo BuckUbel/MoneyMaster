@@ -74,7 +74,7 @@ export const apiPath: string = "/api";
 export const standardApiCallPaths: IRestCallApiPaths = {
     create: "/create",
     read: "/load",
-    readOne: "/{index*}",
+    readOne: "/",
     update: "/update",
     delete: "/delete",
 };

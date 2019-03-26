@@ -17,8 +17,7 @@ export interface IBookingViewProps {
 export interface IBookingViewState {
 }
 
-const defaultState: IBookingViewState = {
-};
+const defaultState: IBookingViewState = {};
 
 export default class BookingTableView extends React.Component<IBookingViewProps, IBookingViewState> {
 

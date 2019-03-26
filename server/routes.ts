@@ -2,16 +2,16 @@ import * as Hapi from "hapi";
 import {IHapiServer} from "./HapiServer";
 import BookingRoutes from "./routes/bookings";
 import {
-    accountApiCallPaths,
+    accountActions,
     accountFields, AccountModel,
 } from "../base/model/AccountModel";
-import {bookingApiCallPaths, bookingFields, BookingModel} from "../base/model/BookingModel";
+import {bookingActions, bookingFields, BookingModel} from "../base/model/BookingModel";
 import {
-    shortDescriptionApiCallPaths,
+    shortDescriptionActions,
     shortDescriptionFields,
     ShortDescriptionModel
 } from "../base/model/ShortDescriptionModel";
-import {categoryApiCallPaths, categoryFields, CategoryModel} from "../base/model/CategoryModel";
+import {categoryActions, categoryFields, CategoryModel} from "../base/model/CategoryModel";
 import {standardEntityRouting} from "./routes/enities";
 
 export default class ServerRoutes {
@@ -46,28 +46,28 @@ export default class ServerRoutes {
             this.server,
             this.server.database.config.tableNames.bookings,
             bookingFields,
-            bookingApiCallPaths,
+            bookingActions.apiPaths,
             BookingModel.createEntity
         );
         standardEntityRouting(
             this.server,
             this.server.database.config.tableNames.accounts,
             accountFields,
-            accountApiCallPaths,
+            accountActions.apiPaths,
             AccountModel.createEntity
         );
         standardEntityRouting(
             this.server,
             this.server.database.config.tableNames.shortDescriptions,
             shortDescriptionFields,
-            shortDescriptionApiCallPaths,
+            shortDescriptionActions.apiPaths,
             ShortDescriptionModel.createEntity
         );
         standardEntityRouting(
             this.server,
             this.server.database.config.tableNames.categories,
             categoryFields,
-            categoryApiCallPaths,
+            categoryActions.apiPaths,
             CategoryModel.createEntity
         );
     }

@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const util_1 = require("../helper/util");
 const Entity_1 = require("../helper/Entity");
 const AccountModel_1 = require("./AccountModel");
-exports.categoryApiCallPaths = util_1.createApiCallPathObject("/categories");
+const Entity_2 = require("../actions/Entity");
+exports.categoryActions = Entity_2.createEntityActions("category");
 exports.categoryFields = {
     id: {
         fieldName: "id",

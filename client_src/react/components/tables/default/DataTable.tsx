@@ -181,8 +181,15 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
                                                 >
                                                     {Object.keys(row.content).map((key: string, cellIndex: number) => {
                                                         if (!colData[cellIndex].hidden) {
+                                                            let cellContent = row.content[key];
+                                                            if (colData[cellIndex].type === "boolean") {
+                                                                cellContent = row.content[key] ?
+                                                                    String.fromCharCode(10003) :
+                                                                    String.fromCharCode(9747);
+                                                            }
                                                             return (
-                                                                <TableCell key={key}>{row.content[key]}</TableCell>);
+                                                                <TableCell key={key}>{cellContent}</TableCell>
+                                                            );
                                                         }
                                                         return null;
                                                     })}

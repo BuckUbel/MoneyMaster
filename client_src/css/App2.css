@@ -1,147 +1,178 @@
 .App {
-  text-align: center;
+    text-align: center;
 }
+
 .App-logo {
-  animation: App-logo-spin infinite 5s linear;
-  height: 50px;
+    animation: App-logo-spin infinite 5s linear;
+    height: 50px;
 }
+
 @keyframes App-logo-spin {
-  from {
-    transform: rotate3d(0, 0, 0, 0);
-  }
-  to {
-    transform: rotate3d(1, 1, 1, 360deg);
-  }
+    from {
+        transform: rotate3d(0, 0, 0, 0);
+    }
+    to {
+        transform: rotate3d(1, 1, 1, 360deg);
+    }
 }
+
 .App-header:hover .App-logo {
-  animation-play-state: paused;
+    animation-play-state: paused;
 }
+
 @keyframes App-logo-spin-fast {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
+
 .App-header {
-  background-color: #353e46;
-  padding: 1px;
-  color: white;
-  position: fixed;
-  width: 100%;
-  height: 70px;
-  top: 0;
-  left: 0;
+    background-color: #353e46;
+    padding: 1px;
+    color: white;
+    position: fixed;
+    width: 100%;
+    height: 70px;
+    top: 0;
+    left: 0;
 }
+
 .App-header h1 {
-  font-size: 1.5em;
+    font-size: 1.5em;
 }
+
 .App-header h3 {
-  font-size: 1.0em;
+    font-size: 1.0em;
 }
+
 .App-intro {
-  font-size: large;
+    font-size: large;
 }
+
 .App-header .header-left {
-  width: 120px;
-  display: block;
-  float: left;
-  margin: 10px 0 0 0;
-  text-align: right;
+    width: 120px;
+    display: block;
+    float: left;
+    margin: 10px 0 0 0;
+    text-align: right;
 }
+
 .App-header .header-right {
-  display: block;
-  margin: 15px 0 auto 135px;
-  text-align: left;
+    display: block;
+    margin: 15px 0 auto 135px;
+    text-align: left;
 }
+
 .mainPage {
-  clear: both;
-  position: fixed;
-  top: 70px;
-  bottom: 0;
-  width: 100%;
-  text-align: left;
+    clear: both;
+    position: fixed;
+    top: 70px;
+    bottom: 0;
+    width: 100%;
+    text-align: left;
 }
+
 .sidebar {
-  margin: 0;
-  background-color: #5d666e;
-  width: 185px;
-  height: 100%;
-  float: left;
-  position: initial;
+    margin: 0;
+    background-color: #5d666e;
+    width: 185px;
+    height: 100%;
+    float: left;
+    position: initial;
 }
+
 .sidebar ul {
-  margin: 0;
-  padding: 0;
+    margin: 0;
+    padding: 0;
 }
+
 .sidebar li {
-  display: block;
-  padding: 5px 0 5px 0;
-  margin: 5px 0 0 0;
-  text-decoration: none;
-  color: #a2abb4;
+    display: block;
+    padding: 5px 0 5px 0;
+    margin: 5px 0 0 0;
+    text-decoration: none;
+    color: #a2abb4;
 }
+
 .sidebar li:hover {
-  background-color: #353e46;
-  color: #84919a;
-  opacity: 0.75;
-  transition: .5s ease;
+    background-color: #353e46;
+    color: #84919a;
+    opacity: 0.75;
+    transition: .5s ease;
 }
+
 .sidebar a {
-  padding: 0 0 0 10px;
-  display: block;
-  width: 185px;
-  text-decoration: none;
-  color: #a2abb4
+    padding: 0 0 0 10px;
+    display: block;
+    width: 185px;
+    text-decoration: none;
+    color: #a2abb4
 }
+
 .sidebar a:hover {
-  text-decoration: none;
-  color: #84919a;
+    text-decoration: none;
+    color: #84919a;
 }
+
 .content {
-  /*overflow: auto;*/
-  /*height: 100%;*/
-  position: initial;
-  background: #171a20;
-  color: #a2abb4;
-  padding: 50px 30px 50px 30px;
+    /*overflow: auto;*/
+    /*height: 100%;*/
+    position: initial;
+    background: #171a20;
+    color: #a2abb4;
+    padding: 50px 30px 50px 30px;
 }
+
 .contentSpace {
-  overflow: auto;
-  height: 100%;
-  position: initial;
-  background: #171a20;
-  color: #a2abb4;
-  padding: 0;
+    overflow: auto;
+    height: 100%;
+    position: initial;
+    background: #171a20;
+    color: #a2abb4;
+    padding: 0;
 }
+
 .footer {
-  background-color: #000;
-  width: 100%;
-  bottom: 0;
-  height: 150px;
+    background-color: #000;
+    width: 100%;
+    bottom: 0;
+    height: 150px;
 }
+
 .footer div {
-  padding: 50px 20px 50px 20px;
+    padding: 50px 20px 50px 20px;
 }
+
 .content p {
-  color: #a2abb4
+    color: #a2abb4
 }
+
 .content input {
-  background-color: #5d666e;
-  border: solid 0;
-  padding: 2px 0 2px 5px;
-  color: #fff
+    background-color: #5d666e;
+    border: solid 0;
+    padding: 2px 0 2px 5px;
+    color: #fff
 }
+
 .content textarea {
-  background-color: #5d666e;
-  border: solid 0;
-  padding: 5px 0 0 5px;
-  color: #fff
+    background-color: #5d666e;
+    border: solid 0;
+    padding: 5px 0 0 5px;
+    color: #fff
 }
+
 .content table {
-  margin: 0 auto 0 auto;
+    margin: 0 auto 0 auto;
 }
+
 ::placeholder {
-  color: #84919a;
+    color: #84919a;
 }
+
 .smallCell {
-  width: 1px;
-  white-space: nowrap;
+    width: 1px;
+    white-space: nowrap;
 }

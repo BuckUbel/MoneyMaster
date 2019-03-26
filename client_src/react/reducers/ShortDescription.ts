@@ -1,13 +1,12 @@
-import {
-    bookingActions,
-    BookingModel,
-    IBookingIdentity,
-    IBookingIdentityDefaultStringValues
-} from "../../../base/model/BookingModel";
 import {IResultAction} from "../../../base/actions/Entity";
+import {
+    IShortDescriptionIdentityDefaultStringValues,
+    shortDescriptionActions,
+    ShortDescriptionModel
+} from "../../../base/model/ShortDescriptionModel";
 
 export interface IState {
-    data: BookingModel[];
+    data: ShortDescriptionModel[];
 }
 
 const defaultState: IState = {
@@ -17,24 +16,25 @@ const defaultState: IState = {
 export default (state: IState = defaultState, action: IResultAction) => {
 
     switch (action.type) {
-        case bookingActions.actionTypes.add.success: {
+        case shortDescriptionActions.actionTypes.add.success: {
             return state;
         }
-        case bookingActions.actionTypes.edit.success: {
+        case shortDescriptionActions.actionTypes.edit.success: {
             return state;
         }
-        case bookingActions.actionTypes.loadAll.failure: {
+        case shortDescriptionActions.actionTypes.loadAll.failure: {
             return state;
         }
-        case bookingActions.actionTypes.loadAll.success: {
+        case shortDescriptionActions.actionTypes.loadAll.success: {
             if (action) {
                 const newState: IState = Object.assign([], state);
                 if (action.response) {
                     if (action.response.entities) {
                         newState.data = action.response.entities.map(
-                            (bookingData: IBookingIdentityDefaultStringValues): BookingModel => {
-                                const obj = new BookingModel();
-                                obj.set(bookingData);
+                            (shortDescriptionData: IShortDescriptionIdentityDefaultStringValues)
+                                : ShortDescriptionModel => {
+                                const obj = new ShortDescriptionModel();
+                                obj.set(shortDescriptionData);
                                 return obj;
                             });
                         return newState;

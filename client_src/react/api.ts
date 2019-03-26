@@ -2,56 +2,23 @@ import {Action, ActionCreator, Middleware} from "redux";
 import {IRootState} from "./store";
 import {Dispatch} from "react-redux";
 import {ThunkAction} from "redux-thunk";
+import {httpMethods, ICallApiAction, IResultAction} from "../../base/actions/Entity";
 
-export interface ICallApiAction<T = any> extends Action {
-    endpoint: string;
-    method: "get" | "post";
-    types?: [string, string, string];
-    type: string;
-    payload?: {
-        [params: string]: any;
-    };
-    actionParams?: {
-        [params: string]: any;
-    };
-    successAction?: (...param: any[]) => IResultAction;
-    failAction?: (...param: any[]) => IResultAction;
-}
-
-export interface IResultAction extends Action {
-    type: string;
-    payload?: {
-        [params: string]: any;
-    };
-    response?: {
-        success: true;
-        data: any[] | any;
-    };
-    error?: {
-        message: string;
-        code?: string;
-    };
-    responseData?: IAnyObject | IAnyObject[];
-}
-
-export interface IAnyObject {
-    [attributes: string]: any;
-}
-
-export interface ISuccessAction extends IResultAction {
-    response: {
-        success: true;
-        data: any[];
-    };
-}
-
-export interface IFailAction extends IResultAction {
-    error: {
-        message: string;
-        code?: string;
-    };
-    responseData?: IAnyObject | IAnyObject[];
-}
+// export interface IResultAction extends Action {
+//     type: string;
+//     payload?: {
+//         [params: string]: any;
+//     };
+//     response?: {
+//         success: true;
+//         data: any[] | any;
+//     };
+//     error?: {
+//         message: string;
+//         code?: string;
+//     };
+//     responseData?: IAnyObject | IAnyObject[];
+// }
 
 // -------------------------------------------
 // Default Api Actions
@@ -73,7 +40,7 @@ export const load: ActionCreator<ThunkAction<Promise<Action>, IRootState, void, 
     return async (dispatch: Dispatch<IRootState>): Promise<Action> => {
         let failed = false;
         try {
-            const objects = await fetch(apiAction.endpoint, getFetchBody(apiAction))
+            const objects: any = await fetch(apiAction.endpoint, getFetchBody(apiAction))
                 .then((res) => {
                     return res.json();
                 })
@@ -88,7 +55,7 @@ export const load: ActionCreator<ThunkAction<Promise<Action>, IRootState, void, 
             if (!failed) {
 
                 if (apiAction.successAction) {
-                    return dispatch(apiAction.successAction(objects));
+                    return dispatch(apiAction.successAction(objects, 200, "Daten wurden geladen."));
                 }
                 if (apiAction.failAction) {
                     return dispatch(apiAction.failAction(objects, 500, "Ein Fehler liegt vor."));
@@ -106,7 +73,7 @@ const getFetchBody = (apiAction: ICallApiAction) => {
 
     let body = {};
 
-    if (apiAction.method === "post") {
+    if (apiAction.method === httpMethods.POST) {
         body = {
             method: apiAction.method,
             headers: {
@@ -117,7 +84,7 @@ const getFetchBody = (apiAction: ICallApiAction) => {
         };
     }
 
-    if (apiAction.method === "get") {
+    if (apiAction.method === httpMethods.GET) {
         body = {
             method: apiAction.method,
             headers: {

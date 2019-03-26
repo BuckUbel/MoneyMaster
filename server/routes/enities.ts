@@ -19,11 +19,19 @@ export function standardEntityRouting(
         }
     });
     server.app.route({
+        method: "GET",
+        path: routes.readOne + "{index*}",
+        handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+            // load one Entity
+            return "";
+        }
+    });
+    server.app.route({
         method: "POST",
         path: routes.create,
         handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
             const requestBody: any = request.payload;
-            const objects: IEntityStringClass[] = requestBody.elements;
+            const objects: IEntityStringClass[] = requestBody.entities;
             const entityObjects = objects.map((object) => {
                 return newEntity(object);
             });

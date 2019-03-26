@@ -8,5 +8,6 @@ export default class CategoriesRoutes {
         this.server = server;
     }
 
-    public async init() {    }
+    public async init() {
+    }
 }

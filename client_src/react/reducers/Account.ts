@@ -1,6 +1,10 @@
-import {IResultAction} from "../api";
-import {AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "../../../base/model/AccountModel";
-import {ActionTypes} from "../actions/Account";
+import {
+    accountActions,
+    AccountModel,
+    IAccountIdentity,
+    IAccountIdentityDefaultStringValues
+} from "../../../base/model/AccountModel";
+import {IResultAction} from "../../../base/actions/Entity";
 
 export interface IState {
     data: AccountModel[];
@@ -13,22 +17,22 @@ const defaultState: IState = {
 export default (state: IState = defaultState, action: IResultAction) => {
 
     switch (action.type) {
-        case ActionTypes.ADD_ACCOUNT_SUCCESS: {
+        case accountActions.actionTypes.add.success: {
             return state;
         }
-        case ActionTypes.EDIT_ACCOUNT_SUCCESS: {
+        case accountActions.actionTypes.edit.success: {
             return state;
         }
-        case ActionTypes.LOAD_ALL_ACCOUNT_FAILURE: {
+        case accountActions.actionTypes.loadAll.failure: {
             return state;
         }
-        case ActionTypes.LOAD_ALL_ACCOUNT_SUCCESS: {
+        case accountActions.actionTypes.loadAll.success: {
             if (action) {
                 const newState: IState = Object.assign([], state);
                 if (action.response) {
-                    if (action.response.data) {
-                        newState.data = action.response.data.map(
-                            (accountData: IAccountIdentityDefaultStringValues): IAccountIdentity=> {
+                    if (action.response.entities) {
+                        newState.data = action.response.entities.map(
+                            (accountData: IAccountIdentityDefaultStringValues): AccountModel => {
                                 const obj = new AccountModel();
                                 obj.set(accountData);
                                 return obj;

@@ -1,13 +1,8 @@
-import {
-    bookingActions,
-    BookingModel,
-    IBookingIdentity,
-    IBookingIdentityDefaultStringValues
-} from "../../../base/model/BookingModel";
 import {IResultAction} from "../../../base/actions/Entity";
+import {categoryActions, CategoryModel, ICategoryIdentityDefaultStringValues} from "../../../base/model/CategoryModel";
 
 export interface IState {
-    data: BookingModel[];
+    data: CategoryModel[];
 }
 
 const defaultState: IState = {
@@ -17,24 +12,24 @@ const defaultState: IState = {
 export default (state: IState = defaultState, action: IResultAction) => {
 
     switch (action.type) {
-        case bookingActions.actionTypes.add.success: {
+        case categoryActions.actionTypes.add.success: {
             return state;
         }
-        case bookingActions.actionTypes.edit.success: {
+        case categoryActions.actionTypes.edit.success: {
             return state;
         }
-        case bookingActions.actionTypes.loadAll.failure: {
+        case categoryActions.actionTypes.loadAll.failure: {
             return state;
         }
-        case bookingActions.actionTypes.loadAll.success: {
+        case categoryActions.actionTypes.loadAll.success: {
             if (action) {
                 const newState: IState = Object.assign([], state);
                 if (action.response) {
                     if (action.response.entities) {
                         newState.data = action.response.entities.map(
-                            (bookingData: IBookingIdentityDefaultStringValues): BookingModel => {
-                                const obj = new BookingModel();
-                                obj.set(bookingData);
+                            (categoryData: ICategoryIdentityDefaultStringValues): CategoryModel => {
+                                const obj = new CategoryModel();
+                                obj.set(categoryData);
                                 return obj;
                             });
                         return newState;

@@ -1,18 +1,17 @@
 import * as React from "react";
 import {Avatar, Card, CardContent, CardHeader, Divider, Grid, Typography} from "@material-ui/core";
-import {beautyDateString} from "../../../../base/helper/util";
 import {RenderThings} from "../../helper/util";
-import {accountFields, AccountModel} from "../../../../base/model/AccountModel";
-import {IAccountTableInformations} from "../tables/AccountTable";
+import {categoryFields, CategoryModel} from "../../../../base/model/CategoryModel";
+import {ICategoryTableInformations} from "../tables/CategoryTable";
 import ColorField from "./simple/ColorField";
 
-export interface IAccountProps {
-    entity: AccountModel;
+export interface ICategoryProps {
+    entity: CategoryModel;
 }
 
-export default class Account extends React.Component<IAccountProps, {}> {
+export default class Category extends React.Component<ICategoryProps, {}> {
 
-    public static compare(a: AccountModel, b: AccountModel): number {
+    public static compare(a: CategoryModel, b: CategoryModel): number {
         if (a.id < b.id) {
             return 1;
         }
@@ -22,21 +21,19 @@ export default class Account extends React.Component<IAccountProps, {}> {
         return 0;
     }
 
-    public static getDisplay(act: AccountModel): IAccountTableInformations<RenderThings> {
+    public static getDisplay(act: CategoryModel): ICategoryTableInformations<RenderThings> {
         return ({
             id: String(act.id),
             name: act.name,
             description: act.description,
-            value: act.value.toFixed(2),
             color: <ColorField color={act.color}/>,
-            isReal: act.isReal,
-            isCore: act.isCore
+            isStandard: act.isStandard,
         });
     }
 
     public state: {} = {};
 
-    constructor(props: IAccountProps) {
+    constructor(props: ICategoryProps) {
         super(props);
     }
 
@@ -45,15 +42,11 @@ export default class Account extends React.Component<IAccountProps, {}> {
             id,
             name,
             description,
-            value,
             color,
-            isCore,
-            isReal
+            isStandard
         } = this.props.entity;
 
-        const money = value.toFixed(2);
-        const valueColor = value < 0 ? "#f00" : "#0b0";
-        const avatarSize = Math.abs(value) > 100 ? 45 : 25;
+        const avatarSize = 25;
 
         return (
             <React.Fragment>
@@ -61,12 +54,9 @@ export default class Account extends React.Component<IAccountProps, {}> {
                     <CardHeader
                         avatar={
                             <Avatar aria-label="Acitivity"
-                                    style={{backgroundColor: valueColor, width: avatarSize, height: avatarSize}}/>
+                                    style={{backgroundColor: color, width: avatarSize, height: avatarSize}}/>
                         }
                         title={name}
-                        subheader={<Typography component="p" style={{color: valueColor}}>
-                            {money}
-                        </Typography>}
                     />
                     <CardContent>
                         <Divider/>
@@ -76,11 +66,7 @@ export default class Account extends React.Component<IAccountProps, {}> {
                                     {description}
                                 </Typography>
                                 <Typography component="p">
-                                    {isCore ? accountFields.isCore.labelName : ""}
-                                </Typography>
-                                <Typography component="p">
-                                    {isReal ? accountFields.isReal.labelName : ""}
-
+                                    {isStandard ? categoryFields.isStandard.labelName : ""}
                                 </Typography>
                             </Grid>
                         </Grid>

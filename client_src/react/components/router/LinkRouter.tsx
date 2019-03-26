@@ -23,8 +23,17 @@ export default class LinkRouter extends React.Component<ILinkRouterProps, ILinkR
         this.handleClick = this.handleClick.bind(this);
     }
 
+    public componentDidMount() {
+        const index = this.props.routeList.findIndex((route: IAppRoute) => {
+            return (route.path === window.location.pathname);
+        });
+
+        this.setState({
+            selected: index
+        });
+    }
+
     public handleClick(index: number) {
-        // TODO: set Selected specific, if the url is call normally
         this.setState({selected: index});
     }
 
@@ -32,12 +41,16 @@ export default class LinkRouter extends React.Component<ILinkRouterProps, ILinkR
         const {routeList, showText} = this.props;
         const {selected} = this.state;
         const hideClass = showText ? "" : "hiddenLinkText";
-        const links = routeList.map((route, index) => (
-                <Link to={route.path} key={index}>
-                    <LinkRoute index={index} route={route} hideClass={hideClass} isClicked={(index === selected)}
-                               onRouteClick={this.handleClick}/>
-                </Link>
-            ),
+        const links = routeList.map((route, index) => {
+                if (!route.notDisplay) {
+                    return (
+                        <Link className="nav-item-link" to={route.path} key={index}>
+                            <LinkRoute index={index} route={route} hideClass={hideClass}
+                                       isClicked={(index === selected)}
+                                       onRouteClick={this.handleClick}/>
+                        </Link>);
+                }
+            }
         );
         return (
             <React.Fragment>
