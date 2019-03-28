@@ -14,18 +14,26 @@ import IconButton from "@material-ui/core/Button";
 import MenuIcon from "@material-ui/icons/Menu";
 import {CssBaseline, Grid} from "@material-ui/core";
 import LinkRouter from "./components/router/LinkRouter";
+import AutorenewIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import QuerybuilderIcon from "@material-ui/core/SvgIcon/SvgIcon";
+import Button from "@material-ui/core/Button/Button";
+
+interface IAppProps {
+    isLoading: boolean;
+    loadEntities: (isLoading: boolean) => () => void;
+}
 
 interface IAppState {
     showLinkText: boolean;
 }
 
-class App extends React.Component<{}, IAppState> {
+class App extends React.Component<IAppProps, IAppState> {
 
     public state: IAppState = {
         showLinkText: false,
     };
 
-    public constructor(props: {}) {
+    public constructor(props: IAppProps) {
         super(props);
         this.toggleDrawer = this.toggleDrawer.bind(this);
     }
@@ -37,6 +45,7 @@ class App extends React.Component<{}, IAppState> {
     }
 
     public render() {
+        const {isLoading, loadEntities} = this.props;
         const {showLinkText} = this.state;
         const sidebarClasses = "sidebar " + (showLinkText ? "sidebar-large" : "sidebar-short");
         const sidebarPaperClasses = "sidebar-paper " + (showLinkText ? "sidebar-paper-large" : "sidebar-paper-short");
@@ -53,6 +62,10 @@ class App extends React.Component<{}, IAppState> {
                             <Typography variant={"h5"}>
                                 MoneyMaster
                             </Typography>
+                            {/*<Button onClick={loadEntities(isLoading)} color={"primary"} variant={"contained"}>*/}
+                                {/*{!isLoading && <AutorenewIcon/>}*/}
+                                {/*{isLoading && <QuerybuilderIcon/>}*/}
+                            {/*</Button>*/}
                         </Toolbar>
                     </AppBar>
                     <Drawer

@@ -1,11 +1,16 @@
 import {IAddActionPayload, IDeleteActionPayload, IEntityClass, IUpdateActionPayload} from "../helper/Entity";
 import {createApiCallPathObject, IRestCallApiPaths} from "../helper/util";
 
-export interface ICallApiAction<T = any> {
+export interface IAction {
+    type: string;
+    isApiAction?: boolean;
+    newStateContent?: any;
+}
+
+export interface ICallApiAction<T = any> extends IAction {
     endpoint: string;
     method: HttpMethods;
     types?: [string, string, string];
-    type: string;
     payload?: IAddActionPayload | IUpdateActionPayload | IDeleteActionPayload;
     actionParams?: {
         [params: string]: any;
@@ -85,7 +90,6 @@ export function createEntityActionTypes(entityName: string): IEntityActionsTypes
     };
 }
 
-export type IActionFunction = (...param: any[]) => ICallApiAction;
 
 export interface IEntityActions {
     add: (entities: IEntityClass[]) => ICallApiAction;
@@ -125,6 +129,7 @@ export const standardAddAction = (actionType: IActionTypesRSF, endpoint: string)
             type: actionType.request,
             successAction: standardResultAction(actionType.success, true),
             failAction: standardResultAction(actionType.failure, false),
+            isApiAction: true,
         });
     };
 export const standardLoadOneAction = (actionType: IActionTypesRSF, endpoint: string) =>
@@ -135,6 +140,7 @@ export const standardLoadOneAction = (actionType: IActionTypesRSF, endpoint: str
             type: actionType.request,
             successAction: standardResultAction(actionType.success, true),
             failAction: standardResultAction(actionType.failure, false),
+            isApiAction: true,
         });
     };
 export const standardLoadAction = (actionType: IActionTypesRSF, endpoint: string) =>
@@ -145,6 +151,7 @@ export const standardLoadAction = (actionType: IActionTypesRSF, endpoint: string
             type: actionType.request,
             successAction: standardResultAction(actionType.success, true),
             failAction: standardResultAction(actionType.failure, false),
+            isApiAction: true,
         });
     };
 export const standardUpdateAction = (actionType: IActionTypesRSF, endpoint: string) =>
@@ -158,6 +165,7 @@ export const standardUpdateAction = (actionType: IActionTypesRSF, endpoint: stri
             type: actionType.request,
             successAction: standardResultAction(actionType.success, true),
             failAction: standardResultAction(actionType.failure, false),
+            isApiAction: true,
         });
     };
 
@@ -172,6 +180,7 @@ export const standardDeleteAction = (actionType: IActionTypesRSF, endpoint: stri
             type: actionType.request,
             successAction: standardResultAction(actionType.success, true),
             failAction: standardResultAction(actionType.failure, false),
+            isApiAction: true,
         });
     };
 

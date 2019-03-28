@@ -14,8 +14,13 @@ export function standardEntityRouting(
     server.app.route({
         method: "GET",
         path: routes.read,
-        handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
-            return loadAllEntitiesFromDB(server.database, dbTable, dbFields);
+        handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+            return await loadAllEntitiesFromDB(server.database, dbTable, dbFields).then((result) => {
+                return result;
+            }).catch((e: string) => {
+                console.log(e);
+                return e;
+            });
         }
     });
     server.app.route({

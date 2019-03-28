@@ -10,6 +10,7 @@ import {BookingViewContainer, BookingTableViewContainer} from "../../containers/
 import AccountViewContainer from "../../containers/views/AccountViewContainer";
 import CategoryViewContainer from "../../containers/views/CategoryViewContainer";
 import ShortDescriptionViewContainer from "../../containers/views/ShortDescriptionViewContainer";
+import HomeViewContainer from "../../containers/views/HomeViewContainer";
 
 export interface IAppRoute {
     name: string;
@@ -34,7 +35,7 @@ export const routeList: IAppRoute[] =
         },
         {
             name: "Home",
-            component: () => <BookingViewContainer/>,
+            component: () => <HomeViewContainer/>,
             icon: HomeRoundedIcon,
             path: "/home",
             title: "Home",

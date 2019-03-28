@@ -4,25 +4,6 @@ import {Dispatch} from "react-redux";
 import {ThunkAction} from "redux-thunk";
 import {httpMethods, ICallApiAction, IResultAction} from "../../base/actions/Entity";
 
-// export interface IResultAction extends Action {
-//     type: string;
-//     payload?: {
-//         [params: string]: any;
-//     };
-//     response?: {
-//         success: true;
-//         data: any[] | any;
-//     };
-//     error?: {
-//         message: string;
-//         code?: string;
-//     };
-//     responseData?: IAnyObject | IAnyObject[];
-// }
-
-// -------------------------------------------
-// Default Api Actions
-
 export enum ActionTypes {
     NO_RESULT_ACTION = "NO_RESULT_ACTION",
     DO_NOTHING_ACTION = "DO_NOTHING_ACTION",
@@ -38,34 +19,37 @@ export const doNothingAction = (): IResultAction => ({
 export const load: ActionCreator<ThunkAction<Promise<Action>, IRootState, void, Action>>
     = (apiAction: ICallApiAction) => {
     return async (dispatch: Dispatch<IRootState>): Promise<Action> => {
-        let failed = false;
-        try {
-            const objects: any = await fetch(apiAction.endpoint, getFetchBody(apiAction))
-                .then((res) => {
-                    return res.json();
-                })
-                .catch((err) => {
-                    failed = true;
-                    if (apiAction.failAction) {
-                        return dispatch(apiAction.failAction(null, 500, "Daten konnten nicht geladen werden."));
-                    }
-                    throw err;
-                });
-            // action which load the given objects in the store
-            if (!failed) {
+        if (apiAction.isApiAction) {
+            let failed = false;
+            try {
+                const objects: any = await fetch(apiAction.endpoint, getFetchBody(apiAction))
+                    .then((res) => {
+                        return res.json();
+                    })
+                    .catch((err) => {
+                        failed = true;
+                        if (apiAction.failAction) {
+                            return dispatch(apiAction.failAction(null, 500, "Daten konnten nicht geladen werden."));
+                        }
+                        throw err;
+                    });
+                // action which load the given objects in the store
+                if (!failed) {
 
-                if (apiAction.successAction) {
-                    return dispatch(apiAction.successAction(objects, 200, "Daten wurden geladen."));
+                    if (apiAction.successAction) {
+                        return dispatch(apiAction.successAction(objects, 200, "Daten wurden geladen."));
+                    }
+                    if (apiAction.failAction) {
+                        return dispatch(apiAction.failAction(objects, 500, "Ein Fehler liegt vor."));
+                    }
+                    return dispatch(noResultAction());
                 }
-                if (apiAction.failAction) {
-                    return dispatch(apiAction.failAction(objects, 500, "Ein Fehler liegt vor."));
-                }
-                return dispatch(noResultAction());
+                return dispatch(doNothingAction());
+            } catch (err) {
+                throw err;
             }
-            return dispatch(doNothingAction());
-        } catch (err) {
-            throw err;
         }
+        return dispatch(apiAction);
     };
 };
 
