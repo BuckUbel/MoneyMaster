@@ -9,7 +9,6 @@ import BookingTable from "../tables/BookingTable";
 
 export interface IBookingViewProps {
     bookings: BookingModel[];
-    fetchAllBookings: () => Promise<any>;
     addBookings: (bookings: IBookingIdentity[]) => Promise<any>;
     editBookings: (bookings: IBookingIdentity[]) => Promise<any>;
 }
@@ -25,23 +24,7 @@ export default class BookingTableView extends React.Component<IBookingViewProps,
 
     constructor(props: IBookingViewProps) {
         super(props);
-        this.loadForTable = this.loadForTable.bind(this);
         this.resetMonth = this.resetMonth.bind(this);
-    }
-
-    public componentDidMount() {
-        this.loadForTable();
-    }
-
-    public loadForTable() {
-        this.props.fetchAllBookings()
-            .then(() => {
-                    console.log("Success");
-                },
-            )
-            .catch(() => {
-                console.log("Error");
-            });
     }
 
     public resetMonth() {
@@ -61,10 +44,6 @@ export default class BookingTableView extends React.Component<IBookingViewProps,
         return (
             <Grid item xs={12} container spacing={24}>
                 <Grid key={1} item xs={12} container spacing={16}>
-                    <Grid item key={1}>
-                        <Button onClick={this.loadForTable} color={"primary"} variant={"contained"}> Tabelle
-                            laden</Button>
-                    </Grid>
                     <Grid item key={3}>
                         <Typography component={"h2"}>
                             {nowValue.toFixed(2) + " €"}

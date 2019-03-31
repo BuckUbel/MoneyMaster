@@ -2,7 +2,7 @@ import {Action, ActionCreator, Middleware} from "redux";
 import {IRootState} from "./store";
 import {Dispatch} from "react-redux";
 import {ThunkAction} from "redux-thunk";
-import {httpMethods, ICallApiAction, IResultAction} from "../../base/actions/Entity";
+import {httpMethods, ICallApiAction, ICallEntityApiAction, IResultAction} from "../../base/actions/Entity";
 
 export enum ActionTypes {
     NO_RESULT_ACTION = "NO_RESULT_ACTION",
@@ -17,16 +17,17 @@ export const doNothingAction = (): IResultAction => ({
 });
 
 export const load: ActionCreator<ThunkAction<Promise<Action>, IRootState, void, Action>>
-    = (apiAction: ICallApiAction) => {
+    = (apiAction: ICallEntityApiAction | ICallApiAction) => {
     return async (dispatch: Dispatch<IRootState>): Promise<Action> => {
         if (apiAction.isApiAction) {
             let failed = false;
             try {
-                const objects: any = await fetch(apiAction.endpoint, getFetchBody(apiAction))
+                const data: any = await fetch(apiAction.endpoint, getFetchBody(apiAction))
                     .then((res) => {
                         return res.json();
                     })
                     .catch((err) => {
+                        console.error(err);
                         failed = true;
                         if (apiAction.failAction) {
                             return dispatch(apiAction.failAction(null, 500, "Daten konnten nicht geladen werden."));
@@ -35,12 +36,11 @@ export const load: ActionCreator<ThunkAction<Promise<Action>, IRootState, void, 
                     });
                 // action which load the given objects in the store
                 if (!failed) {
-
                     if (apiAction.successAction) {
-                        return dispatch(apiAction.successAction(objects, 200, "Daten wurden geladen."));
+                        return dispatch(apiAction.successAction(data, 200, "Daten wurden geladen."));
                     }
                     if (apiAction.failAction) {
-                        return dispatch(apiAction.failAction(objects, 500, "Ein Fehler liegt vor."));
+                        return dispatch(apiAction.failAction(data, 500, "Ein Fehler liegt vor."));
                     }
                     return dispatch(noResultAction());
                 }
@@ -53,7 +53,7 @@ export const load: ActionCreator<ThunkAction<Promise<Action>, IRootState, void, 
     };
 };
 
-const getFetchBody = (apiAction: ICallApiAction) => {
+const getFetchBody = (apiAction: ICallEntityApiAction) => {
 
     let body = {};
 
@@ -86,7 +86,7 @@ type PromiseDispatch = <T extends Action>(promise: Promise<T>) => Promise<T>;
 export const apiMiddleware: Middleware<PromiseDispatch> =
     ({dispatch}: IRootState) =>
         (next) =>
-            <T extends Action>(action: ICallApiAction | Promise<T>) => {
+            <T extends Action>(action: ICallEntityApiAction | Promise<T>) => {
                 console.log(action);
                 if (action instanceof Promise) {
                     console.log(action);

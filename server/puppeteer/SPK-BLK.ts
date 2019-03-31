@@ -1,12 +1,11 @@
 import {promisify} from "util";
 import fs from "fs";
+import {IBankConfig} from "../HapiServer";
 
 const puppeteer = require("puppeteer");
 const path = require("path");
 require("dotenv").config();
 
-const us: string = process.env.BK_USERNAME;
-const pwd: string = process.env.BK_PWD;
 const today: Date = new Date(new Date().getFullYear(), 0, 1);
 const todayString: string = today.getDate() + "." + (today.getMonth() + 1) + "." + today.getFullYear();
 
@@ -22,7 +21,7 @@ const readdir = promisify(fs.readdir);
 const stat = promisify(fs.stat);
 const unlink = promisify(fs.unlink);
 
-export async function getCSVDataFromSPKBLK(downloadPath: string) {
+export async function getCSVDataFromSPKBLK(downloadPath: string, bank: IBankConfig) {
 
     const browser = await puppeteer.launch({
         headless: true
@@ -40,7 +39,7 @@ export async function getCSVDataFromSPKBLK(downloadPath: string) {
         const passwordObject: any = document.getElementsByName(passwordLabel)[0];
         usernameObject.value = username;
         passwordObject.value = password;
-    }, us, pwd);
+    }, bank.username, bank.password);
 
     await page.evaluate(() => {
         const loginObject: any = document.querySelector(".login > input");

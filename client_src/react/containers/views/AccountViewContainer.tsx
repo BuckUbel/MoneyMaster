@@ -11,7 +11,6 @@ const mapsStateToProps = (state: IRootState) => {
     return ({accounts: state.accounts.data});
 };
 const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) => ({
-    fetchAllAccounts: () => dispatch(load(accountActions.actions.loadAll())),
     addAccounts: (accounts: IAccountIdentity[]) => dispatch(load(accountActions.actions.add(accounts))),
     editAccounts: (accounts: IAccountIdentity[]) => dispatch(load(accountActions.actions.edit(accounts))),
 });

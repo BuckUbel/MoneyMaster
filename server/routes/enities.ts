@@ -3,6 +3,7 @@ import {IRestCallApiPaths} from "../../base/helper/util";
 import * as Hapi from "hapi";
 import {insertEntities, loadAllEntitiesFromDB} from "../database/basicActions";
 import {IDatabaseFields, IEntityClass, IEntityStringClass} from "../../base/helper/Entity";
+import {ErrorMessage} from "../../base/helper/messages/ErrorMessage";
 
 export function standardEntityRouting(
     server: IHapiServer,
@@ -19,7 +20,7 @@ export function standardEntityRouting(
                 return result;
             }).catch((e: string) => {
                 console.log(e);
-                return e;
+                return new ErrorMessage("Databank Fehler", e);
             });
         }
     });

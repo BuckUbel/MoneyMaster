@@ -6,7 +6,6 @@ import {ShortDescriptionModel, IShortDescriptionIdentity} from "../../../../base
 
 export interface IShortDescriptionViewProps {
     shortDescriptions: ShortDescriptionModel[];
-    fetchAllShortDescriptions: () => Promise<any>;
     addShortDescriptions: (shortDescriptions: IShortDescriptionIdentity[]) => Promise<any>;
     editShortDescriptions: (shortDescriptions: IShortDescriptionIdentity[]) => Promise<any>;
 }
@@ -23,23 +22,7 @@ export default class ShortDescriptionTableView
 
     constructor(props: IShortDescriptionViewProps) {
         super(props);
-        this.loadForTable = this.loadForTable.bind(this);
         this.resetMonth = this.resetMonth.bind(this);
-    }
-
-    public componentDidMount() {
-        this.loadForTable();
-    }
-
-    public loadForTable() {
-        this.props.fetchAllShortDescriptions()
-            .then(() => {
-                    console.log("Success");
-                },
-            )
-            .catch(() => {
-                console.log("Error");
-            });
     }
 
     public resetMonth() {
@@ -51,12 +34,6 @@ export default class ShortDescriptionTableView
 
         return (
             <Grid item xs={12} container spacing={24}>
-                <Grid key={1} item xs={12} container spacing={16}>
-                    <Grid item key={1}>
-                        <Button onClick={this.loadForTable} color={"primary"} variant={"contained"}> Tabelle
-                            laden</Button>
-                    </Grid>
-                </Grid>
                 <Grid item xs={12} key={2}>
                     <Divider variant={"middle"}/>
                 </Grid>

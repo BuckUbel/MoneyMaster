@@ -16,8 +16,6 @@ const fs_1 = __importDefault(require("fs"));
 const puppeteer = require("puppeteer");
 const path = require("path");
 require("dotenv").config();
-const us = process.env.BK_USERNAME;
-const pwd = process.env.BK_PWD;
 const today = new Date(new Date().getFullYear(), 0, 1);
 const todayString = today.getDate() + "." + (today.getMonth() + 1) + "." + today.getFullYear();
 const waitTimeForGoto = 1000;
@@ -29,7 +27,7 @@ const bookingsURL = "https://www.spk-burgenlandkreis.de/de/home/onlinebanking/" 
 const readdir = util_1.promisify(fs_1.default.readdir);
 const stat = util_1.promisify(fs_1.default.stat);
 const unlink = util_1.promisify(fs_1.default.unlink);
-function getCSVDataFromSPKBLK(downloadPath) {
+function getCSVDataFromSPKBLK(downloadPath, bank) {
     return __awaiter(this, void 0, void 0, function* () {
         const browser = yield puppeteer.launch({
             headless: true
@@ -45,7 +43,7 @@ function getCSVDataFromSPKBLK(downloadPath) {
             const passwordObject = document.getElementsByName(passwordLabel)[0];
             usernameObject.value = username;
             passwordObject.value = password;
-        }, us, pwd);
+        }, bank.username, bank.password);
         yield page.evaluate(() => {
             const loginObject = document.querySelector(".login > input");
             loginObject.click();

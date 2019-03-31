@@ -15,10 +15,11 @@ const Hapi = __importStar(require("hapi"));
 const cron_1 = require("cron");
 const database_1 = require("./database");
 const routes_1 = __importDefault(require("./routes"));
-const SPK_BLK_1 = require("./puppeteer/SPK-BLK");
 const HapiServer_1 = require("./HapiServer");
 const path = __importStar(require("path"));
 const util_1 = require("../base/helper/util");
+const bookings_1 = __importDefault(require("./routes/bookings"));
+// TODO SSL: https://itnext.io/node-express-letsencrypt-generate-a-free-ssl-certificate-and-run-an-https-server-in-5-minutes-a730fbe528ca
 dotenv.config();
 const hServer = new Hapi.Server({
     host: process.env.WEB_HOST,
@@ -46,7 +47,11 @@ const serverConfig = {
     entryFile: path.join(__dirname, process.env.WEB_PUBLIC_DIR, process.env.WEB_INDEX_HTML),
     downloadPath: path.join(__dirname, process.env.DOWNLOAD_DIR),
 };
-const server = new HapiServer_1.HapiServer(hServer, database, serverConfig);
+const bankConfig = {
+    username: process.env.BK_USERNAME,
+    password: "",
+};
+const server = new HapiServer_1.HapiServer(hServer, database, serverConfig, bankConfig);
 const serverRoutes = new routes_1.default(server);
 serverRoutes.init().then(() => {
     server.app.start().then(() => {
@@ -56,11 +61,15 @@ serverRoutes.init().then(() => {
 });
 const job = new cron_1.CronJob("0 0 */6 * * *", () => {
     console.log("Cron Job to download CSV is started.");
-    SPK_BLK_1.getCSVDataFromSPKBLK(server.serverConfig.downloadPath).then(() => {
-        console.log("CSV is downloaded.");
-    }).catch(() => {
-        console.log("CSV is false downloaded.");
-    });
+    if (this.server.bankConfig.password !== "") {
+        bookings_1.default.loadDataFromSPKBLK(this.server)
+            .then(() => {
+            console.log("CSV is downloaded.");
+        }).catch(() => {
+            console.log("CSV is false downloaded.");
+        });
+    }
+    console.error("Password is not available");
 }, () => {
     console.error("Der Cronjob endete unerwartet");
 }, true);

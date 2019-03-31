@@ -29,7 +29,7 @@ export default (state: IState = defaultState, action: IResultAction) => {
             if (action) {
                 const newState: IState = Object.assign([], state);
                 if (action.response) {
-                    if (action.response.entities) {
+                    if ("entities" in action.response) {
                         newState.data = action.response.entities.map(
                             (shortDescriptionData: IShortDescriptionIdentityDefaultStringValues)
                                 : ShortDescriptionModel => {

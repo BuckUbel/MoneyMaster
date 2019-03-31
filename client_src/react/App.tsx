@@ -12,15 +12,17 @@ import Toolbar from "@material-ui/core/es/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/Button";
 import MenuIcon from "@material-ui/icons/Menu";
+import AutorenewIcon from "@material-ui/icons/Autorenew";
+import QuerybuilderIcon from "@material-ui/icons/QueryBuilder";
 import {CssBaseline, Grid} from "@material-ui/core";
 import LinkRouter from "./components/router/LinkRouter";
-import AutorenewIcon from "@material-ui/core/SvgIcon/SvgIcon";
-import QuerybuilderIcon from "@material-ui/core/SvgIcon/SvgIcon";
-import Button from "@material-ui/core/Button/Button";
+import PasswordDialog from "./components/dialogs/PasswordDialog";
 
 interface IAppProps {
     isLoading: boolean;
     loadEntities: (isLoading: boolean) => () => void;
+    downloadFromSPK: (password: string) => void;
+    testPassword: (fct: () => void) => void;
 }
 
 interface IAppState {
@@ -45,27 +47,29 @@ class App extends React.Component<IAppProps, IAppState> {
     }
 
     public render() {
-        const {isLoading, loadEntities} = this.props;
+        const {isLoading, loadEntities, downloadFromSPK, testPassword} = this.props;
         const {showLinkText} = this.state;
         const sidebarClasses = "sidebar " + (showLinkText ? "sidebar-large" : "sidebar-short");
         const sidebarPaperClasses = "sidebar-paper " + (showLinkText ? "sidebar-paper-large" : "sidebar-paper-short");
+        console.log(isLoading);
         return (
             <Router>
                 <div className="App">
                     <CssBaseline/>
                     <AppBar position="fixed" className={"headerbar"}>
                         <Toolbar>
-                            <IconButton className={"roundButton menuToggleButton"} onClick={this.toggleDrawer}
-                                        aria-label={"Menü"}>
+                            <IconButton className={"roundButton menuToggleButton"}
+                                        onClick={this.toggleDrawer} aria-label={"Menü"}>
                                 <MenuIcon/>
                             </IconButton>
-                            <Typography variant={"h5"}>
+                            <Typography variant={"h6"} color={"inherit"} style={{flexGrow: 1}}>
                                 MoneyMaster
                             </Typography>
-                            {/*<Button onClick={loadEntities(isLoading)} color={"primary"} variant={"contained"}>*/}
-                                {/*{!isLoading && <AutorenewIcon/>}*/}
-                                {/*{isLoading && <QuerybuilderIcon/>}*/}
-                            {/*</Button>*/}
+                            <IconButton onClick={loadEntities(isLoading)} color={"inherit"}>
+                                {!isLoading && <AutorenewIcon/>}
+                                {isLoading && <QuerybuilderIcon/>}
+                            </IconButton>
+                            <PasswordDialog submit={downloadFromSPK} onClick={testPassword}/>
                         </Toolbar>
                     </AppBar>
                     <Drawer

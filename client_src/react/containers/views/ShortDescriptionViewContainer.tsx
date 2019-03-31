@@ -11,7 +11,6 @@ const mapsStateToProps = (state: IRootState) => {
     return ({shortDescriptions: state.shortDescriptions.data});
 };
 const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) => ({
-    fetchAllShortDescriptions: () => dispatch(load(shortDescriptionActions.actions.loadAll())),
     addShortDescriptions: (shortDescriptions: IShortDescriptionIdentity[]) =>
         dispatch(load(shortDescriptionActions.actions.add(shortDescriptions))),
     editShortDescriptions: (shortDescriptions: IShortDescriptionIdentity[]) =>

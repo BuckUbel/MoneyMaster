@@ -7,28 +7,40 @@ export interface IAction {
     newStateContent?: any;
 }
 
+export interface ICallEntityApiAction<T = any> extends IAction {
+    endpoint: string;
+    method: HttpMethods;
+    payload?: IAddActionPayload | IUpdateActionPayload | IDeleteActionPayload;
+    successAction?: (entities: any[], code: number, message?: string) => IResultAction;
+    failAction?: (entities: IEntityClass[], code: number, message?: string) => IResultAction;
+}
+
 export interface ICallApiAction<T = any> extends IAction {
     endpoint: string;
     method: HttpMethods;
-    types?: [string, string, string];
-    payload?: IAddActionPayload | IUpdateActionPayload | IDeleteActionPayload;
-    actionParams?: {
-        [params: string]: any;
-    };
-    successAction?: (entities: any[], code: number, message?: string) => IResultAction;
-    failAction?: (entities: IEntityClass[], code: number, message?: string) => IResultAction;
+    payload?: any;
+    successAction?: (data: any, code: number, message?: string) => IResultAction;
+    failAction?: (data: any, code: number, message?: string) => IResultAction;
 }
 
 export interface IResponseData {
     success: boolean;
     code: number;
     message: string;
+}
+
+export interface IEntityResponseData extends IResponseData {
     entities: IAnyObject[];
+}
+
+export interface IDataResponseData extends IResponseData {
+    data: IAnyObject;
+    options?: IAnyObject;
 }
 
 export interface IResultAction {
     type: string;
-    response?: IResponseData;
+    response?: IDataResponseData | IEntityResponseData;
 }
 
 export interface IAnyObject {
@@ -90,13 +102,12 @@ export function createEntityActionTypes(entityName: string): IEntityActionsTypes
     };
 }
 
-
 export interface IEntityActions {
-    add: (entities: IEntityClass[]) => ICallApiAction;
-    load: (id: number) => ICallApiAction;
-    loadAll: () => ICallApiAction;
-    edit: (entities: IEntityClass[]) => ICallApiAction;
-    delete: (ids: number[]) => ICallApiAction;
+    add: (entities: IEntityClass[]) => ICallEntityApiAction;
+    load: (id: number) => ICallEntityApiAction;
+    loadAll: () => ICallEntityApiAction;
+    edit: (entities: IEntityClass[]) => ICallEntityApiAction;
+    delete: (ids: number[]) => ICallEntityApiAction;
 }
 
 export interface IEntityActionsObject {
@@ -105,7 +116,20 @@ export interface IEntityActionsObject {
     apiPaths: IRestCallApiPaths;
 }
 
-export const standardResultAction = (actionType: string, success: boolean) =>
+export const standardResultAction = (actionType: string, success: boolean, options?: any) =>
+    (data: any, code: number, message?: string): IResultAction => {
+        return ({
+            type: actionType,
+            response: {
+                success,
+                code,
+                message,
+                data,
+                options
+            }
+        });
+    };
+export const standardEntityResultAction = (actionType: string, success: boolean) =>
     (entities: any[], code: number, message?: string): IResultAction => {
         return ({
             type: actionType,
@@ -119,7 +143,7 @@ export const standardResultAction = (actionType: string, success: boolean) =>
     };
 
 export const standardAddAction = (actionType: IActionTypesRSF, endpoint: string) =>
-    (entities: IEntityClass[]): ICallApiAction => {
+    (entities: IEntityClass[]): ICallEntityApiAction => {
         return ({
             method: httpMethods.POST,
             endpoint,
@@ -127,35 +151,35 @@ export const standardAddAction = (actionType: IActionTypesRSF, endpoint: string)
                 entities,
             },
             type: actionType.request,
-            successAction: standardResultAction(actionType.success, true),
-            failAction: standardResultAction(actionType.failure, false),
+            successAction: standardEntityResultAction(actionType.success, true),
+            failAction: standardEntityResultAction(actionType.failure, false),
             isApiAction: true,
         });
     };
 export const standardLoadOneAction = (actionType: IActionTypesRSF, endpoint: string) =>
-    (id: number): ICallApiAction => {
+    (id: number): ICallEntityApiAction => {
         return ({
             method: httpMethods.GET,
             endpoint: endpoint + "/" + id,
             type: actionType.request,
-            successAction: standardResultAction(actionType.success, true),
-            failAction: standardResultAction(actionType.failure, false),
+            successAction: standardEntityResultAction(actionType.success, true),
+            failAction: standardEntityResultAction(actionType.failure, false),
             isApiAction: true,
         });
     };
 export const standardLoadAction = (actionType: IActionTypesRSF, endpoint: string) =>
-    (): ICallApiAction => {
+    (): ICallEntityApiAction => {
         return ({
             method: httpMethods.GET,
             endpoint,
             type: actionType.request,
-            successAction: standardResultAction(actionType.success, true),
-            failAction: standardResultAction(actionType.failure, false),
+            successAction: standardEntityResultAction(actionType.success, true),
+            failAction: standardEntityResultAction(actionType.failure, false),
             isApiAction: true,
         });
     };
 export const standardUpdateAction = (actionType: IActionTypesRSF, endpoint: string) =>
-    (entities: IEntityClass[]): ICallApiAction => {
+    (entities: IEntityClass[]): ICallEntityApiAction => {
         return ({
             method: httpMethods.PUT,
             endpoint,
@@ -163,14 +187,14 @@ export const standardUpdateAction = (actionType: IActionTypesRSF, endpoint: stri
                 entities,
             },
             type: actionType.request,
-            successAction: standardResultAction(actionType.success, true),
-            failAction: standardResultAction(actionType.failure, false),
+            successAction: standardEntityResultAction(actionType.success, true),
+            failAction: standardEntityResultAction(actionType.failure, false),
             isApiAction: true,
         });
     };
 
 export const standardDeleteAction = (actionType: IActionTypesRSF, endpoint: string) =>
-    (ids: number[]): ICallApiAction => {
+    (ids: number[]): ICallEntityApiAction => {
         return ({
             method: httpMethods.DELETE,
             endpoint,
@@ -178,8 +202,8 @@ export const standardDeleteAction = (actionType: IActionTypesRSF, endpoint: stri
                 ids,
             },
             type: actionType.request,
-            successAction: standardResultAction(actionType.success, true),
-            failAction: standardResultAction(actionType.failure, false),
+            successAction: standardEntityResultAction(actionType.success, true),
+            failAction: standardEntityResultAction(actionType.failure, false),
             isApiAction: true,
         });
     };

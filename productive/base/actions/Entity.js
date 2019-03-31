@@ -30,7 +30,19 @@ function createEntityActionTypes(entityName) {
     };
 }
 exports.createEntityActionTypes = createEntityActionTypes;
-exports.standardResultAction = (actionType, success) => (entities, code, message) => {
+exports.standardResultAction = (actionType, success, options) => (data, code, message) => {
+    return ({
+        type: actionType,
+        response: {
+            success,
+            code,
+            message,
+            data,
+            options
+        }
+    });
+};
+exports.standardEntityResultAction = (actionType, success) => (entities, code, message) => {
     return ({
         type: actionType,
         response: {
@@ -49,8 +61,9 @@ exports.standardAddAction = (actionType, endpoint) => (entities) => {
             entities,
         },
         type: actionType.request,
-        successAction: exports.standardResultAction(actionType.success, true),
-        failAction: exports.standardResultAction(actionType.failure, false),
+        successAction: exports.standardEntityResultAction(actionType.success, true),
+        failAction: exports.standardEntityResultAction(actionType.failure, false),
+        isApiAction: true,
     });
 };
 exports.standardLoadOneAction = (actionType, endpoint) => (id) => {
@@ -58,8 +71,9 @@ exports.standardLoadOneAction = (actionType, endpoint) => (id) => {
         method: exports.httpMethods.GET,
         endpoint: endpoint + "/" + id,
         type: actionType.request,
-        successAction: exports.standardResultAction(actionType.success, true),
-        failAction: exports.standardResultAction(actionType.failure, false),
+        successAction: exports.standardEntityResultAction(actionType.success, true),
+        failAction: exports.standardEntityResultAction(actionType.failure, false),
+        isApiAction: true,
     });
 };
 exports.standardLoadAction = (actionType, endpoint) => () => {
@@ -67,8 +81,9 @@ exports.standardLoadAction = (actionType, endpoint) => () => {
         method: exports.httpMethods.GET,
         endpoint,
         type: actionType.request,
-        successAction: exports.standardResultAction(actionType.success, true),
-        failAction: exports.standardResultAction(actionType.failure, false),
+        successAction: exports.standardEntityResultAction(actionType.success, true),
+        failAction: exports.standardEntityResultAction(actionType.failure, false),
+        isApiAction: true,
     });
 };
 exports.standardUpdateAction = (actionType, endpoint) => (entities) => {
@@ -79,8 +94,9 @@ exports.standardUpdateAction = (actionType, endpoint) => (entities) => {
             entities,
         },
         type: actionType.request,
-        successAction: exports.standardResultAction(actionType.success, true),
-        failAction: exports.standardResultAction(actionType.failure, false),
+        successAction: exports.standardEntityResultAction(actionType.success, true),
+        failAction: exports.standardEntityResultAction(actionType.failure, false),
+        isApiAction: true,
     });
 };
 exports.standardDeleteAction = (actionType, endpoint) => (ids) => {
@@ -91,8 +107,9 @@ exports.standardDeleteAction = (actionType, endpoint) => (ids) => {
             ids,
         },
         type: actionType.request,
-        successAction: exports.standardResultAction(actionType.success, true),
-        failAction: exports.standardResultAction(actionType.failure, false),
+        successAction: exports.standardEntityResultAction(actionType.success, true),
+        failAction: exports.standardEntityResultAction(actionType.failure, false),
+        isApiAction: true,
     });
 };
 function createEntityActions(entityName) {

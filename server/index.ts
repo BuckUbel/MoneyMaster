@@ -5,9 +5,12 @@ import {CronJob} from "cron";
 import {Database, IDatabase, IDBConfig} from "./database";
 import ServerRoutes from "./routes";
 import {getCSVDataFromSPKBLK} from "./puppeteer/SPK-BLK";
-import {HapiServer, IServerConfig} from "./HapiServer";
+import {HapiServer, IBankConfig, IServerConfig} from "./HapiServer";
 import * as path from "path";
 import {beautyDateTimeString} from "../base/helper/util";
+import BookingRoutes from "./routes/bookings";
+
+// TODO SSL: https://itnext.io/node-express-letsencrypt-generate-a-free-ssl-certificate-and-run-an-https-server-in-5-minutes-a730fbe528ca
 
 dotenv.config();
 
@@ -40,7 +43,11 @@ const serverConfig: IServerConfig = {
     downloadPath: path.join(__dirname, process.env.DOWNLOAD_DIR),
 };
 
-const server = new HapiServer(hServer, database, serverConfig);
+const bankConfig: IBankConfig = {
+    username: process.env.BK_USERNAME,
+    password: "",
+};
+const server = new HapiServer(hServer, database, serverConfig, bankConfig);
 const serverRoutes = new ServerRoutes(server);
 
 serverRoutes.init().then(() => {
@@ -52,11 +59,16 @@ serverRoutes.init().then(() => {
 
 const job = new CronJob("0 0 */6 * * *", () => {
         console.log("Cron Job to download CSV is started.");
-        getCSVDataFromSPKBLK(server.serverConfig.downloadPath).then(() => {
-            console.log("CSV is downloaded.");
-        }).catch(() => {
-            console.log("CSV is false downloaded.");
-        });
+        if (this.server.bankConfig.password !== "") {
+
+            BookingRoutes.loadDataFromSPKBLK(this.server)
+                .then(() => {
+                    console.log("CSV is downloaded.");
+                }).catch(() => {
+                console.log("CSV is false downloaded.");
+            });
+        }
+        console.error("Password is not available");
     }, () => {
         console.error("Der Cronjob endete unerwartet");
     },

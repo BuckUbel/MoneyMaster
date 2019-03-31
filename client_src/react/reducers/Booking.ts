@@ -5,6 +5,7 @@ import {
     IBookingIdentityDefaultStringValues
 } from "../../../base/model/BookingModel";
 import {IResultAction} from "../../../base/actions/Entity";
+import {ActionTypes} from "../actions/Bookings";
 
 export interface IState {
     data: BookingModel[];
@@ -30,7 +31,7 @@ export default (state: IState = defaultState, action: IResultAction) => {
             if (action) {
                 const newState: IState = Object.assign([], state);
                 if (action.response) {
-                    if (action.response.entities) {
+                    if ("entities" in action.response) {
                         newState.data = action.response.entities.map(
                             (bookingData: IBookingIdentityDefaultStringValues): BookingModel => {
                                 const obj = new BookingModel();
