@@ -26,6 +26,8 @@ export default class AccountTable extends React.Component<IAccountTableProps, {}
                     getDisplay={Account.getDisplay}
                     entityTableConfiguration={accountTableConfiguration}
                     baseClass={Account}
+                    noFilter={true}
+                    defaultSortRow={3}
                 />
             </React.Fragment>
         );

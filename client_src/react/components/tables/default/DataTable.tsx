@@ -16,6 +16,7 @@ import {defaultRowCompare, eliminateByFilterValues, IBaseData, ICol, IObjectWith
 export interface IDataTableProps {
     rowData: IRow[];
     colData: ICol[];
+    noFilter?: boolean;
     baseData?: IBaseData[];
     baseClass?: React.ComponentType<IObjectWithEntityProp>;
     defaultSortRow?: number;
@@ -135,7 +136,7 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
 
     public render() {
 
-        const {colData, baseData, baseClass} = this.props;
+        const {colData, baseData, baseClass, noFilter} = this.props;
         const {
             order, orderBy, currentPage, rowsPerPage,
             filterValues, clickedRow, currentDisplayData, currentFilteredData
@@ -148,7 +149,7 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
         return (
             <React.Fragment>
                 <Grid container spacing={40}>
-                    <Grid item xs={12}>
+                    {!noFilter && <Grid item xs={12}>
                         <Card>
                             <CardContent>
                                 <TableFilter
@@ -160,7 +161,7 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
                                 />
                             </CardContent>
                         </Card>
-                    </Grid>
+                    </Grid>}
                     <Grid item xs={12}>
                         <Card>
                             <CardContent>

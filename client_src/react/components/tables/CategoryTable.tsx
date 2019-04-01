@@ -26,6 +26,8 @@ export default class CategoryTable extends React.Component<ICategoryTableProps, 
                     getDisplay={Category.getDisplay}
                     entityTableConfiguration={categoryTableConfiguration}
                     baseClass={Category}
+                    noFilter={true}
+                    defaultSortRow={4}
                 />
             </React.Fragment>
         );

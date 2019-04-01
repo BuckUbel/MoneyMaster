@@ -17,6 +17,8 @@ export interface IBookingTableProps {
     getDisplay: (a: Entity) => IEntityTableInformations<RenderThings>;
     entityTableConfiguration: any;
     baseClass: React.ComponentType<IObjectWithEntityProp>;
+    noFilter?: boolean;
+    defaultSortRow?: number;
 }
 
 export default class EntityTable extends React.Component<IBookingTableProps, {}> {
@@ -28,7 +30,8 @@ export default class EntityTable extends React.Component<IBookingTableProps, {}>
     public render() {
         const {
             entities, compareFunction,
-            getDisplay, entityTableConfiguration, baseClass
+            getDisplay, entityTableConfiguration, baseClass,
+            noFilter, defaultSortRow
         } = this.props;
 
         let data: IRow[] = [];
@@ -56,11 +59,12 @@ export default class EntityTable extends React.Component<IBookingTableProps, {}>
             <React.Fragment>
                 {entities.length > 0 &&
                 <DataTable
-                  rowData={data}
-                  colData={header}
-                  baseData={entities}
-                  baseClass={baseClass}
-                  defaultSortRow={6}
+                    rowData={data}
+                    colData={header}
+                    baseData={entities}
+                    baseClass={baseClass}
+                    defaultSortRow={defaultSortRow ? defaultSortRow : 0}
+                    noFilter={noFilter}
                 />
                 }
             </React.Fragment>

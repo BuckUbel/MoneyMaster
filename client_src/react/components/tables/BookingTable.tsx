@@ -27,6 +27,7 @@ export default class BookingTable extends React.Component<IBookingTableProps, {}
                     getDisplay={Booking.getDisplay}
                     entityTableConfiguration={bookingTableConfiguration}
                     baseClass={Booking}
+                    defaultSortRow={2}
                 />
             </React.Fragment>
         );

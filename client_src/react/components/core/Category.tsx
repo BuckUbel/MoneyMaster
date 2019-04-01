@@ -65,9 +65,13 @@ export default class Category extends React.Component<ICategoryProps, {}> {
                                 <Typography component="p">
                                     {description}
                                 </Typography>
-                                <Typography component="p">
-                                    {isStandard ? categoryFields.isStandard.labelName : ""}
-                                </Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <ul>
+                                    <Typography component="li">
+                                        {isStandard ? categoryFields.isStandard.labelName : ""}
+                                    </Typography>
+                                </ul>
                             </Grid>
                         </Grid>
                         <Divider/>

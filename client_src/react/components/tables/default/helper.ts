@@ -69,7 +69,7 @@ export function defaultRowCompare(index: number) {
         if (typeOfVar === "boolean") {
             const elementA: boolean = a.content[index];
             const elementB: boolean = b.content[index];
-            return elementA === elementB ? 0 : elementA ? -1 : 1;
+            return elementA === elementB ? 0 : elementA ? 1 : -1;
         }
         if (typeOfVar === "string") {
             const isDate = isDMYDateString(a.content[index]);

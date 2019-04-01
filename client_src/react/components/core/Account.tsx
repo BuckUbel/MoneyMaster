@@ -61,12 +61,14 @@ export default class Account extends React.Component<IAccountProps, {}> {
                     <CardHeader
                         avatar={
                             <Avatar aria-label="Acitivity"
-                                    style={{backgroundColor: valueColor, width: avatarSize, height: avatarSize}}/>
+                                    style={{backgroundColor: color, width: avatarSize, height: avatarSize}}/>
                         }
                         title={name}
-                        subheader={<Typography component="p" style={{color: valueColor}}>
+                        subheader={
+                            <Typography component="p" style={{color: valueColor}}>
                             {money}
-                        </Typography>}
+                        </Typography>
+                        }
                     />
                     <CardContent>
                         <Divider/>
@@ -75,16 +77,18 @@ export default class Account extends React.Component<IAccountProps, {}> {
                                 <Typography component="p">
                                     {description}
                                 </Typography>
-                                <Typography component="p">
-                                    {isCore ? accountFields.isCore.labelName : ""}
-                                </Typography>
-                                <Typography component="p">
-                                    {isReal ? accountFields.isReal.labelName : ""}
-
-                                </Typography>
+                            </Grid>
+                            <Divider/>
+                            <Grid item xs={6}>
+                                <ul>
+                                    {isCore ?
+                                        <Typography component="li">{accountFields.isCore.labelName} </Typography> : ""}
+                                    {isReal ?
+                                        <Typography component="li">{accountFields.isReal.labelName} </Typography> : ""}
+                                </ul>
                             </Grid>
                         </Grid>
-                        <Divider/>
+
                         <br/>
                     </CardContent>
                 </Card>
