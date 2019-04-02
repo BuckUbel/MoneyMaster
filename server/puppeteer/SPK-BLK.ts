@@ -80,3 +80,56 @@ export async function getCSVDataFromSPKBLK(downloadPath: string, bank: IBankConf
     await browser.close();
 
 }
+
+export async function testPasswordForSPKBLK(newPassword: string, bank: IBankConfig) {
+
+    const browser = await puppeteer.launch({
+        headless: true
+    });
+    const page = await browser.newPage();
+
+    await page.goto(homeURL);
+
+    await page.evaluate((username: string, password: string) => {
+        const userNameLabelObject: any = document.getElementsByTagName("label")[0];
+        const passwordLabelObject: any = document.getElementsByTagName("label")[1];
+        const userNameLabel: string = userNameLabelObject.htmlFor;
+        const passwordLabel: string = passwordLabelObject.htmlFor;
+        const usernameObject: any = document.getElementsByName(userNameLabel)[0];
+        const passwordObject: any = document.getElementsByName(passwordLabel)[0];
+        usernameObject.value = username;
+        passwordObject.value = password;
+    }, bank.username, newPassword);
+
+    await page.evaluate(() => {
+        const loginObject: any = document.querySelector(".login > input");
+        loginObject.click();
+    });
+
+    await page.waitForNavigation({
+        waitUntil: "networkidle0"
+    });
+
+    await page.waitFor(waitTimeForGoto);
+
+    await page.goto(bookingsURL);
+
+    let success: boolean = false;
+
+    success = await page.evaluate(() => {
+        const firstDateLabelObject: any = document.getElementsByTagName("label")[2];
+        const firstDateLabel: string = firstDateLabelObject.htmlFor;
+        const firstDateObject: any = document.getElementsByName(firstDateLabel)[0];
+        const refreshObject: any = document.getElementsByClassName("icon-if5_refresh")[0]
+            .getElementsByTagName("input")[0];
+        if (firstDateLabelObject && firstDateLabel && firstDateObject && refreshObject) {
+            return true;
+        }
+    });
+
+    await browser.close();
+
+    if (!success) {
+        throw new Error("False Password");
+    }
+}
