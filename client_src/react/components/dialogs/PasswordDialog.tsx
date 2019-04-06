@@ -6,6 +6,7 @@ import StandardDialog from "./StandardDialog";
 import IconButton from "@material-ui/core/Button/Button";
 import ClouddownloadIcon from "@material-ui/icons/CloudDownload";
 import {ChangeEvent} from "react";
+import PasswordForm from "../forms/PasswordForm";
 
 export interface IPasswordDialogProps {
     onClick?: (fct: () => void) => void;
@@ -14,6 +15,7 @@ export interface IPasswordDialogProps {
 
 export interface IPasswordDialogState {
     password: string;
+
 }
 
 const defaultState: IPasswordDialogState = {
@@ -29,8 +31,7 @@ export default class PasswordDialog extends React.Component<IPasswordDialogProps
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
     }
 
-    public onSubmit(event: React.MouseEvent<HTMLElement>) {
-        event.preventDefault();
+    public onSubmit() {
         this.props.submit(this.state.password);
     }
 
@@ -40,16 +41,19 @@ export default class PasswordDialog extends React.Component<IPasswordDialogProps
 
     public render() {
         const {onClick} = this.props;
+
+        const formId = "passwordForm";
+
         return (
             <React.Fragment>
                 <StandardDialog
                     title={"Passwort eintragen"}
+                    formName={formId}
                     createOpenButton={(handleOpen) =>
                         <IconButton onClick={onClick ? () => onClick(handleOpen) : handleOpen} color={"inherit"}>
                             <ClouddownloadIcon/>
                         </IconButton>
                     }
-                    // openFunction={}
                     submitFunction={this.onSubmit}
                 >
                     <DialogContentText>
@@ -57,16 +61,11 @@ export default class PasswordDialog extends React.Component<IPasswordDialogProps
                         Wenn sie dieses einmal eingegeben haben.
                         Kann der Server zu seiner Laufzeit immer wieder darauf zugreifen.
                     </DialogContentText>
-                    <form id="passwordForm">
-                        <TextField autoFocus
-                                   margin="dense"
-                                   id="name"
-                                   label="Passwort"
-                                   type="password"
-                                   value={this.state.password}
-                                   onChange={this.handlePasswordChange}
-                                   fullWidth/>
-                    </form>
+                    <PasswordForm
+                        formId={formId}
+                        values={{password: this.state.password}}
+                        handler={{password: this.handlePasswordChange}}
+                    />
                 </StandardDialog>
             </React.Fragment>
         );

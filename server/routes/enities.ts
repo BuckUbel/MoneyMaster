@@ -1,7 +1,7 @@
 import {IHapiServer} from "../HapiServer";
 import {IRestCallApiPaths} from "../../base/helper/util";
 import * as Hapi from "hapi";
-import {insertEntities, loadAllEntitiesFromDB} from "../database/basicActions";
+import {insertEntities, loadAllEntitiesFromDB, loadOneEntityFromDB} from "../database/basicActions";
 import {IDatabaseFields, IEntityClass, IEntityStringClass} from "../../base/helper/Entity";
 import {ErrorMessage} from "../../base/helper/messages/ErrorMessage";
 
@@ -26,10 +26,17 @@ export function standardEntityRouting(
     });
     server.app.route({
         method: "GET",
-        path: routes.readOne + "{index*}",
-        handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+        path: routes.readOne + "{index}",
+        handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
             // load one Entity
-            return "";
+            const id: number = Number(request.params.index);
+            console.log(request.params.index);
+            return await loadOneEntityFromDB(server.database, dbTable, dbFields, id).then((result) => {
+                return result;
+            }).catch((e: string) => {
+                console.log(e);
+                return new ErrorMessage("Databank Fehler", e);
+            });
         }
     });
     server.app.route({

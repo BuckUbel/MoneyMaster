@@ -7,11 +7,12 @@ import {RenderThings} from "../../helper/util";
 
 export interface IStandardDialogProps {
     title: string;
+    formName: string;
     createOpenButton?: (openFunction: () => void) => RenderThings;
     createSubmitButton?: (closeFunction: () => void) => RenderThings;
     createCancelButton?: (closeFunction: () => void) => RenderThings;
     openFunction?: () => void;
-    submitFunction?: (event: React.MouseEvent<HTMLElement>) => void;
+    submitFunction?: () => void;
 }
 
 export interface IStandardDialogState {
@@ -48,7 +49,8 @@ export default class StandardDialog extends React.Component<IStandardDialogProps
             if (nextStatus === "SUBMITTED") {
                 willOpen = false;
                 if (this.props.submitFunction) {
-                    this.props.submitFunction(event);
+                    event.preventDefault();
+                    this.props.submitFunction();
                 }
             }
             this.setState({open: willOpen});
@@ -56,7 +58,7 @@ export default class StandardDialog extends React.Component<IStandardDialogProps
     }
 
     public render() {
-        const {title, children, createOpenButton, createSubmitButton, createCancelButton} = this.props;
+        const {title, children, createOpenButton, createSubmitButton, createCancelButton, formName} = this.props;
 
         return (
             <React.Fragment>
@@ -79,7 +81,7 @@ export default class StandardDialog extends React.Component<IStandardDialogProps
                                 Abrrechen
                             </Button>}
                         {createSubmitButton ? createSubmitButton(this.handleClick("SUBMITTED")) :
-                            <Button onClick={this.handleClick("SUBMITTED")} color="secondary" type={"submit"} form={"passwordForm"}>
+                            <Button onClick={this.handleClick("SUBMITTED")} color="secondary" type={"submit"} form={formName}>
                                 Abschicken
                             </Button>
                         }

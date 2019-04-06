@@ -4,8 +4,56 @@ import {ThunkDispatch} from "redux-thunk";
 
 import {load} from "../../api";
 import {IRootState} from "../../store";
-import {accountActions, IAccountIdentity} from "../../../../base/model/AccountModel";
+import {accountActions, AccountModel, IAccountIdentity} from "../../../../base/model/AccountModel";
 import AccountTableView from "../../components/views/AccountTableView";
+import * as React from "react";
+
+export interface IAccountViewContainerProps {
+    accounts: AccountModel[];
+    addAccounts: (accounts: IAccountIdentity[]) => Promise<any>;
+    editAccounts: (accounts: IAccountIdentity[]) => Promise<any>;
+}
+
+export interface IAccountViewContainerState {
+}
+
+export const defaultState: IAccountViewContainerState = {};
+
+class AccountViewContainer extends React.Component<IAccountViewContainerProps, IAccountViewContainerState> {
+
+
+    public state: IAccountViewContainerState = defaultState;
+
+    public constructor(props: IAccountViewContainerProps) {
+        super(props);
+    }
+
+    public async addAccount(account: AccountModel) {
+        try {
+            await this.props.addAccounts([account]);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    public async editAccount(account: AccountModel) {
+        try {
+            await this.props.editAccounts([account]);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    public render() {
+        const {accounts} = this.props;
+        return (
+            <AccountTableView accounts={accounts}
+                              addAccount={this.addAccount}
+                              editAccount={this.editAccount}
+            />
+        );
+    }
+}
 
 const mapsStateToProps = (state: IRootState) => {
     return ({accounts: state.accounts.data});
@@ -14,5 +62,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) =
     addAccounts: (accounts: IAccountIdentity[]) => dispatch(load(accountActions.actions.add(accounts))),
     editAccounts: (accounts: IAccountIdentity[]) => dispatch(load(accountActions.actions.edit(accounts))),
 });
-const AccountViewContainer = connect(mapsStateToProps, mapDispatchToProps)(AccountTableView);
-export default AccountViewContainer;
+export default connect(mapsStateToProps, mapDispatchToProps)(AccountViewContainer);

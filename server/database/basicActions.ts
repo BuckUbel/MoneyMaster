@@ -22,7 +22,32 @@ export async function loadAllEntitiesFromDB(
     if (limit) {
         queryString += "LIMIT " + limit + " ";
     }
+    return await db.sqlQuery(queryString);
+}
 
+export async function loadOneEntityFromDB(
+    db: IDatabase,
+    tableName: string,
+    fields: IDatabaseFields,
+    id: number,
+    limit?: number
+) {
+
+    const rowNamesArray = Object.keys(fields).map((key) => {
+        return "" + fields[key].fieldName + " as " + key;
+    });
+
+    const rowNames = rowNamesArray.join(", ");
+
+    let queryString = (
+        "SELECT " + rowNames + " " +
+        "FROM " + tableName + " m " +
+        "WHERE m.id=" + id + " "
+    );
+
+    if (limit) {
+        queryString += "LIMIT " + limit + " ";
+    }
     return await db.sqlQuery(queryString);
 }
 

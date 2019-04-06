@@ -1,13 +1,13 @@
 import * as React from "react";
-import Button from "@material-ui/core/Button";
-import {Divider, Grid, Typography} from "@material-ui/core";
+import {Divider, Fab, Grid, Typography} from "@material-ui/core";
 import AccountTable from "../tables/AccountTable";
 import {AccountModel, IAccountIdentity} from "../../../../base/model/AccountModel";
+import AddDialog from "../dialogs/AddDialog";
 
 export interface IAccountViewProps {
     accounts: AccountModel[];
-    addAccounts: (accounts: IAccountIdentity[]) => Promise<any>;
-    editAccounts: (accounts: IAccountIdentity[]) => Promise<any>;
+    addAccount: (accounts: IAccountIdentity) => void;
+    editAccount: (accounts: IAccountIdentity) => void;
 }
 
 export interface IAccountViewState {
@@ -29,10 +29,15 @@ export default class AccountTableView extends React.Component<IAccountViewProps,
     }
 
     public render() {
-        const {accounts} = this.props;
+        const {accounts, addAccount} = this.props;
 
         return (
             <Grid item xs={12} container spacing={24}>
+                <Grid container item xs={12} key={1}>
+                    <Grid item xs={2}>
+                        <AddDialog submit={addAccount}/>
+                    </Grid>
+                </Grid>
                 <Grid item xs={12} key={2}>
                     <Divider variant={"middle"}/>
                 </Grid>

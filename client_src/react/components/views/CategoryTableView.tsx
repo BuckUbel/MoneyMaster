@@ -1,8 +1,9 @@
 import * as React from "react";
 import Button from "@material-ui/core/Button";
-import {Divider, Grid, Typography} from "@material-ui/core";
+import {Divider, Fab, Grid, Typography} from "@material-ui/core";
 import CategoryTable from "../tables/CategoryTable";
 import {CategoryModel, ICategoryIdentity} from "../../../../base/model/CategoryModel";
+import AddIcon from "@material-ui/icons/Add";
 
 export interface ICategoryViewProps {
     categories: CategoryModel[];
@@ -33,6 +34,13 @@ export default class CategoryTableView extends React.Component<ICategoryViewProp
 
         return (
             <Grid item xs={12} container spacing={24}>
+                <Grid container item xs={12} key={1}>
+                    <Grid item xs={2}>
+                        <Fab color="secondary" aria-label="Hinzufügen">
+                            <AddIcon/>
+                        </Fab>
+                    </Grid>
+                </Grid>
                 <Grid item xs={12} key={2}>
                     <Divider variant={"middle"}/>
                 </Grid>
