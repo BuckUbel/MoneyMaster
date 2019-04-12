@@ -42,7 +42,7 @@ export const accountFields: IAccountFields = {
     color: {
         fieldName: "color",
         labelName: "Farbe",
-        value: "",
+        value: "#000",
         type: "string",
     },
     isReal: {
@@ -92,6 +92,18 @@ export class AccountModel extends Entity implements IAccountIdentity {
         const entity = new AccountModel();
         entity.set(object);
         return entity;
+    }
+
+    public static createEmptyEntity(): IAccountIdentity {
+        return {
+            id: accountFields.id.value,
+            name: accountFields.name.value,
+            description: accountFields.description.value,
+            value: accountFields.value.value,
+            color: accountFields.color.value,
+            isReal: accountFields.isReal.value,
+            isCore: accountFields.isCore.value
+        };
     }
 
     public name: string;

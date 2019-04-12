@@ -1,8 +1,8 @@
 import * as React from "react";
-import {Divider, Fab, Grid, Typography} from "@material-ui/core";
+import {Divider, Grid} from "@material-ui/core";
 import AccountTable from "../tables/AccountTable";
 import {AccountModel, IAccountIdentity} from "../../../../base/model/AccountModel";
-import AddDialog from "../dialogs/AddDialog";
+import AddAccountDialog from "../dialogs/AddAccountDialog";
 
 export interface IAccountViewProps {
     accounts: AccountModel[];
@@ -35,7 +35,7 @@ export default class AccountTableView extends React.Component<IAccountViewProps,
             <Grid item xs={12} container spacing={24}>
                 <Grid container item xs={12} key={1}>
                     <Grid item xs={2}>
-                        <AddDialog submit={addAccount}/>
+                        <AddAccountDialog submit={addAccount}/>
                     </Grid>
                 </Grid>
                 <Grid item xs={12} key={2}>

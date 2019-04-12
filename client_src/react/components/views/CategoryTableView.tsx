@@ -1,14 +1,13 @@
 import * as React from "react";
-import Button from "@material-ui/core/Button";
-import {Divider, Fab, Grid, Typography} from "@material-ui/core";
+import {Divider, Grid} from "@material-ui/core";
 import CategoryTable from "../tables/CategoryTable";
 import {CategoryModel, ICategoryIdentity} from "../../../../base/model/CategoryModel";
-import AddIcon from "@material-ui/icons/Add";
+import AddCategoryDialog from "../dialogs/AddCategoryDialog";
 
 export interface ICategoryViewProps {
     categories: CategoryModel[];
-    addCategories: (categories: ICategoryIdentity[]) => Promise<any>;
-    editCategories: (categories: ICategoryIdentity[]) => Promise<any>;
+    addCategory: (categories: ICategoryIdentity) => Promise<any>;
+    editCategory: (categories: ICategoryIdentity) => Promise<any>;
 }
 
 export interface ICategoryViewState {
@@ -30,15 +29,13 @@ export default class CategoryTableView extends React.Component<ICategoryViewProp
     }
 
     public render() {
-        const {categories} = this.props;
+        const {categories, addCategory} = this.props;
 
         return (
             <Grid item xs={12} container spacing={24}>
                 <Grid container item xs={12} key={1}>
                     <Grid item xs={2}>
-                        <Fab color="secondary" aria-label="Hinzufügen">
-                            <AddIcon/>
-                        </Fab>
+                        <AddCategoryDialog submit={addCategory}/>
                     </Grid>
                 </Grid>
                 <Grid item xs={12} key={2}>

@@ -10,6 +10,7 @@ import * as React from "react";
 
 export interface IAccountViewContainerProps {
     accounts: AccountModel[];
+    fetchAllAccounts: () => Promise<any>;
     addAccounts: (accounts: IAccountIdentity[]) => Promise<any>;
     editAccounts: (accounts: IAccountIdentity[]) => Promise<any>;
 }
@@ -26,17 +27,20 @@ class AccountViewContainer extends React.Component<IAccountViewContainerProps, I
 
     public constructor(props: IAccountViewContainerProps) {
         super(props);
+        this.addAccount = this.addAccount.bind(this);
+        this.addAccount = this.addAccount.bind(this);
     }
 
-    public async addAccount(account: AccountModel) {
+    public async addAccount(account: IAccountIdentity) {
         try {
             await this.props.addAccounts([account]);
+            await this.props.fetchAllAccounts();
         } catch (error) {
             console.error(error);
         }
     }
 
-    public async editAccount(account: AccountModel) {
+    public async editAccount(account: IAccountIdentity) {
         try {
             await this.props.editAccounts([account]);
         } catch (error) {
@@ -59,6 +63,7 @@ const mapsStateToProps = (state: IRootState) => {
     return ({accounts: state.accounts.data});
 };
 const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) => ({
+    fetchAllAccounts: () => dispatch(load(accountActions.actions.loadAll())),
     addAccounts: (accounts: IAccountIdentity[]) => dispatch(load(accountActions.actions.add(accounts))),
     editAccounts: (accounts: IAccountIdentity[]) => dispatch(load(accountActions.actions.edit(accounts))),
 });

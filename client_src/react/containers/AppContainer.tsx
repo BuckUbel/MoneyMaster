@@ -14,7 +14,7 @@ import {downloadFromSPK} from "../actions/Bookings";
 
 export interface IAppContainerProps {
     application: IState;
-    fetchAllAccounts: () => Promise<any>;
+    fetchAllDatas: () => Promise<any>;
     setLoading: (isLoading: boolean) => Promise<any>;
     downloadFromSPK: (password: string, fct?: () => void) => Promise<any>;
 }
@@ -42,7 +42,7 @@ class AppContainer extends React.Component<IAppContainerProps, IAppContainerStat
             if (!isLoading) {
                 try {
                     await this.props.setLoading(true);
-                    await this.props.fetchAllAccounts();
+                    await this.props.fetchAllDatas();
                     await this.props.setLoading(false);
                     console.log("All Entities are loaded successfully.");
                 } catch (error) {
@@ -89,7 +89,7 @@ const mapStateToProps = (state: IRootState) => {
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) => ({
-    fetchAllAccounts: () => loadAllEntities(dispatch),
+    fetchAllDatas: () => loadAllEntities(dispatch),
     setLoading: (isLoading: boolean) => dispatch(load(setLoading(isLoading))),
     downloadFromSPK: (password: string, fct?: () => void) => dispatch(load(downloadFromSPK(password, fct))),
 });

@@ -1,41 +1,40 @@
 import * as React from "react";
-import {TextField} from "@material-ui/core";
+import {Checkbox, TextField} from "@material-ui/core";
 import {ChangeEvent} from "react";
-import {accountFields} from "../../../../base/model/AccountModel";
-import FormColorField from "../core/simple/FormColorField";
 import {categoryFields} from "../../../../base/model/CategoryModel";
 import FormCheckBox from "../core/simple/FormCheckBox";
+import FormColorField from "../core/simple/FormColorField";
 
-export interface IAddAccountFormValues {
+export interface IAddCategoryFormValues {
     name: string;
     description: string;
     color: string;
-    isCore: boolean;
+    isStandard: boolean;
 }
 
-export interface IAddAccountFormHandler {
+export interface IAddCategoryFormHandler {
     name: (event: ChangeEvent<HTMLTextAreaElement>) => void;
     description: (event: ChangeEvent<HTMLTextAreaElement>) => void;
     color: (event: ChangeEvent<HTMLInputElement>) => void;
-    isCore: (event: ChangeEvent<HTMLInputElement>) => void;
+    isStandard: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export interface IAddAccountFormProps {
+export interface IAddCategoryFormProps {
     formId: string;
-    values: IAddAccountFormValues;
-    handler: IAddAccountFormHandler;
+    values: IAddCategoryFormValues;
+    handler: IAddCategoryFormHandler;
 }
 
-export interface IAddAccountFormState {
+export interface IAddCategoryFormState {
 }
 
-export const defaultState: IAddAccountFormState = {};
+export const defaultState: IAddCategoryFormState = {};
 
-export default class AddAccountForm extends React.Component<IAddAccountFormProps, IAddAccountFormState> {
+export default class AddCategoryForm extends React.Component<IAddCategoryFormProps, IAddCategoryFormState> {
 
-    public state: IAddAccountFormState = defaultState;
+    public state: IAddCategoryFormState = defaultState;
 
-    constructor(props: IAddAccountFormProps) {
+    constructor(props: IAddCategoryFormProps) {
         super(props);
 
     }
@@ -47,28 +46,30 @@ export default class AddAccountForm extends React.Component<IAddAccountFormProps
                 <form id={formId}>
                     <TextField autoFocus
                                margin="dense"
-                               id={accountFields.name.fieldName}
-                               label={accountFields.name.labelName}
+                               id={categoryFields.name.fieldName}
+                               label={categoryFields.name.labelName}
                                type="text"
                                value={values.name}
                                onChange={handler.name}
-                               fullWidth/>
+                               fullWidth
+                    />
                     <TextField margin="dense"
-                               id={accountFields.description.fieldName}
-                               label={accountFields.description.labelName}
+                               id={categoryFields.description.fieldName}
+                               label={categoryFields.description.labelName}
                                type="text"
                                value={values.description}
                                onChange={handler.description}
-                               fullWidth/>
+                               fullWidth
+                    />
                     <FormColorField id={categoryFields.color.fieldName}
                                     label={categoryFields.color.labelName}
                                     value={values.color}
                                     onChange={handler.color}
                     />
-                    <FormCheckBox id={accountFields.isCore.fieldName}
-                                  label={accountFields.isCore.labelName}
-                                  value={values.isCore}
-                                  onChange={handler.isCore}
+                    <FormCheckBox id={categoryFields.isStandard.fieldName}
+                                  label={categoryFields.isStandard.labelName}
+                                  value={values.isStandard}
+                                  onChange={handler.isStandard}
                     />
                 </form>
             </React.Fragment>

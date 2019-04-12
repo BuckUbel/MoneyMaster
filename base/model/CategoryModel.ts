@@ -2,7 +2,7 @@ import {
     IDBCol,
 } from "../helper/util";
 import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
-import {AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "./AccountModel";
+import {accountFields, AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "./AccountModel";
 import {createEntityActions, IEntityActionsObject} from "../actions/Entity";
 
 export const categoryActions: IEntityActionsObject = createEntityActions("category");
@@ -37,7 +37,7 @@ export const categoryFields: ICategoriesFields = {
     color: {
         fieldName: "color",
         labelName: "Farbe",
-        value: "",
+        value: "#000",
         type: "string",
     },
     isStandard: {
@@ -77,10 +77,20 @@ export interface ICategoryDatabase extends IDatabaseClass {
 
 export class CategoryModel extends Entity implements ICategoryIdentity {
 
-    public static createEntity(object: IAccountIdentityDefaultStringValues): IAccountIdentity {
-        const entity = new AccountModel();
+    public static createEntity(object: ICategoryIdentityDefaultStringValues): ICategoryIdentity {
+        const entity = new CategoryModel();
         entity.set(object);
         return entity;
+    }
+
+    public static createEmptyEntity(): ICategoryIdentity {
+        return {
+            id: categoryFields.id.value,
+            name: categoryFields.name.value,
+            description: categoryFields.description.value,
+            color: categoryFields.color.value,
+            isStandard: categoryFields.isStandard.value
+        };
     }
 
     public name: string;

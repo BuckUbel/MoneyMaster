@@ -6,30 +6,25 @@ import StandardDialog from "./StandardDialog";
 import {ChangeEvent} from "react";
 import AddAccountForm, {IAddAccountFormValues} from "../forms/AddAccountForm";
 import AddIcon from "@material-ui/icons/Add";
+import {AccountModel, IAccountIdentity} from "../../../../base/model/AccountModel";
 
-
-export interface IAddDialogProps {
+export interface IAddAccountDialogProps {
     onClick?: (fct: () => void) => void;
     submit: (entity: IAddAccountFormValues) => void;
 }
 
-export interface IAddDialogState {
-    entity: IAddAccountFormValues;
+export interface IAddAccountDialogState {
+    entity: IAccountIdentity;
 }
 
-const defaultState: IAddDialogState = {
-    entity: {
-        name: "",
-        description: "",
-        color: "",
-        isCore: true,
-    }
+const defaultState: IAddAccountDialogState = {
+    entity: AccountModel.createEmptyEntity()
 };
-export default class AddDialog extends React.Component<IAddDialogProps, IAddDialogState> {
+export default class AddAccountDialog extends React.Component<IAddAccountDialogProps, IAddAccountDialogState> {
 
-    public state: IAddDialogState = defaultState;
+    public state: IAddAccountDialogState = defaultState;
 
-    public constructor(props: IAddDialogProps) {
+    public constructor(props: IAddAccountDialogProps) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -44,41 +39,41 @@ export default class AddDialog extends React.Component<IAddDialogProps, IAddDial
 
     public handleNameChange(event: ChangeEvent<HTMLTextAreaElement>) {
         const value = event.target.value;
-        this.setState((prevState: IAddDialogState) => ({
-            entity: Object.assign(prevState.entity, {entity: {name: value}})
+        this.setState((prevState: IAddAccountDialogState) => ({
+            entity: Object.assign(prevState.entity, {name: value})
         }));
     }
 
     public handleDescriptionChange(event: ChangeEvent<HTMLTextAreaElement>) {
         const value = event.target.value;
-        this.setState((prevState: IAddDialogState) => ({
-            entity: Object.assign(prevState.entity, {entity: {description: value}})
+        this.setState((prevState: IAddAccountDialogState) => ({
+            entity: Object.assign(prevState.entity, {description: value})
         }));
     }
 
-    public handleColorChange(event: ChangeEvent<HTMLTextAreaElement>) {
+    public handleColorChange(event: ChangeEvent<HTMLInputElement>) {
         const value = event.target.value;
-        this.setState((prevState: IAddDialogState) => ({
-            entity: Object.assign(prevState.entity, {entity: {color: value}})
+        this.setState((prevState: IAddAccountDialogState) => ({
+            entity: Object.assign(prevState.entity, {color: value})
         }));
     }
 
-    public handleIsCoreChange(event: ChangeEvent<HTMLTextAreaElement>) {
-        const value = event.target.value;
-        this.setState((prevState: IAddDialogState) => ({
-            entity: Object.assign(prevState.entity, {entity: {isCore: value}})
+    public handleIsCoreChange(event: ChangeEvent<HTMLInputElement>) {
+        const checked = event.target.checked;
+        this.setState((prevState: IAddAccountDialogState) => ({
+            entity: Object.assign(prevState.entity, {isCore: checked})
         }));
     }
 
     public render() {
         const {onClick} = this.props;
 
-        const formId = "passwordForm";
+        const formId = "addAccountForm";
 
         return (
             <React.Fragment>
                 <StandardDialog
-                    title={"Entität hinzufügen"}
+                    title={"Konto hinzufügen"}
                     formName={formId}
                     createOpenButton={(handleOpen) =>
                         <Fab onClick={onClick ? () => onClick(handleOpen) : handleOpen} color="secondary"
@@ -89,9 +84,7 @@ export default class AddDialog extends React.Component<IAddDialogProps, IAddDial
                     submitFunction={this.onSubmit}
                 >
                     <DialogContentText>
-                        Damit der Server sicher ihre Daten abrufen kann, benötigt er nach jedem Start ihr Passwort.
-                        Wenn sie dieses einmal eingegeben haben.
-                        Kann der Server zu seiner Laufzeit immer wieder darauf zugreifen.
+                        Geben Sie hier die nötige Daten für ein neues virtuelles Konto ein.
                     </DialogContentText>
                     <AddAccountForm
                         formId={formId}

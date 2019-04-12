@@ -18,6 +18,5 @@ export const loadAllEntities = (dispatch: ThunkDispatch<IRootState, void, Action
         } catch (err) {
             rej(err);
         }
-
     });
 };

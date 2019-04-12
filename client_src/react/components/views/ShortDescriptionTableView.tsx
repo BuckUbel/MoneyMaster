@@ -1,14 +1,13 @@
 import * as React from "react";
-import Button from "@material-ui/core/Button";
-import {Divider, Fab, Grid, Typography} from "@material-ui/core";
+import {Divider, Grid} from "@material-ui/core";
 import ShortDescriptionTable from "../tables/ShortDescriptionTable";
 import {ShortDescriptionModel, IShortDescriptionIdentity} from "../../../../base/model/ShortDescriptionModel";
-import AddIcon from "@material-ui/icons/Add";
+import AddShortDescriptionDialog from "../dialogs/AddShortDescriptionDialog";
 
 export interface IShortDescriptionViewProps {
     shortDescriptions: ShortDescriptionModel[];
-    addShortDescriptions: (shortDescriptions: IShortDescriptionIdentity[]) => Promise<any>;
-    editShortDescriptions: (shortDescriptions: IShortDescriptionIdentity[]) => Promise<any>;
+    addShortDescription: (shortDescriptions: IShortDescriptionIdentity) => Promise<any>;
+    editShortDescription: (shortDescriptions: IShortDescriptionIdentity) => Promise<any>;
 }
 
 export interface IShortDescriptionViewState {
@@ -31,15 +30,13 @@ export default class ShortDescriptionTableView
     }
 
     public render() {
-        const {shortDescriptions} = this.props;
+        const {shortDescriptions, addShortDescription} = this.props;
 
         return (
             <Grid item xs={12} container spacing={24}>
                 <Grid container item xs={12} key={1}>
                     <Grid item xs={2}>
-                        <Fab color="secondary" aria-label="Hinzufügen">
-                            <AddIcon/>
-                        </Fab>
+                        <AddShortDescriptionDialog submit={addShortDescription}/>
                     </Grid>
                 </Grid>
                 <Grid item xs={12} key={2}>

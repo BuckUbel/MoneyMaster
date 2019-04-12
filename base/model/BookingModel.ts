@@ -5,7 +5,7 @@ import {
     stringToDateWithSeparator
 } from "../helper/util";
 import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
-import {AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "./AccountModel";
+import {accountFields, AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "./AccountModel";
 import {createEntityActions, IEntityActionsObject} from "../actions/Entity";
 
 export const bookingActions: IEntityActionsObject = createEntityActions("booking");
@@ -220,10 +220,30 @@ export function arrayToBookingModel(arr: string[], categories: string[]): Bookin
 
 export class BookingModel extends Entity implements IBookingIdentity {
 
-    public static createEntity(object: IAccountIdentityDefaultStringValues): IAccountIdentity {
-        const entity = new AccountModel();
+    public static createEntity(object: IBookingIdentityDefaultStringValues): IBookingIdentity {
+        const entity = new BookingModel();
         entity.set(object);
         return entity;
+    }
+
+    public static createEmptyEntity(): IBookingIdentity {
+        return {
+            id: bookingFields.id.value,
+            orderAccount: bookingFields.orderAccount.value,
+            bookingDate: bookingFields.bookingDate.value,
+            validDate: bookingFields.validDate.value,
+            bookingType: bookingFields.bookingType.value,
+            purpose: bookingFields.purpose.value,
+            believerId: bookingFields.believerId.value,
+            mandateReference: bookingFields.mandateReference.value,
+            customerReference: bookingFields.customerReference.value,
+            payPartner: bookingFields.payPartner.value,
+            iban: bookingFields.iban.value,
+            bic: bookingFields.bic.value,
+            value: bookingFields.value.value,
+            currency: bookingFields.currency.value,
+            info: bookingFields.info.value,
+        };
     }
 
     public orderAccount: string;

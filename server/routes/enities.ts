@@ -19,7 +19,7 @@ export function standardEntityRouting(
             return await loadAllEntitiesFromDB(server.database, dbTable, dbFields).then((result) => {
                 return result;
             }).catch((e: string) => {
-                console.log(e);
+                console.error(e);
                 return new ErrorMessage("Databank Fehler", e);
             });
         }
@@ -30,11 +30,10 @@ export function standardEntityRouting(
         handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
             // load one Entity
             const id: number = Number(request.params.index);
-            console.log(request.params.index);
             return await loadOneEntityFromDB(server.database, dbTable, dbFields, id).then((result) => {
                 return result;
             }).catch((e: string) => {
-                console.log(e);
+                console.error(e);
                 return new ErrorMessage("Databank Fehler", e);
             });
         }
@@ -42,13 +41,20 @@ export function standardEntityRouting(
     server.app.route({
         method: "POST",
         path: routes.create,
-        handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+        handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
             const requestBody: any = request.payload;
             const objects: IEntityStringClass[] = requestBody.entities;
             const entityObjects = objects.map((object) => {
                 return newEntity(object);
             });
-            return insertEntities(server.database, dbTable, dbFields, entityObjects);
+            return await insertEntities(server.database, dbTable, dbFields, entityObjects)
+                .then((result) => {
+                    return result;
+                })
+                .catch((e: string) => {
+                    console.error(e);
+                    return new ErrorMessage("Datenbank Fehler", e);
+                });
         }
     });
     server.app.route({

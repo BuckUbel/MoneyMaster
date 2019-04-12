@@ -57,10 +57,18 @@ export interface IShortDescriptionDatabase extends IDatabaseClass {
 
 export class ShortDescriptionModel extends Entity implements IShortDescriptionIdentity {
 
-    public static createEntity(object: IAccountIdentityDefaultStringValues): IAccountIdentity {
-        const entity = new AccountModel();
+    public static createEntity(object: IShortDescriptionIdentityDefaultStringValues): IShortDescriptionIdentity {
+        const entity = new ShortDescriptionModel();
         entity.set(object);
         return entity;
+    }
+
+    public static createEmptyEntity(): IShortDescriptionIdentity {
+        return {
+            id: shortDescriptionFields.id.value,
+            originalContent: shortDescriptionFields.originalContent.value,
+            replaceContent: shortDescriptionFields.replaceContent.value,
+        };
     }
 
     public originalContent: string;
