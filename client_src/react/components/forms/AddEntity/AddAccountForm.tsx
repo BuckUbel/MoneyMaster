@@ -1,10 +1,10 @@
 import * as React from "react";
 import {TextField} from "@material-ui/core";
 import {ChangeEvent} from "react";
-import {accountFields} from "../../../../base/model/AccountModel";
-import FormColorField from "../core/simple/FormColorField";
-import {categoryFields} from "../../../../base/model/CategoryModel";
-import FormCheckBox from "../core/simple/FormCheckBox";
+import {accountFields} from "../../../../../base/model/AccountModel";
+import FormColorField from "../../core/simple/FormColorField";
+import {categoryFields} from "../../../../../base/model/CategoryModel";
+import FormCheckBox from "../../core/simple/FormCheckBox";
 
 export interface IAddAccountFormValues {
     name: string;

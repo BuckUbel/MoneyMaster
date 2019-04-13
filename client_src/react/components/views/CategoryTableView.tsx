@@ -1,8 +1,8 @@
 import * as React from "react";
-import {Divider, Grid} from "@material-ui/core";
+import {Divider, Grid, Typography} from "@material-ui/core";
 import CategoryTable from "../tables/CategoryTable";
 import {CategoryModel, ICategoryIdentity} from "../../../../base/model/CategoryModel";
-import AddCategoryDialog from "../dialogs/AddCategoryDialog";
+import AddCategoryDialog from "../dialogs/AddEntity/AddCategoryDialog";
 
 export interface ICategoryViewProps {
     categories: CategoryModel[];
@@ -33,8 +33,13 @@ export default class CategoryTableView extends React.Component<ICategoryViewProp
 
         return (
             <Grid item xs={12} container spacing={24}>
-                <Grid container item xs={12} key={1}>
-                    <Grid item xs={2}>
+                <Grid container item xs={12} key={1} justify={"space-between"}>
+                    <Grid item xs={11}>
+                        <Typography variant={"h3"}>
+                            Kategorien - Übersicht
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={1}>
                         <AddCategoryDialog submit={addCategory}/>
                     </Grid>
                 </Grid>

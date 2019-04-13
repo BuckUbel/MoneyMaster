@@ -43,9 +43,14 @@ export default class BookingTableView extends React.Component<IBookingViewProps,
         }
         return (
             <Grid item xs={12} container spacing={24}>
-                <Grid key={1} item xs={12} container spacing={16}>
+                <Grid key={1} item xs={12} container spacing={16} justify={"space-between"}>
+                    <Grid item xs={9}>
+                        <Typography variant={"h3"}>
+                            Buchungen
+                        </Typography>
+                    </Grid>
                     <Grid item key={3}>
-                        <Typography component={"h2"}>
+                        <Typography variant={"h4"}>
                             {nowValue.toFixed(2) + " €"}
                         </Typography>
                     </Grid>

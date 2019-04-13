@@ -1,7 +1,7 @@
 import * as React from "react";
 import {TextField} from "@material-ui/core";
 import {ChangeEvent} from "react";
-import {shortDescriptionFields} from "../../../../base/model/ShortDescriptionModel";
+import {shortDescriptionFields} from "../../../../../base/model/ShortDescriptionModel";
 
 export interface IAddShortDescriptionFormValues {
     originalContent: string;

@@ -2,11 +2,11 @@ import * as React from "react";
 import {
     DialogContentText, Fab
 } from "@material-ui/core";
-import StandardDialog from "./StandardDialog";
+import StandardDialog from "../StandardDialog";
 import {ChangeEvent} from "react";
 import AddIcon from "@material-ui/icons/Add";
-import AddShortDescriptionForm, {IAddShortDescriptionFormValues} from "../forms/AddShortDescriptionForm";
-import {ShortDescriptionModel} from "../../../../base/model/ShortDescriptionModel";
+import AddShortDescriptionForm, {IAddShortDescriptionFormValues} from "../../forms/AddEntity/AddShortDescriptionForm";
+import {ShortDescriptionModel} from "../../../../../base/model/ShortDescriptionModel";
 
 export interface IAddShortDescriptionDialogProps {
     onClick?: (fct: () => void) => void;

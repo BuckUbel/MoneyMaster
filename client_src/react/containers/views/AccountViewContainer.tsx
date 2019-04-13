@@ -8,6 +8,12 @@ import {accountActions, AccountModel, IAccountIdentity} from "../../../../base/m
 import AccountTableView from "../../components/views/AccountTableView";
 import * as React from "react";
 
+export interface IMoveMoneyParams {
+    srcAccountId: number;
+    trgAccountId: number;
+    value: number;
+}
+
 export interface IAccountViewContainerProps {
     accounts: AccountModel[];
     fetchAllAccounts: () => Promise<any>;
@@ -22,27 +28,26 @@ export const defaultState: IAccountViewContainerState = {};
 
 class AccountViewContainer extends React.Component<IAccountViewContainerProps, IAccountViewContainerState> {
 
-
     public state: IAccountViewContainerState = defaultState;
 
     public constructor(props: IAccountViewContainerProps) {
         super(props);
-        this.addAccount = this.addAccount.bind(this);
-        this.addAccount = this.addAccount.bind(this);
+        this.addAccounts = this.addAccounts.bind(this);
+        this.editAccounts = this.editAccounts.bind(this);
     }
 
-    public async addAccount(account: IAccountIdentity) {
+    public async addAccounts(accounts: IAccountIdentity[]) {
         try {
-            await this.props.addAccounts([account]);
+            await this.props.addAccounts(accounts);
             await this.props.fetchAllAccounts();
         } catch (error) {
             console.error(error);
         }
     }
 
-    public async editAccount(account: IAccountIdentity) {
+    public async editAccounts(accounts: IAccountIdentity[]) {
         try {
-            await this.props.editAccounts([account]);
+            await this.props.editAccounts(accounts);
         } catch (error) {
             console.error(error);
         }
@@ -52,8 +57,8 @@ class AccountViewContainer extends React.Component<IAccountViewContainerProps, I
         const {accounts} = this.props;
         return (
             <AccountTableView accounts={accounts}
-                              addAccount={this.addAccount}
-                              editAccount={this.editAccount}
+                              addAccounts={this.addAccounts}
+                              editAccounts={this.editAccounts}
             />
         );
     }

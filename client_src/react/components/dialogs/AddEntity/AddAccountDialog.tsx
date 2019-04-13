@@ -2,78 +2,78 @@ import * as React from "react";
 import {
     DialogContentText, Fab
 } from "@material-ui/core";
-import StandardDialog from "./StandardDialog";
+import StandardDialog from "../StandardDialog";
 import {ChangeEvent} from "react";
+import AddAccountForm, {IAddAccountFormValues} from "../../forms/AddEntity/AddAccountForm";
 import AddIcon from "@material-ui/icons/Add";
-import AddCategoryForm, {IAddCategoryFormValues} from "../forms/AddCategoryForm";
-import {CategoryModel} from "../../../../base/model/CategoryModel";
+import {AccountModel, IAccountIdentity} from "../../../../../base/model/AccountModel";
 
-export interface IAddCategoryDialogProps {
+export interface IAddAccountDialogProps {
     onClick?: (fct: () => void) => void;
-    submit: (entity: IAddCategoryFormValues) => void;
+    submit: (entity: IAddAccountFormValues[]) => void;
 }
 
-export interface IAddCategoryDialogState {
-    entity: IAddCategoryFormValues;
+export interface IAddAccountDialogState {
+    entity: IAccountIdentity;
 }
 
-const defaultState: IAddCategoryDialogState = {
-    entity: CategoryModel.createEmptyEntity()
+const defaultState: IAddAccountDialogState = {
+    entity: AccountModel.createEmptyEntity()
 };
-export default class AddCategoryDialog extends React.Component<IAddCategoryDialogProps, IAddCategoryDialogState> {
+export default class AddAccountDialog extends React.Component<IAddAccountDialogProps, IAddAccountDialogState> {
 
-    public state: IAddCategoryDialogState = defaultState;
+    public state: IAddAccountDialogState = defaultState;
 
-    public constructor(props: IAddCategoryDialogProps) {
+    public constructor(props: IAddAccountDialogProps) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
         this.handleColorChange = this.handleColorChange.bind(this);
-        this.handleIsStandardChange = this.handleIsStandardChange.bind(this);
+        this.handleIsCoreChange = this.handleIsCoreChange.bind(this);
     }
 
     public onSubmit() {
-        this.props.submit(this.state.entity);
+        this.props.submit([this.state.entity]);
     }
 
     public handleNameChange(event: ChangeEvent<HTMLTextAreaElement>) {
         const value = event.target.value;
-        this.setState((prevState: IAddCategoryDialogState) => ({
+        this.setState((prevState: IAddAccountDialogState) => ({
             entity: Object.assign(prevState.entity, {name: value})
         }));
     }
 
     public handleDescriptionChange(event: ChangeEvent<HTMLTextAreaElement>) {
         const value = event.target.value;
-        this.setState((prevState: IAddCategoryDialogState) => ({
+        this.setState((prevState: IAddAccountDialogState) => ({
             entity: Object.assign(prevState.entity, {description: value})
         }));
     }
 
     public handleColorChange(event: ChangeEvent<HTMLInputElement>) {
         const value = event.target.value;
-        this.setState((prevState: IAddCategoryDialogState) => ({
+        this.setState((prevState: IAddAccountDialogState) => ({
             entity: Object.assign(prevState.entity, {color: value})
         }));
     }
 
-    public handleIsStandardChange(event: ChangeEvent<HTMLInputElement>) {
+    public handleIsCoreChange(event: ChangeEvent<HTMLInputElement>) {
         const checked = event.target.checked;
-        this.setState((prevState: IAddCategoryDialogState) => ({
-            entity: Object.assign(prevState.entity, {isStandard: checked})
+        this.setState((prevState: IAddAccountDialogState) => ({
+            entity: Object.assign(prevState.entity, {isCore: checked})
         }));
     }
 
     public render() {
         const {onClick} = this.props;
 
-        const formId = "addCategoryForm";
+        const formId = "addAccountForm";
 
         return (
             <React.Fragment>
                 <StandardDialog
-                    title={"Kategorie hinzufügen"}
+                    title={"Konto hinzufügen"}
                     formName={formId}
                     createOpenButton={(handleOpen) =>
                         <Fab onClick={onClick ? () => onClick(handleOpen) : handleOpen} color="secondary"
@@ -84,16 +84,16 @@ export default class AddCategoryDialog extends React.Component<IAddCategoryDialo
                     submitFunction={this.onSubmit}
                 >
                     <DialogContentText>
-                       Geben Sie hier die nötige Daten für eine neue Kategorie ein.
+                        Geben Sie hier die nötige Daten für ein neues virtuelles Konto ein.
                     </DialogContentText>
-                    <AddCategoryForm
+                    <AddAccountForm
                         formId={formId}
                         values={this.state.entity}
                         handler={{
                             name: this.handleNameChange,
                             description: this.handleDescriptionChange,
                             color: this.handleColorChange,
-                            isStandard: this.handleIsStandardChange,
+                            isCore: this.handleIsCoreChange,
                         }}
                     />
                 </StandardDialog>

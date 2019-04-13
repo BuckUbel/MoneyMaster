@@ -1,9 +1,9 @@
 import * as React from "react";
 import {Checkbox, TextField} from "@material-ui/core";
 import {ChangeEvent} from "react";
-import {categoryFields} from "../../../../base/model/CategoryModel";
-import FormCheckBox from "../core/simple/FormCheckBox";
-import FormColorField from "../core/simple/FormColorField";
+import {categoryFields} from "../../../../../base/model/CategoryModel";
+import FormCheckBox from "../../core/simple/FormCheckBox";
+import FormColorField from "../../core/simple/FormColorField";
 
 export interface IAddCategoryFormValues {
     name: string;
