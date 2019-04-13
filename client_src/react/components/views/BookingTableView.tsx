@@ -6,6 +6,7 @@ import {
 import Button from "@material-ui/core/Button";
 import {Divider, Grid, Typography} from "@material-ui/core";
 import BookingTable from "../tables/BookingTable";
+import Booking from "../core/Booking";
 
 export interface IBookingViewProps {
     bookings: BookingModel[];
@@ -50,8 +51,8 @@ export default class BookingTableView extends React.Component<IBookingViewProps,
                         </Typography>
                     </Grid>
                     <Grid item key={3}>
-                        <Typography variant={"h4"}>
-                            {nowValue.toFixed(2) + " €"}
+                        <Typography variant={"h4"} style={Booking.getColorOnBaseOfValue(nowValue)}>
+                            {Booking.getColoredValue(nowValue)}
                         </Typography>
                     </Grid>
                 </Grid>

@@ -2,6 +2,7 @@ import {ISelectorResponse} from "../../core/simple/Selector";
 import {basicStringDMYToDate, isDMYDateString} from "../../../../../base/helper/time/dateHelper";
 import * as React from "react";
 import {TypesAsString} from "../../../../../base/helper/util";
+import {Entity} from "../../../../../base/helper/Entity";
 
 export interface IObjectWithEntityProp {
     entity: any;

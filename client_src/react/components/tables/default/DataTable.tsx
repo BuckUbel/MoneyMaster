@@ -150,17 +150,17 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
             <React.Fragment>
                 <Grid container spacing={40}>
                     {!noFilter && <Grid item xs={12}>
-                        <Card>
-                            <CardContent>
-                                <TableFilter
-                                    rowData={currentFilteredData}
-                                    headerData={colData}
-                                    onFilter={this.onFilter}
-                                    filterValues={filterValues}
-                                    resetFilter={this.resetFilter}
-                                />
-                            </CardContent>
-                        </Card>
+                      <Card>
+                        <CardContent>
+                          <TableFilter
+                            rowData={currentFilteredData}
+                            headerData={colData}
+                            onFilter={this.onFilter}
+                            filterValues={filterValues}
+                            resetFilter={this.resetFilter}
+                          />
+                        </CardContent>
+                      </Card>
                     </Grid>}
                     <Grid item xs={12}>
                         <Card>

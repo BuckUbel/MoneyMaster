@@ -4,6 +4,7 @@ import {beautyDateString} from "../../../../base/helper/util";
 import {bookingFields, BookingModel, IBookingIdentityDefaultStringValues} from "../../../../base/model/BookingModel";
 import {RenderThings} from "../../helper/util";
 import {IBookingTableInformations} from "../tables/BookingTable";
+import {CSSProperties} from "react";
 
 export interface IBookingProps {
     entity: BookingModel;
@@ -30,8 +31,20 @@ export default class Booking extends React.Component<IBookingProps, {}> {
             bookingType: act.bookingType,
             purpose: act.purpose,
             payPartner: act.payPartner,
-            value: act.value.toFixed(2),
+            value: (<p style={Booking.getColorOnBaseOfValue(act.value)}>
+                {Booking.getColoredValue(act.value)}
+            </p>) ,
         });
+    }
+
+    public static getColoredValue(value: number): JSX.Element {
+        return (
+            <React.Fragment>{(value > 0 ? "+" : "") + value.toFixed(2)}</React.Fragment>
+        );
+    }
+
+    public static getColorOnBaseOfValue(value: number): CSSProperties {
+        return {color: (value < 0 ? "#F00" : "#0F0")};
     }
 
     public state: {} = {};

@@ -5,6 +5,7 @@ import {RenderThings} from "../../helper/util";
 import {accountFields, AccountModel} from "../../../../base/model/AccountModel";
 import {IAccountTableInformations} from "../tables/AccountTable";
 import ColorField from "./simple/ColorField";
+import Booking from "./Booking";
 
 export interface IAccountProps {
     entity: AccountModel;
@@ -27,7 +28,9 @@ export default class Account extends React.Component<IAccountProps, {}> {
             id: String(act.id),
             name: act.name,
             description: act.description,
-            value: act.value.toFixed(2),
+            value: <p style={Booking.getColorOnBaseOfValue(act.value)}>
+                {Booking.getColoredValue(act.value)}
+            </p>,
             color: <ColorField color={act.color}/>,
             isReal: act.isReal,
             isCore: act.isCore
@@ -51,8 +54,6 @@ export default class Account extends React.Component<IAccountProps, {}> {
             isReal
         } = this.props.entity;
 
-        const money = value.toFixed(2);
-        const valueColor = value < 0 ? "#f00" : "#0b0";
         const avatarSize = Math.abs(value) > 100 ? 45 : 25;
 
         return (
@@ -65,9 +66,9 @@ export default class Account extends React.Component<IAccountProps, {}> {
                         }
                         title={name}
                         subheader={
-                            <Typography component="p" style={{color: valueColor}}>
-                            {money}
-                        </Typography>
+                            <Typography component="p" style={Booking.getColorOnBaseOfValue(value)}>
+                                {Booking.getColoredValue(value)}
+                            </Typography>
                         }
                     />
                     <CardContent>
