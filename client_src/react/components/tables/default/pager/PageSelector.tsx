@@ -18,9 +18,11 @@ export default class PageSelector extends React.Component<IPageSelecterProps> {
 
         return (
             <React.Fragment>
+                <form>
                 <Selector value={page + 1} onChange={onPageChange}
                           valueArray={getAllNumbersBetweenTwoNumbers(1, lastPage)}
                           helpText={"Seite wählen"}/>
+                </form>
             </React.Fragment>
         );
     }

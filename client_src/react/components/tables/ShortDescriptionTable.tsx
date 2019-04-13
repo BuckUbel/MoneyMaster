@@ -26,6 +26,7 @@ export default class ShortDescriptionTable extends React.Component<IShortDescrip
                     getDisplay={ShortDescription.getDisplay}
                     entityTableConfiguration={shortDescriptionTableConfiguration}
                     baseClass={ShortDescription}
+                    noFilter={true}
                 />
             </React.Fragment>
         );

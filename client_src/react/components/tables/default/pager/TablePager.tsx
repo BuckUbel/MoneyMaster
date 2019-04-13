@@ -73,9 +73,12 @@ export default class TablePager extends React.Component<ITablePagerProps, ITable
                                         style={{textAlign: "center"}}>{from + " - " + to + " von " + count}</Typography>
                         </Grid>
                         <Grid item xs={4} style={{display: "inline-flex"}}>
-                            <Selector value={rowsPerPage} onChange={onRowsPerPageChange} valueArray={[10, 25, 50, 100]}
-                                      helpText={""}/>
-                            <Typography className={"centeringGrid"} component={"p"}>Zeilen pro Seite</Typography>
+                            <form>
+                                <Selector value={rowsPerPage} onChange={onRowsPerPageChange}
+                                          valueArray={[10, 25, 50, 100]}
+                                          helpText={""}/>
+                                <Typography className={"centeringGrid"} component={"p"}>Zeilen pro Seite</Typography>
+                            </form>
                         </Grid>
                         <Grid item xs={5}/>
                     </Grid>

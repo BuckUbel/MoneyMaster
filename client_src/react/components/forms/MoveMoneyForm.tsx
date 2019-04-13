@@ -59,21 +59,21 @@ export default class MoveMoneyForm extends React.Component<IMoveMoneyFormProps, 
             <React.Fragment>
                 <form id={formId} autoComplete={"off"}>
                     <Grid container spacing={8}>
-                        <Grid xs={6}>
+                        <Grid item xs={6}>
                             <Selector value={values.srcAccountName}
                                       onChange={handler.srcAccountName}
                                       valueArray={textAccounts}
                                       helpText={"Quellkonto"}
                             />
                         </Grid>
-                        <Grid xs={6}>
+                        <Grid item xs={6}>
                             <Selector value={values.trgAccountName}
                                       onChange={handler.trgAccountName}
                                       valueArray={textAccounts}
                                       helpText={"Zielkonto"}
                             />
                         </Grid>
-                        <Grid xs={6}>
+                        <Grid item xs={6}>
                             <TextField margin="dense"
                                        id={accountFields.value.fieldName}
                                        label={accountFields.value.labelName}

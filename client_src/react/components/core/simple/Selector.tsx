@@ -28,7 +28,6 @@ export default class Selector extends React.Component<ISelectorProps> {
 
         return (
             <React.Fragment>
-                <form>
                     <FormControl>
                         <Select
                             value={value}
@@ -54,7 +53,6 @@ export default class Selector extends React.Component<ISelectorProps> {
                         </Select>
                         {helpText && <FormHelperText>{helpText}</FormHelperText>}
                     </FormControl>
-                </form>
             </React.Fragment>
         );
     }

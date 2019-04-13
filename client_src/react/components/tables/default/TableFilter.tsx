@@ -116,29 +116,32 @@ export default class TableFilter extends React.Component<ITableFilterProps, ITab
         return (
 
             <React.Fragment>
-                <Grid item xs={12} container spacing={16} alignItems={"center"} justify={"space-between"}>
-                    <Grid item xs={10} container spacing={8} alignItems={"center"} justify={"flex-start"}>
-                        {filterObjects.map((filter, index) => {
-                            if (filter) {
-                                return (
-                                    <Grid item xs={3} key={index}>
-                                        {filter}
-                                    </Grid>
-                                );
-                            }
-                        })}
+                <form>
+
+                    <Grid item xs={12} container spacing={16} alignItems={"center"} justify={"space-between"}>
+                        <Grid item xs={10} container spacing={8} alignItems={"center"} justify={"flex-start"}>
+                            {filterObjects.map((filter, index) => {
+                                if (filter) {
+                                    return (
+                                        <Grid item xs={3} key={index}>
+                                            {filter}
+                                        </Grid>
+                                    );
+                                }
+                            })}
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Button
+                                onClick={resetFilter}
+                                aria-label={"resetFilter"}
+                                size={"medium"}
+                                variant={"contained"}
+                                color={"primary"}>
+                                {"Filter zurücksetzen"}
+                            </Button>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={2}>
-                        <Button
-                            onClick={resetFilter}
-                            aria-label={"resetFilter"}
-                            size={"medium"}
-                            variant={"contained"}
-                            color={"primary"}>
-                            {"Filter zurücksetzen"}
-                        </Button>
-                    </Grid>
-                </Grid>
+                </form>
             </React.Fragment>
         );
     }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import StandardDialog from "./StandardDialog";
-import {DialogContentText, Fab} from "@material-ui/core";
+import {DialogContentText, Divider, Fab} from "@material-ui/core";
 import {IMoveMoneyParams} from "../../containers/views/AccountViewContainer";
 import EuroIcon from "@material-ui/icons/EuroSymbol";
 import MoveMoneyForm from "../forms/MoveMoneyForm";
@@ -22,7 +22,7 @@ export const defaultState: IMoveMoneyDialogState = {
     params: {
         srcAccountName: "",
         trgAccountName: "",
-        value: null
+        value: 0
     }
 };
 
@@ -84,7 +84,6 @@ export default class MoveMoneyDialog extends React.Component<IMoveMoneyDialogPro
                     <DialogContentText>
                         Geben Sie hier die nötige Daten für ein neues virtuelles Konto ein.
                     </DialogContentText>
-
                     <MoveMoneyForm
                         formId={formId}
                         accounts={accounts}
