@@ -20,8 +20,8 @@ export interface IMoveMoneyDialogState {
 
 export const defaultState: IMoveMoneyDialogState = {
     params: {
-        srcAccountId: null,
-        trgAccountId: null,
+        srcAccountName: "",
+        trgAccountName: "",
         value: null
     }
 };
@@ -45,14 +45,14 @@ export default class MoveMoneyDialog extends React.Component<IMoveMoneyDialogPro
     public handleSrcAccountIdChange(event: ChangeEvent<HTMLSelectElement>, child: ReactNode) {
         const value = event.target.value;
         this.setState((prevState: IMoveMoneyDialogState) => ({
-            params: Object.assign(prevState.params, {srcAccountId: value})
+            params: Object.assign(prevState.params, {srcAccountName: value})
         }));
     }
 
     public handleTrgAccountIdChange(event: ChangeEvent<HTMLSelectElement>, child: ReactNode) {
         const value = event.target.value;
         this.setState((prevState: IMoveMoneyDialogState) => ({
-            params: Object.assign(prevState.params, {trgAccountId: value})
+            params: Object.assign(prevState.params, {trgAccountName: value})
         }));
     }
 
@@ -90,8 +90,8 @@ export default class MoveMoneyDialog extends React.Component<IMoveMoneyDialogPro
                         accounts={accounts}
                         values={this.state.params}
                         handler={{
-                            srcAccountId: this.handleSrcAccountIdChange,
-                            trgAccountId: this.handleTrgAccountIdChange,
+                            srcAccountName: this.handleSrcAccountIdChange,
+                            trgAccountName: this.handleTrgAccountIdChange,
                             value: this.handleValueChange,
                         }}
                     />

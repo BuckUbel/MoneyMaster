@@ -77,7 +77,26 @@ const getFetchBody = (apiAction: ICallEntityApiAction) => {
             },
         };
     }
-
+    if (apiAction.method === httpMethods.PUT) {
+        body = {
+            method: apiAction.method,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(apiAction.payload),
+        };
+    }
+    if (apiAction.method === httpMethods.DELETE) {
+        body = {
+            method: apiAction.method,
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(apiAction.payload),
+        };
+    }
     return body;
 };
 

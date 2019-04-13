@@ -5,6 +5,7 @@ import {AccountModel, IAccountIdentity} from "../../../../base/model/AccountMode
 import AddAccountDialog from "../dialogs/AddEntity/AddAccountDialog";
 import {IMoveMoneyParams} from "../../containers/views/AccountViewContainer";
 import MoveMoneyDialog from "../dialogs/MoveMoneyDialog";
+import {boolean} from "joi";
 
 export interface IAccountViewProps {
     accounts: AccountModel[];
@@ -34,15 +35,20 @@ export default class AccountTableView extends React.Component<IAccountViewProps,
     public moveMoney(params: IMoveMoneyParams) {
         const {accounts} = this.props;
         const srcAccount = accounts.find((account: AccountModel) => {
-            return account.id === params.srcAccountId;
+            return account.name === params.srcAccountName;
         });
         const trgAccount = accounts.find((account: AccountModel) => {
-            return account.id === params.trgAccountId;
+            return account.name === params.trgAccountName;
         });
-        srcAccount.value -= params.value;
-        trgAccount.value += params.value;
+        if (srcAccount.isReal === false && trgAccount.isReal === false) {
+            srcAccount.value = Number(srcAccount.value) - Number(params.value);
+            trgAccount.value = Number(trgAccount.value) + Number(params.value);
 
-        this.props.editAccounts([srcAccount, trgAccount]);
+            this.props.editAccounts([srcAccount, trgAccount]);
+        }
+        else {
+            // TODO: Show error Mesage, because false account is selected
+        }
     }
 
     public render() {

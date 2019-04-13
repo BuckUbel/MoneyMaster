@@ -6,23 +6,18 @@ import FormCheckBox from "../core/simple/FormCheckBox";
 import {ChangeEvent} from "react";
 import Selector from "../core/simple/Selector";
 import {ReactNode} from "react";
-
-export interface IMoveMoneyFormValues {
-    srcAccountId: number;
-    trgAccountId: number;
-    value: number;
-}
+import {IMoveMoneyParams} from "../../containers/views/AccountViewContainer";
 
 export interface IMoveMoneyFormHandler {
-    srcAccountId: (event: ChangeEvent<HTMLSelectElement>, child: ReactNode) => void;
-    trgAccountId: (event: ChangeEvent<HTMLSelectElement>, child: ReactNode) => void;
+    srcAccountName: (event: ChangeEvent<HTMLSelectElement>, child: ReactNode) => void;
+    trgAccountName: (event: ChangeEvent<HTMLSelectElement>, child: ReactNode) => void;
     value: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 export interface IMoveMoneyFormProps {
     formId: string;
     accounts: AccountModel[];
-    values: IMoveMoneyFormValues;
+    values: IMoveMoneyParams;
     handler: IMoveMoneyFormHandler;
 }
 
@@ -39,7 +34,9 @@ export default class MoveMoneyForm extends React.Component<IMoveMoneyFormProps, 
     public static getDerivedStateFromProps(newProps: IMoveMoneyFormProps, oldState: IMoveMoneyFormState)
         : IMoveMoneyFormState {
 
-        const newTextAccounts = newProps.accounts.map((account: AccountModel): string => {
+        const newTextAccounts = newProps.accounts.filter((account: AccountModel): boolean => {
+            return account.isReal === false;
+        }).map((account: AccountModel): string => {
             return account.name;
         });
 
@@ -50,29 +47,28 @@ export default class MoveMoneyForm extends React.Component<IMoveMoneyFormProps, 
 
     public state: IMoveMoneyFormState = defaultState;
 
-
     constructor(props: IMoveMoneyFormProps) {
         super(props);
     }
 
     public render() {
-        const {formId, values, handler, accounts} = this.props;
+        const {formId, values, handler} = this.props;
         const {textAccounts} = this.state;
 
         return (
             <React.Fragment>
-                <form id={formId}>
+                <form id={formId} autoComplete={"off"}>
                     <Grid container spacing={8}>
                         <Grid xs={6}>
-                            <Selector value={values.srcAccountId}
-                                      onChange={handler.srcAccountId}
+                            <Selector value={values.srcAccountName}
+                                      onChange={handler.srcAccountName}
                                       valueArray={textAccounts}
                                       helpText={"Quellkonto"}
                             />
                         </Grid>
                         <Grid xs={6}>
-                            <Selector value={values.trgAccountId}
-                                      onChange={handler.trgAccountId}
+                            <Selector value={values.trgAccountName}
+                                      onChange={handler.trgAccountName}
                                       valueArray={textAccounts}
                                       helpText={"Zielkonto"}
                             />
@@ -84,7 +80,9 @@ export default class MoveMoneyForm extends React.Component<IMoveMoneyFormProps, 
                                        type="number"
                                        value={values.value}
                                        onChange={handler.value}
-                                       fullWidth/>
+                                       fullWidth
+                                       autoComplete={"off"}
+                            />
                         </Grid>
                     </Grid>
                 </form>

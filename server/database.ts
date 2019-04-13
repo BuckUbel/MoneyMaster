@@ -64,6 +64,7 @@ export class Database implements IDatabase {
             database: this.config.databaseName,
             user: this.config.user,
             password: this.config.password,
+            multipleStatements: true
         });
     }
 }

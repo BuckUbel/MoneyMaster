@@ -85,3 +85,32 @@ export async function insertEntities(
     );
     return await db.sqlQuery(queryString);
 }
+
+export async function updateEntities(
+    db: IDatabase,
+    tableName: string,
+    fields: IDatabaseFields,
+    entities: IEntityClass[]
+) {
+    const rowNamesArray: string[] = Object.keys(fields).reduce((filtered: any[], key) => {
+        if (key !== "id") {
+            filtered.push(fields[key].fieldName);
+        }
+        return filtered;
+    }, []);
+    const queries: string[] = entities.map((entity: IEntityClass): string => {
+        const databaseEntity: IDatabaseClass = createEntityForDB(entity);
+        const valueArray = Object.keys(fields).reduce((filtered: any[], key) => {
+            if (key !== "id") {
+                filtered.push(databaseEntity[key]);
+            }
+            return filtered;
+        }, []);
+        const arrayToSet: string[] = rowNamesArray.map((rowName: string, index: number): string => {
+            return rowName + "='" + valueArray[index] + "'";
+        });
+        const arrayToSetString = arrayToSet.join(", ");
+        return "UPDATE " + tableName + " SET " + arrayToSetString + " WHERE " + "id" + "='" + entity.id + "'";
+    });
+    return db.sqlQuery(queries.join(";"));
+}

@@ -9,8 +9,8 @@ import AccountTableView from "../../components/views/AccountTableView";
 import * as React from "react";
 
 export interface IMoveMoneyParams {
-    srcAccountId: number;
-    trgAccountId: number;
+    srcAccountName: string;
+    trgAccountName: string;
     value: number;
 }
 
@@ -48,6 +48,7 @@ class AccountViewContainer extends React.Component<IAccountViewContainerProps, I
     public async editAccounts(accounts: IAccountIdentity[]) {
         try {
             await this.props.editAccounts(accounts);
+            await this.props.fetchAllAccounts();
         } catch (error) {
             console.error(error);
         }
