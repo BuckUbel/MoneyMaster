@@ -30,6 +30,9 @@ class CategoryViewContainer extends React.Component<ICategoryViewContainerProps,
         this.addCategory = this.addCategory.bind(this);
         this.addCategory = this.addCategory.bind(this);
     }
+    public async componentDidMount() {
+        await this.props.fetchAllCategories();
+    }
 
     public async addCategory(category: ICategoryIdentity) {
         try {

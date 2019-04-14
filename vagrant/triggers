@@ -1,0 +1,27 @@
+CREATE DEFINER=`root`@`localhost` TRIGGER `accountUpdate_Insert` AFTER INSERT ON `bookings` FOR EACH ROW BEGIN
+	UPDATE  moneymaster.accounts a SET a.value= (SELECT SUM(value) FROM moneymaster.bookings)
+    WHERE a.isReal = 1;
+	UPDATE moneymaster.accounts as a,
+	(SELECT SUM(value) as v FROM moneymaster.bookings) as b,
+	(SELECT SUM(value) as v from moneymaster.accounts WHERE isCore = 0 AND isReal = 0) as c
+	SET value = b.v - c.v WHERE a.isCore = 1;
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `accountUpdate_Update` AFTER UPDATE ON `bookings` FOR EACH ROW BEGIN
+	UPDATE  accounts a SET a.value= (SELECT SUM(value) FROM moneymaster.bookings)
+    WHERE a.isReal = 1;
+	UPDATE moneymaster.accounts as a,
+	(SELECT SUM(value) as v FROM moneymaster.bookings) as b,
+	(SELECT SUM(value) as v from moneymaster.accounts WHERE isCore = 0 AND isReal = 0) as c
+	SET value = b.v - c.v WHERE a.isCore = 1;
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `accountUpdate_Delete` AFTER DELETE ON `bookings` FOR EACH ROW BEGIN
+	UPDATE  accounts a SET a.value= (SELECT SUM(value) FROM moneymaster.bookings)
+    WHERE a.isReal = 1;
+	UPDATE moneymaster.accounts as a,
+	(SELECT SUM(value) as v FROM moneymaster.bookings) as b,
+	(SELECT SUM(value) as v from moneymaster.accounts WHERE isCore = 0 AND isReal = 0) as c
+	SET value = b.v - c.v WHERE a.isCore = 1;
+END
+

@@ -1,14 +1,16 @@
 import * as React from "react";
 import {Avatar, Card, CardContent, CardHeader, Divider, Grid, Typography} from "@material-ui/core";
-import {beautyDateString} from "../../../../base/helper/util";
 import {RenderThings} from "../../helper/util";
-import {accountFields, AccountModel} from "../../../../base/model/AccountModel";
+import {accountFields, AccountModel, IAccountIdentity} from "../../../../base/model/AccountModel";
 import {IAccountTableInformations} from "../tables/AccountTable";
 import ColorField from "./simple/ColorField";
 import Booking from "./Booking";
+import {IAddAccountFormValues} from "../forms/AddEntity/AddAccountForm";
+import EditAccountDialog from "../dialogs/EditEntity/EditAccountDialog";
 
 export interface IAccountProps {
     entity: AccountModel;
+    editAction?: (account: IAccountIdentity) => void;
 }
 
 export default class Account extends React.Component<IAccountProps, {}> {
@@ -53,11 +55,21 @@ export default class Account extends React.Component<IAccountProps, {}> {
             isCore,
             isReal
         } = this.props.entity;
+        const {editAction, entity} = this.props;
 
         const avatarSize = Math.abs(value) > 100 ? 45 : 25;
 
         return (
             <React.Fragment>
+                {editAction &&
+                <Grid container item xs={12} key={1} justify={"space-between"}>
+                  <Grid item xs={11}/>
+                  <Grid item xs={1}>
+                    <EditAccountDialog entity={entity} submit={(e2: IAddAccountFormValues[]) => {
+                    }}/>
+                  </Grid>
+                </Grid>
+                }
                 <Card>
                     <CardHeader
                         avatar={

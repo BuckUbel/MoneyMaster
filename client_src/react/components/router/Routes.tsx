@@ -11,6 +11,7 @@ import AccountViewContainer from "../../containers/views/AccountViewContainer";
 import CategoryViewContainer from "../../containers/views/CategoryViewContainer";
 import ShortDescriptionViewContainer from "../../containers/views/ShortDescriptionViewContainer";
 import HomeViewContainer from "../../containers/views/HomeViewContainer";
+import AccountContainer from "../../containers/core/AccountContainer";
 
 export interface IAppRoute {
     name: string;
@@ -30,6 +31,15 @@ export const routeList: IAppRoute[] =
             icon: null,
             path: "/",
             pathWithoutParams: "/",
+            title: "",
+            notDisplay: true
+        },
+        {
+            name: "AccountPage",
+            component: (match) => <AccountContainer id={match.params.id}/>,
+            icon: null,
+            path: "/accounts/:id",
+            pathWithoutParams: "/accounts/",
             title: "",
             notDisplay: true
         },

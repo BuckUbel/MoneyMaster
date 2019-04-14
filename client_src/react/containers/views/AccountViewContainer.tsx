@@ -36,6 +36,10 @@ class AccountViewContainer extends React.Component<IAccountViewContainerProps, I
         this.editAccounts = this.editAccounts.bind(this);
     }
 
+    public async componentDidMount() {
+        await this.props.fetchAllAccounts();
+    }
+
     public async addAccounts(accounts: IAccountIdentity[]) {
         try {
             await this.props.addAccounts(accounts);

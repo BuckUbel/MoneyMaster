@@ -35,6 +35,10 @@ class ShortDescriptionViewContainer extends React.Component<IShortDescriptionVie
         this.addShortDescription = this.addShortDescription.bind(this);
     }
 
+    public async componentDidMount() {
+        await this.props.fetchAllShortDescriptions();
+    }
+
     public async addShortDescription(shortDescription: ShortDescriptionModel) {
         try {
             await this.props.addShortDescriptions([shortDescription]);
