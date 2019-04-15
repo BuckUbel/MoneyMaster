@@ -6,7 +6,7 @@ import {
 import StandardDialog from "../StandardDialog";
 import {ChangeEvent} from "react";
 import EditIcon from "@material-ui/icons/Edit";
-import AddShortDescriptionForm from "../../forms/AddEntity/AddShortDescriptionForm";
+import ManageShortDescriptionForm from "../../forms/ManageEntity/ManageShortDescriptionForm";
 import {IShortDescriptionIdentity, ShortDescriptionModel} from "../../../../../base/model/ShortDescriptionModel";
 
 export interface IEditShortDescriptionDialogProps {
@@ -89,7 +89,7 @@ export default class EditShortDescriptionDialog
                     <DialogContentText>
                         Geben Sie hier die nötige Daten für eine neue Kurzbeschreibung ein.
                     </DialogContentText>
-                    <AddShortDescriptionForm
+                    <ManageShortDescriptionForm
                         formId={formId}
                         values={this.state.entity}
                         handler={{

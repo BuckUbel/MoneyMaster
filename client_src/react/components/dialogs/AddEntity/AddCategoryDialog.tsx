@@ -5,16 +5,16 @@ import {
 import StandardDialog from "../StandardDialog";
 import {ChangeEvent} from "react";
 import AddIcon from "@material-ui/icons/Add";
-import AddCategoryForm, {IAddCategoryFormValues} from "../../forms/AddEntity/AddCategoryForm";
+import ManageCategoryForm, {IManageCategoryFormValues} from "../../forms/ManageEntity/ManageCategoryForm";
 import {CategoryModel} from "../../../../../base/model/CategoryModel";
 
 export interface IAddCategoryDialogProps {
     onClick?: (fct: () => void) => void;
-    submit: (entity: IAddCategoryFormValues) => void;
+    submit: (entity: IManageCategoryFormValues) => void;
 }
 
 export interface IAddCategoryDialogState {
-    entity: IAddCategoryFormValues;
+    entity: IManageCategoryFormValues;
 }
 
 const defaultState: IAddCategoryDialogState = {
@@ -86,7 +86,7 @@ export default class AddCategoryDialog extends React.Component<IAddCategoryDialo
                     <DialogContentText>
                        Geben Sie hier die nötige Daten für eine neue Kategorie ein.
                     </DialogContentText>
-                    <AddCategoryForm
+                    <ManageCategoryForm
                         formId={formId}
                         values={this.state.entity}
                         handler={{

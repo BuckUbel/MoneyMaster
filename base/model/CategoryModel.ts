@@ -2,7 +2,6 @@ import {
     IDBCol,
 } from "../helper/util";
 import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
-import {accountFields, AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "./AccountModel";
 import {createEntityActions, IEntityActionsObject} from "../actions/Entity";
 
 export const categoryActions: IEntityActionsObject = createEntityActions("category");

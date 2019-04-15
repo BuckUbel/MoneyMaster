@@ -3,7 +3,6 @@ import {Avatar, Card, CardContent, CardHeader, Divider, Grid, Typography} from "
 import {RenderThings} from "../../helper/util";
 import {IShortDescriptionIdentity, ShortDescriptionModel} from "../../../../base/model/ShortDescriptionModel";
 import {IShortDescriptionTableInformations} from "../tables/ShortDescriptionTable";
-import EditCategoryDialog from "../dialogs/EditEntity/EditCategoryDialog";
 import EditShortDescriptionDialog from "../dialogs/EditEntity/EditShortDescriptionDialog";
 
 export interface IShortDescriptionProps {

@@ -3,9 +3,7 @@ import {IRootState} from "../../store";
 import {ThunkDispatch} from "redux-thunk";
 import {Action} from "redux";
 import {load} from "../../api";
-import {categoryActions, CategoryModel, ICategoryIdentity} from "../../../../base/model/CategoryModel";
 import {connect} from "react-redux";
-import {ICategoryOwnProps} from "./CategoryContainer";
 import {
     IShortDescriptionIdentity,
     shortDescriptionActions,

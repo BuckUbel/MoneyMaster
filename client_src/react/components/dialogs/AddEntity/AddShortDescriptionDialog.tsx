@@ -5,16 +5,16 @@ import {
 import StandardDialog from "../StandardDialog";
 import {ChangeEvent} from "react";
 import AddIcon from "@material-ui/icons/Add";
-import AddShortDescriptionForm, {IAddShortDescriptionFormValues} from "../../forms/AddEntity/AddShortDescriptionForm";
+import ManageShortDescriptionForm, {IManageShortDescriptionFormValues} from "../../forms/ManageEntity/ManageShortDescriptionForm";
 import {ShortDescriptionModel} from "../../../../../base/model/ShortDescriptionModel";
 
 export interface IAddShortDescriptionDialogProps {
     onClick?: (fct: () => void) => void;
-    submit: (entity: IAddShortDescriptionFormValues) => void;
+    submit: (entity: IManageShortDescriptionFormValues) => void;
 }
 
 export interface IAddShortDescriptionDialogState {
-    entity: IAddShortDescriptionFormValues;
+    entity: IManageShortDescriptionFormValues;
 }
 
 const defaultState: IAddShortDescriptionDialogState = {
@@ -71,7 +71,7 @@ export default class AddShortDescriptionDialog extends React.Component<IAddShort
                     <DialogContentText>
                        Geben Sie hier die nötige Daten für eine neue Kategorie ein.
                     </DialogContentText>
-                    <AddShortDescriptionForm
+                    <ManageShortDescriptionForm
                         formId={formId}
                         values={this.state.entity}
                         handler={{

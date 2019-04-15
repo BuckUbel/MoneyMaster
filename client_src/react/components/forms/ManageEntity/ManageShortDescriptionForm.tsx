@@ -3,32 +3,32 @@ import {TextField} from "@material-ui/core";
 import {ChangeEvent} from "react";
 import {shortDescriptionFields} from "../../../../../base/model/ShortDescriptionModel";
 
-export interface IAddShortDescriptionFormValues {
+export interface IManageShortDescriptionFormValues {
     originalContent: string;
     replaceContent: string;
 }
 
-export interface IAddShortDescriptionFormHandler {
+export interface IManageShortDescriptionFormHandler {
     originalContent: (event: ChangeEvent<HTMLTextAreaElement>) => void;
     replaceContent: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
-export interface IAddShortDescriptionFormProps {
+export interface IManageShortDescriptionFormProps {
     formId: string;
-    values: IAddShortDescriptionFormValues;
-    handler: IAddShortDescriptionFormHandler;
+    values: IManageShortDescriptionFormValues;
+    handler: IManageShortDescriptionFormHandler;
 }
 
-export interface IAddShortDescriptionFormState {
+export interface IManageShortDescriptionFormState {
 }
 
-export const defaultState: IAddShortDescriptionFormState = {};
+export const defaultState: IManageShortDescriptionFormState = {};
 
-export default class AddShortDescriptionForm extends React.Component<IAddShortDescriptionFormProps, IAddShortDescriptionFormState> {
+export default class ManageShortDescriptionForm extends React.Component<IManageShortDescriptionFormProps, IManageShortDescriptionFormState> {
 
-    public state: IAddShortDescriptionFormState = defaultState;
+    public state: IManageShortDescriptionFormState = defaultState;
 
-    constructor(props: IAddShortDescriptionFormProps) {
+    constructor(props: IManageShortDescriptionFormProps) {
         super(props);
 
     }

@@ -5,7 +5,6 @@ import {accountFields, AccountModel, IAccountIdentity} from "../../../../base/mo
 import {IAccountTableInformations} from "../tables/AccountTable";
 import ColorField from "./simple/ColorField";
 import Booking from "./Booking";
-import {IAddAccountFormValues} from "../forms/AddEntity/AddAccountForm";
 import EditAccountDialog from "../dialogs/EditEntity/EditAccountDialog";
 import MultilineText from "./simple/MultilineText";
 

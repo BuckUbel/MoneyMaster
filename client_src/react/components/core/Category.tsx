@@ -6,7 +6,6 @@ import {ICategoryTableInformations} from "../tables/CategoryTable";
 import ColorField from "./simple/ColorField";
 import EditCategoryDialog from "../dialogs/EditEntity/EditCategoryDialog";
 import MultilineText from "./simple/MultilineText";
-import {accountFields} from "../../../../base/model/AccountModel";
 
 export interface ICategoryProps {
     entity: CategoryModel;

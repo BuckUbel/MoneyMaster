@@ -5,7 +5,7 @@ import {
 } from "@material-ui/core";
 import StandardDialog from "../StandardDialog";
 import {ChangeEvent} from "react";
-import AddAccountForm, {IAddAccountFormValues} from "../../forms/AddEntity/AddAccountForm";
+import ManageAccountForm from "../../forms/ManageEntity/ManageAccountForm";
 import EditIcon from "@material-ui/icons/Edit";
 import {AccountModel, IAccountIdentity} from "../../../../../base/model/AccountModel";
 
@@ -108,7 +108,7 @@ export default class EditAccountDialog extends React.Component<IEditAccountDialo
                     <DialogContentText>
                         Verändern Sie hier die nötigen Daten für das ausgewählte Konto ein.
                     </DialogContentText>
-                    <AddAccountForm
+                    <ManageAccountForm
                         formId={formId}
                         values={entity}
                         handler={{

@@ -5,36 +5,36 @@ import {categoryFields} from "../../../../../base/model/CategoryModel";
 import FormCheckBox from "../../core/simple/FormCheckBox";
 import FormColorField from "../../core/simple/FormColorField";
 
-export interface IAddCategoryFormValues {
+export interface IManageCategoryFormValues {
     name: string;
     description: string;
     color: string;
     isStandard: boolean;
 }
 
-export interface IAddCategoryFormHandler {
+export interface IManageCategoryFormHandler {
     name: (event: ChangeEvent<HTMLTextAreaElement>) => void;
     description: (event: ChangeEvent<HTMLTextAreaElement>) => void;
     color: (event: ChangeEvent<HTMLInputElement>) => void;
     isStandard: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export interface IAddCategoryFormProps {
+export interface IManageCategoryFormProps {
     formId: string;
-    values: IAddCategoryFormValues;
-    handler: IAddCategoryFormHandler;
+    values: IManageCategoryFormValues;
+    handler: IManageCategoryFormHandler;
 }
 
-export interface IAddCategoryFormState {
+export interface IManageCategoryFormState {
 }
 
-export const defaultState: IAddCategoryFormState = {};
+export const defaultState: IManageCategoryFormState = {};
 
-export default class AddCategoryForm extends React.Component<IAddCategoryFormProps, IAddCategoryFormState> {
+export default class ManageCategoryForm extends React.Component<IManageCategoryFormProps, IManageCategoryFormState> {
 
-    public state: IAddCategoryFormState = defaultState;
+    public state: IManageCategoryFormState = defaultState;
 
-    constructor(props: IAddCategoryFormProps) {
+    constructor(props: IManageCategoryFormProps) {
         super(props);
 
     }

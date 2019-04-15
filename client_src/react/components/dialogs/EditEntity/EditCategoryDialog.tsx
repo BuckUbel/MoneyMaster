@@ -6,7 +6,7 @@ import {
 import StandardDialog from "../StandardDialog";
 import {ChangeEvent} from "react";
 import EditIcon from "@material-ui/icons/Edit";
-import AddCategoryForm from "../../forms/AddEntity/AddCategoryForm";
+import ManageCategoryForm from "../../forms/ManageEntity/ManageCategoryForm";
 import {CategoryModel, ICategoryIdentity} from "../../../../../base/model/CategoryModel";
 
 export interface IEditCategoryDialogProps {
@@ -110,7 +110,7 @@ export default class EditCategoryDialog extends React.Component<IEditCategoryDia
                     <DialogContentText>
                         Geben Sie hier die nötige Daten für eine neue Kategorie ein.
                     </DialogContentText>
-                    <AddCategoryForm
+                    <ManageCategoryForm
                         formId={formId}
                         values={this.state.entity}
                         handler={{

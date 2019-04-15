@@ -4,13 +4,13 @@ import {
 } from "@material-ui/core";
 import StandardDialog from "../StandardDialog";
 import {ChangeEvent} from "react";
-import AddAccountForm, {IAddAccountFormValues} from "../../forms/AddEntity/AddAccountForm";
+import ManageAccountForm, {IManageAccountFormValues} from "../../forms/ManageEntity/ManageAccountForm";
 import AddIcon from "@material-ui/icons/Add";
 import {AccountModel, IAccountIdentity} from "../../../../../base/model/AccountModel";
 
 export interface IAddAccountDialogProps {
     onClick?: (fct: () => void) => void;
-    submit: (entity: IAddAccountFormValues[]) => void;
+    submit: (entity: IManageAccountFormValues[]) => void;
 }
 
 export interface IAddAccountDialogState {
@@ -86,7 +86,7 @@ export default class AddAccountDialog extends React.Component<IAddAccountDialogP
                     <DialogContentText>
                         Geben Sie hier die nötige Daten für ein neues virtuelles Konto ein.
                     </DialogContentText>
-                    <AddAccountForm
+                    <ManageAccountForm
                         formId={formId}
                         values={this.state.entity}
                         handler={{

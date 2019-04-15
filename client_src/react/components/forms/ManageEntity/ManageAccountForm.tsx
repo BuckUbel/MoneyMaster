@@ -6,36 +6,36 @@ import FormColorField from "../../core/simple/FormColorField";
 import {categoryFields} from "../../../../../base/model/CategoryModel";
 import FormCheckBox from "../../core/simple/FormCheckBox";
 
-export interface IAddAccountFormValues {
+export interface IManageAccountFormValues {
     name: string;
     description: string;
     color: string;
     isCore: boolean;
 }
 
-export interface IAddAccountFormHandler {
+export interface IManageAccountFormHandler {
     name: (event: ChangeEvent<HTMLTextAreaElement>) => void;
     description: (event: ChangeEvent<HTMLTextAreaElement>) => void;
     color: (event: ChangeEvent<HTMLInputElement>) => void;
     isCore: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export interface IAddAccountFormProps {
+export interface IManageAccountFormProps {
     formId: string;
-    values: IAddAccountFormValues;
-    handler: IAddAccountFormHandler;
+    values: IManageAccountFormValues;
+    handler: IManageAccountFormHandler;
 }
 
-export interface IAddAccountFormState {
+export interface IManageAccountFormState {
 }
 
-export const defaultState: IAddAccountFormState = {};
+export const defaultState: IManageAccountFormState = {};
 
-export default class AddAccountForm extends React.Component<IAddAccountFormProps, IAddAccountFormState> {
+export default class ManageAccountForm extends React.Component<IManageAccountFormProps, IManageAccountFormState> {
 
-    public state: IAddAccountFormState = defaultState;
+    public state: IManageAccountFormState = defaultState;
 
-    constructor(props: IAddAccountFormProps) {
+    constructor(props: IManageAccountFormProps) {
         super(props);
 
     }
