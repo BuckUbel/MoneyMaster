@@ -11,6 +11,7 @@ export interface IAccountContainerProps {
     id: number;
     fetchAccount: (id: number) => Promise<any>;
     editAccounts: (accounts: IAccountIdentity[]) => Promise<any>;
+    deleteAccounts: (ids: number[]) => Promise<any>;
     account: AccountModel;
 }
 
@@ -27,6 +28,8 @@ class AccountContainer extends React.Component<IAccountContainerProps, IAccountC
 
     constructor(props: IAccountContainerProps) {
         super(props);
+        this.editAccounts = this.editAccounts.bind(this);
+        this.deleteAccount = this.deleteAccount.bind(this);
     }
 
     public async componentDidMount() {
@@ -42,10 +45,25 @@ class AccountContainer extends React.Component<IAccountContainerProps, IAccountC
         }
     }
 
+    public async deleteAccount(id: number) {
+        try {
+            await this.props.deleteAccounts([id]);
+            await this.props.fetchAccount(this.props.id);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     public render() {
         return (
             <React.Fragment>
-                {this.props.account && <Account entity={this.props.account} editAction={this.editAccounts}/>}
+                {this.props.account &&
+                <Account
+                    entity={this.props.account}
+                    editAction={this.editAccounts}
+                    deleteAction={this.deleteAccount}
+                />
+                }
             </React.Fragment>
         );
     }
@@ -57,5 +75,6 @@ const mapsStateToProps = (state: IRootState, ownProps: IAccountOwnProps) => {
 const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) => ({
     fetchAccount: (id: number) => dispatch(load(accountActions.actions.load(id))),
     editAccounts: (accounts: IAccountIdentity[]) => dispatch(load(accountActions.actions.edit(accounts))),
+    deleteAccounts: (ids: number[]) => dispatch(load(accountActions.actions.delete(ids))),
 });
 export default connect(mapsStateToProps, mapDispatchToProps)(AccountContainer);

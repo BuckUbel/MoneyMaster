@@ -21,6 +21,7 @@ export default (state: IState = defaultState, action: IResultAction) => {
         case categoryActions.actionTypes.loadAll.failure: {
             return state;
         }
+        case categoryActions.actionTypes.load.success:
         case categoryActions.actionTypes.loadAll.success: {
             if (action) {
                 const newState: IState = Object.assign([], state);

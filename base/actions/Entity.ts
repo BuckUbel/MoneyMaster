@@ -160,7 +160,7 @@ export const standardLoadOneAction = (actionType: IActionTypesRSF, endpoint: str
     (id: number): ICallEntityApiAction => {
         return ({
             method: httpMethods.GET,
-            endpoint: endpoint + "/" + id,
+            endpoint: endpoint + id,
             type: actionType.request,
             successAction: standardEntityResultAction(actionType.success, true),
             failAction: standardEntityResultAction(actionType.failure, false),

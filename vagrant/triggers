@@ -1,4 +1,5 @@
 CREATE DEFINER=`root`@`localhost` TRIGGER `accountUpdate_Insert` AFTER INSERT ON `bookings` FOR EACH ROW BEGIN
+	SET SQL_SAFE_UPDATES = 0;
 	UPDATE  moneymaster.accounts a SET a.value= (SELECT SUM(value) FROM moneymaster.bookings)
     WHERE a.isReal = 1;
 	UPDATE moneymaster.accounts as a,
@@ -8,6 +9,7 @@ CREATE DEFINER=`root`@`localhost` TRIGGER `accountUpdate_Insert` AFTER INSERT ON
 END
 
 CREATE DEFINER=`root`@`localhost` TRIGGER `accountUpdate_Update` AFTER UPDATE ON `bookings` FOR EACH ROW BEGIN
+	SET SQL_SAFE_UPDATES = 0;
 	UPDATE  accounts a SET a.value= (SELECT SUM(value) FROM moneymaster.bookings)
     WHERE a.isReal = 1;
 	UPDATE moneymaster.accounts as a,
@@ -17,6 +19,7 @@ CREATE DEFINER=`root`@`localhost` TRIGGER `accountUpdate_Update` AFTER UPDATE ON
 END
 
 CREATE DEFINER=`root`@`localhost` TRIGGER `accountUpdate_Delete` AFTER DELETE ON `bookings` FOR EACH ROW BEGIN
+	SET SQL_SAFE_UPDATES = 0;
 	UPDATE  accounts a SET a.value= (SELECT SUM(value) FROM moneymaster.bookings)
     WHERE a.isReal = 1;
 	UPDATE moneymaster.accounts as a,

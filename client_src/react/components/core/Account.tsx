@@ -11,6 +11,7 @@ import EditAccountDialog from "../dialogs/EditEntity/EditAccountDialog";
 export interface IAccountProps {
     entity: AccountModel;
     editAction?: (account: IAccountIdentity) => void;
+    deleteAction?: (id: number) => void;
 }
 
 export default class Account extends React.Component<IAccountProps, {}> {
@@ -55,7 +56,7 @@ export default class Account extends React.Component<IAccountProps, {}> {
             isCore,
             isReal
         } = this.props.entity;
-        const {editAction, entity} = this.props;
+        const {deleteAction, editAction, entity} = this.props;
 
         const avatarSize = Math.abs(value) > 100 ? 45 : 25;
 
@@ -65,8 +66,7 @@ export default class Account extends React.Component<IAccountProps, {}> {
                 <Grid container item xs={12} key={1} justify={"space-between"}>
                   <Grid item xs={11}/>
                   <Grid item xs={1}>
-                    <EditAccountDialog entity={entity} submit={(e2: IAddAccountFormValues[]) => {
-                    }}/>
+                    <EditAccountDialog entity={entity} delete={deleteAction} submit={editAction}/>
                   </Grid>
                 </Grid>
                 }

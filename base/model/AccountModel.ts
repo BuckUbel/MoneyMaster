@@ -3,7 +3,6 @@ import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClas
 import {createEntityActions, IEntityActionsObject} from "../actions/Entity";
 
 export const accountActions: IEntityActionsObject = createEntityActions("accounts");
-
 interface IAccountFields extends IDatabaseFields {
     id?: IDBCol<number>;
     name?: IDBCol<string>;

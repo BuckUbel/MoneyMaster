@@ -1,7 +1,13 @@
 import {IHapiServer} from "../HapiServer";
 import {IRestCallApiPaths} from "../../base/helper/util";
 import * as Hapi from "hapi";
-import {insertEntities, loadAllEntitiesFromDB, loadOneEntityFromDB, updateEntities} from "../database/basicActions";
+import {
+    deleteEntities,
+    insertEntities,
+    loadAllEntitiesFromDB,
+    loadOneEntityFromDB,
+    updateEntities
+} from "../database/basicActions";
 import {IDatabaseFields, IEntityClass, IEntityStringClass} from "../../base/helper/Entity";
 import {ErrorMessage} from "../../base/helper/messages/ErrorMessage";
 
@@ -81,9 +87,18 @@ export function standardEntityRouting(
     server.app.route({
         method: "DELETE",
         path: routes.delete,
-        handler: (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
+        handler: async (request: Hapi.Request, h: Hapi.ResponseToolkit) => {
             // delete routine
-            return "";
+            const requestBody: any = request.payload;
+            const ids: number[] = requestBody.ids;
+            return await deleteEntities(server.database, dbTable, ids)
+                .then((result) => {
+                    return result;
+                })
+                .catch((e: string) => {
+                    console.error(e);
+                    return new ErrorMessage("Datenbank Fehler", e);
+                });
         }
     });
 }

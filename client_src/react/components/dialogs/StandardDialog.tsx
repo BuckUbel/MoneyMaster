@@ -13,6 +13,7 @@ export interface IStandardDialogProps {
     createCancelButton?: (closeFunction: () => void) => RenderThings;
     openFunction?: () => void;
     submitFunction?: () => void;
+    optionalActions?: (closeFunction: () => void) => (RenderThings | RenderThings[]);
 }
 
 export interface IStandardDialogState {
@@ -58,7 +59,15 @@ export default class StandardDialog extends React.Component<IStandardDialogProps
     }
 
     public render() {
-        const {title, children, createOpenButton, createSubmitButton, createCancelButton, formName} = this.props;
+        const {
+            title,
+            children,
+            createOpenButton,
+            createSubmitButton,
+            createCancelButton,
+            formName,
+            optionalActions
+        } = this.props;
 
         return (
             <React.Fragment>
@@ -76,12 +85,14 @@ export default class StandardDialog extends React.Component<IStandardDialogProps
                         {children}
                     </DialogContent>
                     <DialogActions>
+                        {optionalActions && optionalActions(this.handleClick("CANCELLED"))}
                         {createCancelButton ? createCancelButton(this.handleClick("CANCELLED")) :
                             <Button onClick={this.handleClick("CANCELLED")} color="primary">
                                 Abrrechen
                             </Button>}
                         {createSubmitButton ? createSubmitButton(this.handleClick("SUBMITTED")) :
-                            <Button onClick={this.handleClick("SUBMITTED")} color="secondary" type={"submit"} form={formName}>
+                            <Button onClick={this.handleClick("SUBMITTED")} color="secondary" type={"submit"}
+                                    form={formName}>
                                 Abschicken
                             </Button>
                         }

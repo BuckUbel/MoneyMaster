@@ -114,3 +114,14 @@ export async function updateEntities(
     });
     return db.sqlQuery(queries.join(";"));
 }
+
+export async function deleteEntities(
+    db: IDatabase,
+    tableName: string,
+    ids: number[]
+) {
+    const queries: string[] = ids.map((id: number): string => {
+        return "DELETE FROM  " + tableName + " WHERE " + "id" + "='" + id + "'";
+    });
+    return db.sqlQuery(queries.join(";"));
+}

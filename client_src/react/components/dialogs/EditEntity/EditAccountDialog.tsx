@@ -1,31 +1,33 @@
 import * as React from "react";
 import {
+    Button,
     DialogContentText, Fab
 } from "@material-ui/core";
 import StandardDialog from "../StandardDialog";
 import {ChangeEvent} from "react";
 import AddAccountForm, {IAddAccountFormValues} from "../../forms/AddEntity/AddAccountForm";
-import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@material-ui/icons/Edit";
 import {AccountModel, IAccountIdentity} from "../../../../../base/model/AccountModel";
 
-export interface IAddAccountDialogProps {
+export interface IEditAccountDialogProps {
     onClick?: (fct: () => void) => void;
-    submit: (entity: IAddAccountFormValues[]) => void;
+    submit: (entity: IAccountIdentity) => void;
+    delete: (id: number) => void;
     entity: IAccountIdentity;
 }
 
-export interface IAddAccountDialogState {
+export interface IEditAccountDialogState {
     entity: IAccountIdentity;
 }
 
-const defaultState: IAddAccountDialogState = {
+const defaultState: IEditAccountDialogState = {
     entity: AccountModel.createEmptyEntity()
 };
-export default class EditAccountDialog extends React.Component<IAddAccountDialogProps, IAddAccountDialogState> {
+export default class EditAccountDialog extends React.Component<IEditAccountDialogProps, IEditAccountDialogState> {
 
-    public state: IAddAccountDialogState = Object.assign({}, defaultState, this.props);
+    public state: IEditAccountDialogState = Object.assign({}, defaultState, this.props);
 
-    public constructor(props: IAddAccountDialogProps) {
+    public constructor(props: IEditAccountDialogProps) {
         super(props);
         this.onSubmit = this.onSubmit.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
@@ -35,34 +37,38 @@ export default class EditAccountDialog extends React.Component<IAddAccountDialog
 
     }
 
+    public handleDelete() {
+        this.props.delete(this.state.entity.id);
+    }
+
     public onSubmit() {
-        this.props.submit([this.state.entity]);
+        this.props.submit(this.state.entity);
     }
 
     public handleNameChange(event: ChangeEvent<HTMLTextAreaElement>) {
         const value = event.target.value;
-        this.setState((prevState: IAddAccountDialogState) => ({
+        this.setState((prevState: IEditAccountDialogState) => ({
             entity: Object.assign(prevState.entity, {name: value})
         }));
     }
 
     public handleDescriptionChange(event: ChangeEvent<HTMLTextAreaElement>) {
         const value = event.target.value;
-        this.setState((prevState: IAddAccountDialogState) => ({
+        this.setState((prevState: IEditAccountDialogState) => ({
             entity: Object.assign(prevState.entity, {description: value})
         }));
     }
 
     public handleColorChange(event: ChangeEvent<HTMLInputElement>) {
         const value = event.target.value;
-        this.setState((prevState: IAddAccountDialogState) => ({
+        this.setState((prevState: IEditAccountDialogState) => ({
             entity: Object.assign(prevState.entity, {color: value})
         }));
     }
 
     public handleIsCoreChange(event: ChangeEvent<HTMLInputElement>) {
         const checked = event.target.checked;
-        this.setState((prevState: IAddAccountDialogState) => ({
+        this.setState((prevState: IEditAccountDialogState) => ({
             entity: Object.assign(prevState.entity, {isCore: checked})
         }));
     }
@@ -70,7 +76,7 @@ export default class EditAccountDialog extends React.Component<IAddAccountDialog
     public render() {
         const {onClick} = this.props;
 
-        const formId = "addAccountForm";
+        const formId = "editAccountForm";
 
         return (
             <React.Fragment>
@@ -80,13 +86,22 @@ export default class EditAccountDialog extends React.Component<IAddAccountDialog
                     createOpenButton={(handleOpen) =>
                         <Fab onClick={onClick ? () => onClick(handleOpen) : handleOpen} color="secondary"
                              aria-label="Hinzufügen">
-                            <AddIcon/>
+                            <EditIcon/>
                         </Fab>
                     }
                     submitFunction={this.onSubmit}
+                    optionalActions={
+                        (handleClose) =>
+                            <Button onClick={() => {
+                                handleClose();
+                                this.handleDelete();
+                            }} color="secondary">
+                                Löschen
+                            </Button>
+                    }
                 >
                     <DialogContentText>
-                        Geben Sie hier die nötige Daten für ein neues virtuelles Konto ein.
+                        Verändern Sie hier die nötigen Daten für das ausgewählte Konto ein.
                     </DialogContentText>
                     <AddAccountForm
                         formId={formId}
