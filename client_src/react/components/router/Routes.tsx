@@ -36,7 +36,7 @@ export const routeList: IAppRoute[] =
         },
         {
             name: "AccountPage",
-            component: (match) => <AccountContainer id={match.params.id}/>,
+            component: (match) => <AccountContainer entity={{id: match.params.id}}/>,
             icon: null,
             path: "/accounts/:id",
             pathWithoutParams: "/accounts/",

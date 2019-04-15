@@ -4,6 +4,7 @@ import {RenderThings} from "../../helper/util";
 import EntityTable, {IEntityTableInformations} from "./EntityTable";
 import Account from "../core/Account";
 import {accountFields, AccountModel} from "../../../../base/model/AccountModel";
+import AccountContainer from "../../containers/core/AccountContainer";
 
 export interface IAccountTableProps {
     accounts: AccountModel[];
@@ -25,7 +26,7 @@ export default class AccountTable extends React.Component<IAccountTableProps, {}
                     compareFunction={Account.compare}
                     getDisplay={Account.getDisplay}
                     entityTableConfiguration={accountTableConfiguration}
-                    baseClass={Account}
+                    baseClass={AccountContainer}
                     noFilter={true}
                     defaultSortRow={3}
                 />

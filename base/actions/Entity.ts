@@ -202,8 +202,8 @@ export const standardDeleteAction = (actionType: IActionTypesRSF, endpoint: stri
                 ids,
             },
             type: actionType.request,
-            successAction: standardEntityResultAction(actionType.success, true),
-            failAction: standardEntityResultAction(actionType.failure, false),
+            successAction: standardResultAction(actionType.success, true),
+            failAction: standardResultAction(actionType.failure, false),
             isApiAction: true,
         });
     };

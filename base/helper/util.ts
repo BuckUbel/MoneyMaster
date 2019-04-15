@@ -137,7 +137,7 @@ export function getAllNumbersBetweenTwoNumbers(x: number, y: number): number[] {
 }
 
 export interface IObjectWithKeyLiterals {
-    [key: string]: any
+    [key: string]: any;
 }
 
 export function getArrayFromObject(obj: IObjectWithKeyLiterals): any {

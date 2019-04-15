@@ -1,7 +1,7 @@
 import * as React from "react";
 import {
     Button,
-    DialogContentText, Fab
+    DialogContentText, Fab, Tooltip
 } from "@material-ui/core";
 import StandardDialog from "../StandardDialog";
 import {ChangeEvent} from "react";
@@ -75,6 +75,7 @@ export default class EditAccountDialog extends React.Component<IEditAccountDialo
 
     public render() {
         const {onClick} = this.props;
+        const {entity} = this.state;
 
         const formId = "editAccountForm";
 
@@ -92,12 +93,16 @@ export default class EditAccountDialog extends React.Component<IEditAccountDialo
                     submitFunction={this.onSubmit}
                     optionalActions={
                         (handleClose) =>
-                            <Button onClick={() => {
-                                handleClose();
-                                this.handleDelete();
-                            }} color="secondary">
-                                Löschen
-                            </Button>
+                            <Tooltip title={"Nur freie virtuelle Konten können gelöscht werden."} enterDelay={300}>
+                                <span>
+                                <Button disabled={entity.isReal || entity.isCore} onClick={() => {
+                                    handleClose();
+                                    this.handleDelete();
+                                }} color="secondary">
+                                    Löschen
+                                </Button>
+                                </span>
+                            </Tooltip>
                     }
                 >
                     <DialogContentText>
@@ -105,7 +110,7 @@ export default class EditAccountDialog extends React.Component<IEditAccountDialo
                     </DialogContentText>
                     <AddAccountForm
                         formId={formId}
-                        values={this.state.entity}
+                        values={entity}
                         handler={{
                             name: this.handleNameChange,
                             description: this.handleDescriptionChange,

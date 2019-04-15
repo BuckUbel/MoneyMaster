@@ -93,7 +93,7 @@ export function standardEntityRouting(
             const ids: number[] = requestBody.ids;
             return await deleteEntities(server.database, dbTable, ids)
                 .then((result) => {
-                    return result;
+                    return {result, ids};
                 })
                 .catch((e: string) => {
                     console.error(e);

@@ -6,17 +6,17 @@ import {load} from "../../api";
 import {accountActions, AccountModel, IAccountIdentity} from "../../../../base/model/AccountModel";
 import {connect} from "react-redux";
 import Account from "../../components/core/Account";
+import {IEntityClass} from "../../../../base/helper/Entity";
 
 export interface IAccountContainerProps {
-    id: number;
     fetchAccount: (id: number) => Promise<any>;
     editAccounts: (accounts: IAccountIdentity[]) => Promise<any>;
     deleteAccounts: (ids: number[]) => Promise<any>;
-    account: AccountModel;
+    entity: AccountModel;
 }
 
 export interface IAccountOwnProps {
-    id: number;
+    entity: IEntityClass;
 }
 
 export interface IAccountContainerState {
@@ -33,13 +33,13 @@ class AccountContainer extends React.Component<IAccountContainerProps, IAccountC
     }
 
     public async componentDidMount() {
-        await this.props.fetchAccount(this.props.id);
+        await this.props.fetchAccount(this.props.entity.id);
     }
 
     public async editAccounts(account: IAccountIdentity) {
         try {
             await this.props.editAccounts([account]);
-            await this.props.fetchAccount(this.props.id);
+            await this.props.fetchAccount(this.props.entity.id);
         } catch (error) {
             console.error(error);
         }
@@ -48,7 +48,7 @@ class AccountContainer extends React.Component<IAccountContainerProps, IAccountC
     public async deleteAccount(id: number) {
         try {
             await this.props.deleteAccounts([id]);
-            await this.props.fetchAccount(this.props.id);
+            await this.props.fetchAccount(this.props.entity.id);
         } catch (error) {
             console.error(error);
         }
@@ -57,9 +57,9 @@ class AccountContainer extends React.Component<IAccountContainerProps, IAccountC
     public render() {
         return (
             <React.Fragment>
-                {this.props.account &&
+                {this.props.entity &&
                 <Account
-                    entity={this.props.account}
+                    entity={this.props.entity}
                     editAction={this.editAccounts}
                     deleteAction={this.deleteAccount}
                 />
@@ -70,7 +70,15 @@ class AccountContainer extends React.Component<IAccountContainerProps, IAccountC
 }
 
 const mapsStateToProps = (state: IRootState, ownProps: IAccountOwnProps) => {
-    return ({account: state.accounts.data.find((account) => account.id === Number(ownProps.id))});
+    return (
+        {
+            entity: ownProps.entity ?
+                ownProps.entity.id ?
+                    state.accounts.data.find((account) => account.id === Number(ownProps.entity.id)) :
+                    null :
+                null,
+        }
+    );
 };
 const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) => ({
     fetchAccount: (id: number) => dispatch(load(accountActions.actions.load(id))),

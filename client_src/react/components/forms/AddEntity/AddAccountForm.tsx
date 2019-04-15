@@ -57,6 +57,7 @@ export default class AddAccountForm extends React.Component<IAddAccountFormProps
                                id={accountFields.description.fieldName}
                                label={accountFields.description.labelName}
                                type="text"
+                               multiline
                                value={values.description}
                                onChange={handler.description}
                                fullWidth/>

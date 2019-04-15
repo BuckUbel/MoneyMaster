@@ -216,9 +216,9 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
                         </Card>
                     </Grid>
                 </Grid>
-                {clickedRow > -1 &&
+                {hiddenElement &&
                 <Drawer anchor="right" open={true} onClose={this.clickOnRow(-1)}
-                        PaperProps={{style: {maxWidth: "40%"}}}>
+                        PaperProps={{style: {minWidth: "40%"}}}>
                     {React.createElement(baseClass, {entity: hiddenElement})}
                 </Drawer>}
             </React.Fragment>

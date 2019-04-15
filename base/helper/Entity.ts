@@ -3,12 +3,15 @@ import {IDBCol} from "./util";
 export function createEntityForDB(object: IEntityClass): IDatabaseClass {
     return object.getDBObject();
 }
+
 export interface IAddActionPayload {
     entities: IEntityClass[];
 }
+
 export interface IUpdateActionPayload {
     entities: IEntityClass[];
 }
+
 export interface IDeleteActionPayload {
     ids: number[];
 }
@@ -59,3 +62,30 @@ export class Entity implements IEntityClass {
     }
 }
 
+export function deleteEntities(prevArray: Entity[], deleteArray: number[]): Entity[] {
+    const returnArray = Object.assign([], prevArray);
+    deleteArray.forEach((id: number) => {
+        const foundedIndex = returnArray.findIndex((prevEntity: Entity) => {
+            return prevEntity.id === id;
+        });
+        if (foundedIndex !== -1) {
+            returnArray.splice(foundedIndex, 1);
+        }
+    });
+    return returnArray;
+}
+
+export function updateEntities(prevArray: Entity[], newArray: Entity[]): Entity[] {
+    const returnArray = Object.assign([], prevArray);
+    newArray.forEach((newEntity: Entity) => {
+        const foundedIndex = returnArray.findIndex((prevEntity: Entity) => {
+            return prevEntity.id === newEntity.id;
+        });
+        if (foundedIndex !== -1) {
+            returnArray[foundedIndex] = newEntity;
+        } else {
+            returnArray.push(newEntity);
+        }
+    });
+    return returnArray;
+}
