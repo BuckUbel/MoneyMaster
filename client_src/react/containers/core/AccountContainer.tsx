@@ -23,7 +23,7 @@ class AccountContainer extends React.Component<IAccountContainerProps, {}> {
 
     constructor(props: IAccountContainerProps) {
         super(props);
-        this.editAccounts = this.editAccounts.bind(this);
+        this.editAccount = this.editAccount.bind(this);
         this.deleteAccount = this.deleteAccount.bind(this);
     }
 
@@ -31,7 +31,7 @@ class AccountContainer extends React.Component<IAccountContainerProps, {}> {
         await this.props.fetchAccount(this.props.entity.id);
     }
 
-    public async editAccounts(account: IAccountIdentity) {
+    public async editAccount(account: IAccountIdentity) {
         try {
             await this.props.editAccounts([account]);
             await this.props.fetchAccount(this.props.entity.id);
@@ -55,7 +55,7 @@ class AccountContainer extends React.Component<IAccountContainerProps, {}> {
                 {this.props.entity &&
                 <Account
                     entity={this.props.entity}
-                    editAction={this.editAccounts}
+                    editAction={this.editAccount}
                     deleteAction={this.deleteAccount}
                 />
                 }

@@ -23,15 +23,15 @@ class CategoryContainer extends React.Component<ICategoryContainerProps, {}> {
 
     constructor(props: ICategoryContainerProps) {
         super(props);
-        this.editCategories = this.editCategories.bind(this);
-        this.deleteCategories = this.deleteCategories.bind(this);
+        this.editCategory = this.editCategory.bind(this);
+        this.deleteCategory = this.deleteCategory.bind(this);
     }
 
     public async componentDidMount() {
         await this.props.fetchCategory(this.props.entity.id);
     }
 
-    public async editCategories(category: ICategoryIdentity) {
+    public async editCategory(category: ICategoryIdentity) {
         try {
             await this.props.editCategories([category]);
             await this.props.fetchCategory(this.props.entity.id);
@@ -41,7 +41,7 @@ class CategoryContainer extends React.Component<ICategoryContainerProps, {}> {
         }
     }
 
-    public async deleteCategories(id: number) {
+    public async deleteCategory(id: number) {
         try {
             await this.props.deleteCategories([id]);
             await this.props.fetchCategory(this.props.entity.id);
@@ -57,8 +57,8 @@ class CategoryContainer extends React.Component<ICategoryContainerProps, {}> {
                 {this.props.entity &&
                 <Category
                     entity={this.props.entity}
-                    deleteAction={this.deleteCategories}
-                    editAction={this.editCategories}
+                    deleteAction={this.deleteCategory}
+                    editAction={this.editCategory}
                 />}
             </React.Fragment>
         );

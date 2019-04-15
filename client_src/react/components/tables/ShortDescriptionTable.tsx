@@ -4,6 +4,7 @@ import {RenderThings} from "../../helper/util";
 import EntityTable, {IEntityTableInformations} from "./EntityTable";
 import ShortDescription from "../core/ShortDescription";
 import {shortDescriptionFields, ShortDescriptionModel} from "../../../../base/model/ShortDescriptionModel";
+import ShortDescriptionContainer from "../../containers/core/ShortDescriptionContainer";
 
 export interface IShortDescriptionTableProps {
     shortDescriptions: ShortDescriptionModel[];
@@ -25,7 +26,7 @@ export default class ShortDescriptionTable extends React.Component<IShortDescrip
                     compareFunction={ShortDescription.compare}
                     getDisplay={ShortDescription.getDisplay}
                     entityTableConfiguration={shortDescriptionTableConfiguration}
-                    baseClass={ShortDescription}
+                    baseClass={ShortDescriptionContainer}
                     noFilter={true}
                 />
             </React.Fragment>

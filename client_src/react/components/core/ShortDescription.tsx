@@ -1,11 +1,15 @@
 import * as React from "react";
 import {Avatar, Card, CardContent, CardHeader, Divider, Grid, Typography} from "@material-ui/core";
 import {RenderThings} from "../../helper/util";
-import {shortDescriptionFields, ShortDescriptionModel} from "../../../../base/model/ShortDescriptionModel";
+import {IShortDescriptionIdentity, ShortDescriptionModel} from "../../../../base/model/ShortDescriptionModel";
 import {IShortDescriptionTableInformations} from "../tables/ShortDescriptionTable";
+import EditCategoryDialog from "../dialogs/EditEntity/EditCategoryDialog";
+import EditShortDescriptionDialog from "../dialogs/EditEntity/EditShortDescriptionDialog";
 
 export interface IShortDescriptionProps {
     entity: ShortDescriptionModel;
+    editAction?: (shortDescription: IShortDescriptionIdentity) => void;
+    deleteAction?: (id: number) => void;
 }
 
 export default class ShortDescription extends React.Component<IShortDescriptionProps, {}> {
@@ -35,19 +39,38 @@ export default class ShortDescription extends React.Component<IShortDescriptionP
     }
 
     public render() {
+        const {deleteAction, editAction, entity} = this.props;
         const {
             id,
             originalContent,
             replaceContent
-        } = this.props.entity;
+        } = entity;
 
         return (
             <React.Fragment>
                 <Card>
+                    <CardHeader
+                        action={<React.Fragment>
+                            {editAction && deleteAction &&
+                            <EditShortDescriptionDialog
+                                entity={entity}
+                                delete={deleteAction}
+                                submit={editAction}
+                            />}
+                        </React.Fragment>}
+                    />
                     <CardContent>
-                        <Divider/>
-                        <Typography component="p">
-                            {originalContent + " =|= " + replaceContent}
+                        <Typography component="p" >
+                            {"Die Zeichenkette "}
+                        </Typography>
+                        <Typography component="p" color={"primary"}>
+                            {originalContent}
+                        </Typography>
+                        <Typography component="p" >
+                            {"wird zu folgendem Text konvertiert:"}
+                        </Typography>
+                        <Typography component="p" color={"secondary"}>
+                            {replaceContent}
                         </Typography>
                     </CardContent>
                 </Card>

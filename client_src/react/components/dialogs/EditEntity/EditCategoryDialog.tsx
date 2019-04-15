@@ -76,7 +76,7 @@ export default class EditCategoryDialog extends React.Component<IEditCategoryDia
         const {onClick} = this.props;
         const {entity} = this.state;
 
-        const formId = "addCategoryForm";
+        const formId = "editCategoryForm";
 
         return (
             <React.Fragment>
