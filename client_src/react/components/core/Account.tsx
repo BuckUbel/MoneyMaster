@@ -48,6 +48,7 @@ export default class Account extends React.Component<IAccountProps, {}> {
     }
 
     public render() {
+        const {deleteAction, editAction, entity} = this.props;
         const {
             id,
             name,
@@ -56,8 +57,7 @@ export default class Account extends React.Component<IAccountProps, {}> {
             color,
             isCore,
             isReal
-        } = this.props.entity;
-        const {deleteAction, editAction, entity} = this.props;
+        } = entity;
 
         const avatarSize = Math.abs(value) > 100 ? 45 : 25;
 
@@ -76,7 +76,7 @@ export default class Account extends React.Component<IAccountProps, {}> {
                             </Typography>
                         }
                         action={<React.Fragment>
-                            {editAction &&
+                            {editAction && deleteAction &&
                             <EditAccountDialog
                                 entity={entity}
                                 delete={deleteAction}
@@ -88,7 +88,9 @@ export default class Account extends React.Component<IAccountProps, {}> {
                         <Divider/>
                         <MultilineText text={description}/>
                         {isCore ?
-                            <Tooltip title={"Ein Kernkonto wird mit realen Buchungen mit verändert."} placement={"bottom-start"}>
+                            <Tooltip
+                                title={"Ein Kernkonto wird mit realen Buchungen mit verändert."}
+                                placement={"bottom-start"}>
                                 <Typography component="p" color={"secondary"}>
 
                                     {"Dies ist ein " + accountFields.isCore.labelName}
@@ -96,7 +98,9 @@ export default class Account extends React.Component<IAccountProps, {}> {
                             </Tooltip> : ""}
                         <br/>
                         {isReal ?
-                            <Tooltip title={"Ein Reales Konto existiert wirklich in einer realen Banl."} placement={"bottom-start"}>
+                            <Tooltip
+                                title={"Ein Reales Konto existiert wirklich in einer realen Banl."}
+                                placement={"bottom-start"}>
                                 <Typography component="p" color={"secondary"}>
                                     {"Dies ist ein " + accountFields.isReal.labelName}
                                 </Typography>

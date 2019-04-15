@@ -19,12 +19,7 @@ export interface IAccountOwnProps {
     entity: IEntityClass;
 }
 
-export interface IAccountContainerState {
-}
-
-class AccountContainer extends React.Component<IAccountContainerProps, IAccountContainerState> {
-
-    public state: IAccountContainerState = {};
+class AccountContainer extends React.Component<IAccountContainerProps, {}> {
 
     constructor(props: IAccountContainerProps) {
         super(props);

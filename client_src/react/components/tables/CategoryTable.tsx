@@ -4,6 +4,7 @@ import {RenderThings} from "../../helper/util";
 import EntityTable, {IEntityTableInformations} from "./EntityTable";
 import Category from "../core/Category";
 import {categoryFields, CategoryModel} from "../../../../base/model/CategoryModel";
+import CategoryContainer from "../../containers/core/CategoryContainer";
 
 export interface ICategoryTableProps {
     categories: CategoryModel[];
@@ -25,7 +26,7 @@ export default class CategoryTable extends React.Component<ICategoryTableProps, 
                     compareFunction={Category.compare}
                     getDisplay={Category.getDisplay}
                     entityTableConfiguration={categoryTableConfiguration}
-                    baseClass={Category}
+                    baseClass={CategoryContainer}
                     noFilter={true}
                     defaultSortRow={4}
                 />

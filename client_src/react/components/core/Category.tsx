@@ -1,12 +1,17 @@
 import * as React from "react";
-import {Avatar, Card, CardContent, CardHeader, Divider, Grid, Typography} from "@material-ui/core";
+import {Avatar, Card, CardContent, CardHeader, Divider, Grid, Tooltip, Typography} from "@material-ui/core";
 import {RenderThings} from "../../helper/util";
-import {categoryFields, CategoryModel} from "../../../../base/model/CategoryModel";
+import {categoryFields, CategoryModel, ICategoryIdentity} from "../../../../base/model/CategoryModel";
 import {ICategoryTableInformations} from "../tables/CategoryTable";
 import ColorField from "./simple/ColorField";
+import EditCategoryDialog from "../dialogs/EditEntity/EditCategoryDialog";
+import MultilineText from "./simple/MultilineText";
+import {accountFields} from "../../../../base/model/AccountModel";
 
 export interface ICategoryProps {
     entity: CategoryModel;
+    editAction?: (account: ICategoryIdentity) => void;
+    deleteAction?: (id: number) => void;
 }
 
 export default class Category extends React.Component<ICategoryProps, {}> {
@@ -38,14 +43,14 @@ export default class Category extends React.Component<ICategoryProps, {}> {
     }
 
     public render() {
+        const {deleteAction, editAction, entity} = this.props;
         const {
             id,
             name,
             description,
             color,
             isStandard
-        } = this.props.entity;
-
+        } = entity;
         const avatarSize = 25;
 
         return (
@@ -57,24 +62,27 @@ export default class Category extends React.Component<ICategoryProps, {}> {
                                     style={{backgroundColor: color, width: avatarSize, height: avatarSize}}/>
                         }
                         title={name}
+                        action={<React.Fragment>
+                            {editAction && deleteAction &&
+                            <EditCategoryDialog
+                                entity={entity}
+                                delete={deleteAction}
+                                submit={editAction}
+                            />}
+                        </React.Fragment>}
                     />
                     <CardContent>
                         <Divider/>
-                        <Grid container>
-                            <Grid item xs={6}>
-                                <Typography component="p">
-                                    {description}
+                        <MultilineText text={description}/>
+                        {isStandard ?
+                            <Tooltip
+                                title={"Alle Buchungen werden erstmal dieser Kategorie zugewiesen."}
+                                placement={"bottom-start"}>
+                                <Typography component="p" color={"secondary"}>
+                                    {"Dies ist eine " + categoryFields.isStandard.labelName}
                                 </Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <ul>
-                                    <Typography component="li">
-                                        {isStandard ? categoryFields.isStandard.labelName : ""}
-                                    </Typography>
-                                </ul>
-                            </Grid>
-                        </Grid>
-                        <Divider/>
+                            </Tooltip> : ""}
+                        <br/>
                         <br/>
                     </CardContent>
                 </Card>
