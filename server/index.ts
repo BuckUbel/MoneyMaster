@@ -28,6 +28,7 @@ const dbConfig: IDBConfig = {
     password: process.env.DB_PASSWORD,
     tableNames: {
         bookings: process.env.BOOKING_TABLE_NAME,
+        vBookings: process.env.VBOOKING_TABLE_NAME,
         accounts: process.env.ACCOUNT_TABLE_NAME,
         categories: process.env.CATEGORY_TABLE_NAME,
         shortDescriptions: process.env.SHORT_DESCRIPTION_TABLE_NAME,

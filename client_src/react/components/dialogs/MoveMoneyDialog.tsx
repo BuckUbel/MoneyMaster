@@ -1,9 +1,8 @@
 import * as React from "react";
 import StandardDialog from "./StandardDialog";
 import {DialogContentText, Divider, Fab} from "@material-ui/core";
-import {IMoveMoneyParams} from "../../containers/views/AccountViewContainer";
 import EuroIcon from "@material-ui/icons/EuroSymbol";
-import MoveMoneyForm from "../forms/MoveMoneyForm";
+import MoveMoneyForm, {IMoveMoneyParams} from "../forms/MoveMoneyForm";
 import {ChangeEvent} from "react";
 import {ReactNode} from "react";
 import {AccountModel} from "../../../../base/model/AccountModel";

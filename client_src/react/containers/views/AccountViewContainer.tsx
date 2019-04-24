@@ -8,12 +8,6 @@ import {accountActions, AccountModel, IAccountIdentity} from "../../../../base/m
 import AccountTableView from "../../components/views/AccountTableView";
 import * as React from "react";
 
-export interface IMoveMoneyParams {
-    srcAccountName: string;
-    trgAccountName: string;
-    value: number;
-}
-
 export interface IAccountViewContainerProps {
     accounts: AccountModel[];
     fetchAllAccounts: () => Promise<any>;

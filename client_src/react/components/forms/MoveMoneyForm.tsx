@@ -1,12 +1,15 @@
 import * as React from "react";
 import {Grid, TextField} from "@material-ui/core";
 import {accountFields, AccountModel} from "../../../../base/model/AccountModel";
-import FormColorField from "../core/simple/FormColorField";
-import FormCheckBox from "../core/simple/FormCheckBox";
 import {ChangeEvent} from "react";
 import Selector from "../core/simple/Selector";
 import {ReactNode} from "react";
-import {IMoveMoneyParams} from "../../containers/views/AccountViewContainer";
+
+export interface IMoveMoneyParams {
+    srcAccountName: string;
+    trgAccountName: string;
+    value: number;
+}
 
 export interface IMoveMoneyFormHandler {
     srcAccountName: (event: ChangeEvent<HTMLSelectElement>, child: ReactNode) => void;

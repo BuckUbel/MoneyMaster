@@ -1,13 +1,18 @@
 import * as React from "react";
-import {Avatar, Card, CardContent, CardHeader, Divider, Grid, Typography} from "@material-ui/core";
+import {Avatar, Card, CardContent, CardHeader, Divider, Fab, Grid, Typography} from "@material-ui/core";
 import {beautyDateString} from "../../../../base/helper/util";
 import {bookingFields, BookingModel, IBookingIdentityDefaultStringValues} from "../../../../base/model/BookingModel";
 import {RenderThings} from "../../helper/util";
 import {IBookingTableInformations} from "../tables/BookingTable";
 import {CSSProperties} from "react";
+import {VBookingModel} from "../../../../base/model/VBookingModel";
+import VBookingContainer from "../../containers/core/VBookingContainer";
+import AddIcon from "@material-ui/icons/Add";
 
 export interface IBookingProps {
     entity: BookingModel;
+    vBookings?: VBookingModel[];
+    addVBooking?: () => void;
 }
 
 export default class Booking extends React.Component<IBookingProps, {}> {
@@ -33,7 +38,7 @@ export default class Booking extends React.Component<IBookingProps, {}> {
             payPartner: act.payPartner,
             value: (<p style={Booking.getColorOnBaseOfValue(act.value)}>
                 {Booking.getColoredValue(act.value)}
-            </p>) ,
+            </p>),
         });
     }
 
@@ -74,46 +79,71 @@ export default class Booking extends React.Component<IBookingProps, {}> {
 
         return (
             <React.Fragment>
-                <Card>
-                    <CardHeader
-                        avatar={
-                            <Avatar aria-label="Acitivity"
-                                    style={{backgroundColor: valueColor, width: avatarSize, height: avatarSize}}/>
-                        }
-                        title={beautyDateString(bookingDate)}
-                        subheader={<Typography component="p" style={{color: valueColor}}>
-                            {money}
-                        </Typography>}
-                    />
-                    <CardContent>
-                        <Divider/>
-                        <Grid container>
-                            <Grid item xs={6}>
+                <Grid container spacing={8}>
+                    <Grid item xs={12}>
+                        <Card>
+                            <CardHeader
+                                avatar={
+                                    <Avatar aria-label="Acitivity"
+                                            style={{
+                                                backgroundColor: valueColor,
+                                                width: avatarSize,
+                                                height: avatarSize
+                                            }}/>
+                                }
+                                title={beautyDateString(bookingDate)}
+                                subheader={<Typography component="p" style={{color: valueColor}}>
+                                    {money}
+                                </Typography>}
+                                action={
+                                    <React.Fragment>
+                                        {this.props.addVBooking &&
+                                        <Fab onClick={this.props.addVBooking}>
+                                            <AddIcon/>
+                                        </Fab>
+                                        }
+                                    </React.Fragment>
+                                }
+                            />
+                            <CardContent>
+                                <Divider/>
+                                <Grid container>
+                                    <Grid item xs={6}>
+                                        <Typography component="p">
+                                            {bookingFields.payPartner.labelName + ": " + payPartner}
+                                            <br/> {bookingFields.validDate.labelName + ": " + validDate}
+                                            <br/> {bookingFields.bookingType.labelName + ": " + bookingType}
+                                            <br/> {bookingFields.info.labelName + ": " + info}
+                                            <br/>
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={6}>
+                                        <Typography component="p">
+                                            <br/> {bookingFields.iban.labelName + ": " + iban}
+                                            <br/> {bookingFields.bic.labelName + ": " + bic}
+                                            <br/>
+                                            <br/> {bookingFields.orderAccount.labelName + ": " + orderAccount}
+                                        </Typography>
+                                    </Grid>
+                                </Grid>
+                                <Divider/>
+                                <br/>
                                 <Typography component="p">
-                                    {bookingFields.payPartner.labelName + ": " + payPartner}
-                                    <br/> {bookingFields.validDate.labelName + ": " + validDate}
-                                    <br/> {bookingFields.bookingType.labelName + ": " + bookingType}
-                                    <br/> {bookingFields.info.labelName + ": " + info}
-                                    <br/>
+                                    {bookingFields.purpose.labelName + ": " + purpose}
+                                    <br/> <br/>
                                 </Typography>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Typography component="p">
-                                    <br/> {bookingFields.iban.labelName + ": " + iban}
-                                    <br/> {bookingFields.bic.labelName + ": " + bic}
-                                    <br/>
-                                    <br/> {bookingFields.orderAccount.labelName + ": " + orderAccount}
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                        <Divider/>
-                        <br/>
-                        <Typography component="p">
-                            {bookingFields.purpose.labelName + ": " + purpose}
-                            <br/> <br/>
-                        </Typography>
-                    </CardContent>
-                </Card>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    <Grid item xs={12} container spacing={8}>
+                        {this.props.vBookings.map((vb: VBookingModel, index: number) => {
+                            return (<Grid item xs={6} key={index}>
+                                <VBookingContainer entity={vb}/>
+                            </Grid>);
+                        })}
+                    </Grid>
+                </Grid>
+
             </React.Fragment>
         );
     }

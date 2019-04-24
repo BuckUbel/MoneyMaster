@@ -6,6 +6,8 @@ import {
 } from "../../../base/model/BookingModel";
 import {IResultAction} from "../../../base/actions/Entity";
 import {ActionTypes} from "../actions/Bookings";
+import {CategoryModel, ICategoryIdentityDefaultStringValues} from "../../../base/model/CategoryModel";
+import {updateEntities} from "../../../base/helper/Entity";
 
 export interface IState {
     data: BookingModel[];
@@ -30,15 +32,16 @@ export default (state: IState = defaultState, action: IResultAction) => {
         case bookingActions.actionTypes.load.success:
         case bookingActions.actionTypes.loadAll.success: {
             if (action) {
-                const newState: IState = Object.assign([], state);
                 if (action.response) {
                     if ("entities" in action.response) {
-                        newState.data = action.response.entities.map(
+                        const newState: IState = Object.assign([], state);
+                        const newData = action.response.entities.map(
                             (bookingData: IBookingIdentityDefaultStringValues): BookingModel => {
                                 const obj = new BookingModel();
                                 obj.set(bookingData);
                                 return obj;
                             });
+                        newState.data = updateEntities(state.data, newData) as BookingModel[];
                         return newState;
                     }
                 }

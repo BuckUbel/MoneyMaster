@@ -68,14 +68,23 @@ export async function insertEntities(
 
     const entityStringArray: string[] = entities.map((entity: IEntityClass): string => {
         const databaseEntity: IDatabaseClass = createEntityForDB(entity);
-        const valueArray = Object.keys(fields).reduce((filtered: any[], key) => {
+        const valueArray: string[] = [];
+        Object.keys(fields).forEach((key: string, index: number) => {
+            const currentField = fields[key];
             if (key !== "id") {
-                filtered.push(databaseEntity[key]);
+                if (databaseEntity[key] === null) {
+                    valueArray.push(String(databaseEntity[key]));
+                } else {
+                    if (currentField.type === "number" || currentField.type === "boolean") {
+                        valueArray.push(databaseEntity[key]);
+                    } else {
+                        valueArray.push("'" + databaseEntity[key] + "'");
+                    }
+                }
             }
-            return filtered;
-        }, []);
+        });
 
-        return "('" + valueArray.join("', '") + "')";
+        return "(" + valueArray.join(", ") + ")";
     });
 
     const values = entityStringArray.join(", ");
@@ -100,18 +109,29 @@ export async function updateEntities(
     }, []);
     const queries: string[] = entities.map((entity: IEntityClass): string => {
         const databaseEntity: IDatabaseClass = createEntityForDB(entity);
-        const valueArray = Object.keys(fields).reduce((filtered: any[], key) => {
+
+        const valueArray: string[] = [];
+        Object.keys(fields).forEach((key: string, index: number) => {
+            const currentField = fields[key];
             if (key !== "id") {
-                filtered.push(databaseEntity[key]);
+                if (databaseEntity[key] === null) {
+                    valueArray.push(String(databaseEntity[key]));
+                } else {
+                    if (currentField.type === "number" || currentField.type === "boolean") {
+                        valueArray.push(databaseEntity[key]);
+                    } else {
+                        valueArray.push("'" + databaseEntity[key] + "'");
+                    }
+                }
             }
-            return filtered;
-        }, []);
+        });
         const arrayToSet: string[] = rowNamesArray.map((rowName: string, index: number): string => {
-            return rowName + "='" + valueArray[index] + "'";
+            return rowName + "=" + valueArray[index] + "";
         });
         const arrayToSetString = arrayToSet.join(", ");
         return "UPDATE " + tableName + " SET " + arrayToSetString + " WHERE " + "id" + "='" + entity.id + "'";
     });
+    queries.unshift("SET foreign_key_checks = 0");
     return db.sqlQuery(queries.join(";"));
 }
 

@@ -82,20 +82,31 @@ export class CategoryModel extends Entity implements ICategoryIdentity {
         return entity;
     }
 
-    public static createEmptyEntity(): ICategoryIdentity {
-        return {
+    public static createEmptyEntity(): CategoryModel {
+        return new CategoryModel({
             id: categoryFields.id.value,
             name: categoryFields.name.value,
             description: categoryFields.description.value,
             color: categoryFields.color.value,
             isStandard: categoryFields.isStandard.value
-        };
+        });
     }
 
     public name: string;
     public description: string;
     public color: string;
     public isStandard: boolean;
+
+    public constructor(obj?: ICategoryIdentity) {
+        super();
+        if (obj) {
+            this.id = obj.id;
+            this.name = obj.name;
+            this.description = obj.description;
+            this.color = obj.color;
+            this.isStandard = obj.isStandard;
+        }
+    }
 
     public set(object: ICategoryIdentityDefaultStringValues) {
         this.id = Number(object.id);

@@ -1,8 +1,10 @@
 import {IDBCol} from "../helper/util";
 import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
 import {createEntityActions, IEntityActionsObject} from "../actions/Entity";
+import {ICategoryIdentity} from "./CategoryModel";
 
 export const accountActions: IEntityActionsObject = createEntityActions("accounts");
+
 interface IAccountFields extends IDatabaseFields {
     id?: IDBCol<number>;
     name?: IDBCol<string>;
@@ -93,8 +95,8 @@ export class AccountModel extends Entity implements IAccountIdentity {
         return entity;
     }
 
-    public static createEmptyEntity(): IAccountIdentity {
-        return {
+    public static createEmptyEntity(): AccountModel {
+        return new AccountModel({
             id: accountFields.id.value,
             name: accountFields.name.value,
             description: accountFields.description.value,
@@ -102,7 +104,7 @@ export class AccountModel extends Entity implements IAccountIdentity {
             color: accountFields.color.value,
             isReal: accountFields.isReal.value,
             isCore: accountFields.isCore.value
-        };
+        });
     }
 
     public name: string;
@@ -111,6 +113,19 @@ export class AccountModel extends Entity implements IAccountIdentity {
     public color: string;
     public isCore: boolean;
     public isReal: boolean;
+
+    public constructor(obj?: IAccountIdentity) {
+        super();
+        if (obj) {
+            this.id = obj.id;
+            this.name = obj.name;
+            this.description = obj.description;
+            this.color = obj.color;
+            this.isCore = obj.isCore;
+            this.isReal = obj.isReal;
+            this.value = obj.value;
+        }
+    }
 
     public set(object: IAccountIdentityDefaultStringValues) {
         this.id = object.id ? Number(object.id) : null;

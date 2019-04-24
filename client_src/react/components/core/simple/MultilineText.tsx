@@ -19,9 +19,9 @@ export default class MultilineText extends React.Component<IMultilineTextProps, 
     public static getDerivedStateFromProps(nextProps: IMultilineTextProps, prevState: IMultilineTextState)
         : IMultilineTextState {
         const {text} = nextProps;
-        const newMultilineText = text.split("\n").map((i: string, key: number) => {
+        const newMultilineText = text ? text.split("\n").map((i: string, key: number) => {
             return <Typography component={"p"} key={key}>{i}</Typography>;
-        });
+        }) : "";
         return ({
             multilineText: newMultilineText
         });

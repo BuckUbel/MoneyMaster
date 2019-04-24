@@ -1,7 +1,8 @@
-import mysql, {Connection, FieldInfo, MysqlError, Query} from "mysql";
+import mysql, {Connection, FieldInfo, MysqlError, Pool, PoolConnection, Query} from "mysql";
 
 export interface IDBTableNames {
     bookings: string;
+    vBookings: string;
     accounts: string;
     categories: string;
     shortDescriptions: string;
@@ -18,7 +19,7 @@ export interface IDBConfig {
 
 export interface IDatabase {
     config: IDBConfig;
-    connection: Connection;
+    pool: Pool;
     store: any;
     sqlQuery: (query: string) => Promise<any[]>;
     init: () => void;
@@ -28,7 +29,7 @@ export class Database implements IDatabase {
 
     public config: IDBConfig;
 
-    public connection: Connection;
+    public pool: Pool;
 
     public store: any;
 
@@ -39,32 +40,39 @@ export class Database implements IDatabase {
 
     public async sqlQuery(query: string): Promise<any[]> {
 
-        if (this.connection) {
+        if (this.pool) {
 
-            this.init();
-            await this.connection.connect();
+            // this.init();
+            // await this.connection.connect();
 
             return new Promise((resolve, reject) => {
-                this.connection.query(query, (error: MysqlError | null, rows?: any, fields?: FieldInfo[]) => {
-                    this.connection.end();
-
+                this.pool.getConnection((error: Error, connection: PoolConnection) => {
                     if (error) {
                         return reject(error);
                     }
-                    return resolve(rows);
+                    connection.query(query, (sqlError: MysqlError | null, rows?: any, fields?: FieldInfo[]) => {
+                        // this.connection.end();
+                        connection.release();
+                        if (sqlError) {
+                            return reject(error);
+                        }
+                        return resolve(rows);
+                    });
+
                 });
             });
         }
     }
 
     public init() {
-        this.connection = mysql.createConnection({
+        this.pool = mysql.createPool({
             host: this.config.host,
             port: this.config.port,
             database: this.config.databaseName,
             user: this.config.user,
             password: this.config.password,
-            multipleStatements: true
+            multipleStatements: true,
+            connectionLimit: 20
         });
     }
 }

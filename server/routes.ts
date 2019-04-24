@@ -13,6 +13,7 @@ import {
 } from "../base/model/ShortDescriptionModel";
 import {categoryActions, categoryFields, CategoryModel} from "../base/model/CategoryModel";
 import {standardEntityRouting} from "./routes/enities";
+import {vBookingActions, vBookingFields, VBookingModel} from "../base/model/VBookingModel";
 
 export default class ServerRoutes {
 
@@ -55,6 +56,13 @@ export default class ServerRoutes {
             accountFields,
             accountActions.apiPaths,
             AccountModel.createEntity
+        );
+        standardEntityRouting(
+            this.server,
+            this.server.database.config.tableNames.vBookings,
+            vBookingFields,
+            vBookingActions.apiPaths,
+            VBookingModel.createEntity
         );
         standardEntityRouting(
             this.server,

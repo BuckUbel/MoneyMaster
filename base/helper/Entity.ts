@@ -53,7 +53,7 @@ export class Entity implements IEntityClass {
         this.id = 0;
     }
 
-    public set(object: IEntityStringClass) {
+    public set(object: IEntityStringClass, ...props: any[]) {
         this.id = object.id ? Number(object.id) : null;
     }
 

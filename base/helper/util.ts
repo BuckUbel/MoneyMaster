@@ -91,7 +91,6 @@ export function createApiCallPathObject(entityString: string): IRestCallApiPaths
 
 export type TypesAsString = "boolean" | "string" | "number" | "date" | "object";
 
-
 export interface IDBCol<T> {
     fieldName: string;
     labelName: string;

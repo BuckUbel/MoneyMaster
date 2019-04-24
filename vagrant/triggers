@@ -2,6 +2,7 @@ CREATE DEFINER=`root`@`localhost` TRIGGER `accountUpdate_Insert` AFTER INSERT ON
 	SET SQL_SAFE_UPDATES = 0;
 	UPDATE  moneymaster.accounts a SET a.value= (SELECT SUM(value) FROM moneymaster.bookings)
     WHERE a.isReal = 1;
+    INSERT INTO moneymaster.virtual_bookings (booking_id, category_id, value, name) VALUES (new.id, 1, new.value, new.payPartner);
 	UPDATE moneymaster.accounts as a,
 	(SELECT SUM(value) as v FROM moneymaster.bookings) as b,
 	(SELECT SUM(value) as v from moneymaster.accounts WHERE isCore = 0 AND isReal = 0) as c
@@ -22,6 +23,7 @@ CREATE DEFINER=`root`@`localhost` TRIGGER `accountUpdate_Delete` AFTER DELETE ON
 	SET SQL_SAFE_UPDATES = 0;
 	UPDATE  accounts a SET a.value= (SELECT SUM(value) FROM moneymaster.bookings)
     WHERE a.isReal = 1;
+    DELETE FROM moneymaster.virtual_bookings WHERE booking_id = old.id AND category_id = 1 AND value= old.value AND name=old.payPartner;
 	UPDATE moneymaster.accounts as a,
 	(SELECT SUM(value) as v FROM moneymaster.bookings) as b,
 	(SELECT SUM(value) as v from moneymaster.accounts WHERE isCore = 0 AND isReal = 0) as c

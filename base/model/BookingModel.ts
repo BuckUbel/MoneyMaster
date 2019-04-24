@@ -7,6 +7,7 @@ import {
 import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
 import {accountFields, AccountModel, IAccountIdentity, IAccountIdentityDefaultStringValues} from "./AccountModel";
 import {createEntityActions, IEntityActionsObject} from "../actions/Entity";
+import {ICategoryIdentity} from "./CategoryModel";
 
 export const bookingActions: IEntityActionsObject = createEntityActions("booking");
 
@@ -226,8 +227,8 @@ export class BookingModel extends Entity implements IBookingIdentity {
         return entity;
     }
 
-    public static createEmptyEntity(): IBookingIdentity {
-        return {
+    public static createEmptyEntity(): BookingModel {
+        return new BookingModel({
             id: bookingFields.id.value,
             orderAccount: bookingFields.orderAccount.value,
             bookingDate: bookingFields.bookingDate.value,
@@ -243,7 +244,7 @@ export class BookingModel extends Entity implements IBookingIdentity {
             value: bookingFields.value.value,
             currency: bookingFields.currency.value,
             info: bookingFields.info.value,
-        };
+        });
     }
 
     public orderAccount: string;
@@ -260,6 +261,27 @@ export class BookingModel extends Entity implements IBookingIdentity {
     public value: number;
     public currency: string;
     public info: string;
+
+    public constructor(obj?: IBookingIdentity) {
+        super();
+        if (obj) {
+            this.id = obj.id;
+            this.orderAccount = obj.orderAccount;
+            this.bookingDate = obj.bookingDate;
+            this.validDate = obj.validDate;
+            this.bookingType = obj.bookingType;
+            this.purpose = obj.purpose;
+            this.believerId = obj.believerId;
+            this.mandateReference = obj.mandateReference;
+            this.customerReference = obj.customerReference;
+            this.payPartner = obj.payPartner;
+            this.iban = obj.iban;
+            this.bic = obj.bic;
+            this.value = obj.value;
+            this.currency = obj.currency;
+            this.info = obj.info;
+        }
+    }
 
     public set(object: IBookingIdentityDefaultStringValues) {
         this.id = object && object.id ? Number(object.id) : bookingFields.id.value;

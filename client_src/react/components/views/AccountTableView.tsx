@@ -3,9 +3,9 @@ import {Divider, Grid, Typography} from "@material-ui/core";
 import AccountTable from "../tables/AccountTable";
 import {AccountModel, IAccountIdentity} from "../../../../base/model/AccountModel";
 import AddAccountDialog from "../dialogs/AddEntity/AddAccountDialog";
-import {IMoveMoneyParams} from "../../containers/views/AccountViewContainer";
 import MoveMoneyDialog from "../dialogs/MoveMoneyDialog";
 import {boolean} from "joi";
+import {IMoveMoneyParams} from "../forms/MoveMoneyForm";
 
 export interface IAccountViewProps {
     accounts: AccountModel[];

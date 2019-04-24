@@ -5,6 +5,7 @@ import {RenderThings} from "../../helper/util";
 import Booking from "../core/Booking";
 import EntityTable, {IEntityTableInformations} from "./EntityTable";
 import {getArrayFromObject} from "../../../../base/helper/util";
+import BookingContainer from "../../containers/core/BookingContainer";
 
 export interface IBookingTableProps {
     bookings: BookingModel[];
@@ -26,7 +27,7 @@ export default class BookingTable extends React.Component<IBookingTableProps, {}
                     compareFunction={Booking.compareOnDate}
                     getDisplay={Booking.getDisplay}
                     entityTableConfiguration={bookingTableConfiguration}
-                    baseClass={Booking}
+                    baseClass={BookingContainer}
                     defaultSortRow={2}
                 />
             </React.Fragment>
