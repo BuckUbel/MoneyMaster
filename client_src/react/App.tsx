@@ -60,7 +60,7 @@ class App extends React.Component<IAppProps, IAppState> {
                         <Toolbar>
                             <IconButton className={"roundButton menuToggleButton"}
                                         onClick={this.toggleDrawer} aria-label={"Menü"}>
-                                <MenuIcon/>
+                                <img src="/public/images/logo.png" width={38} height={38}/>
                             </IconButton>
                             <Typography variant={"h6"} color={"inherit"} style={{flexGrow: 1}}>
                                 MoneyMaster

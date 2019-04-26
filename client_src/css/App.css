@@ -31,7 +31,7 @@
 }
 
 .sidebar-large {
-    width: 200px;
+    width: 240px;
     transition: width 0.5s;
 }
 
@@ -45,7 +45,7 @@
 }
 
 .sidebar-paper-large {
-    max-width: 200px;
+    max-width: 240px;
     transition: all 0.5s;
 }
 
@@ -68,6 +68,6 @@
 .menuToggleButton {
     padding: 10px !important;
     min-width: 10px !important;
-    margin-left: -12px !important;
+    margin-left: -24px !important;
     margin-right: 0 !important;
 }

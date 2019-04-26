@@ -8,21 +8,21 @@ import "../css/chart.css";
 
 import store from "./store";
 import AppContainer from "./containers/AppContainer";
-import {lightBlue, red, teal} from "@material-ui/core/colors";
+import {blue, lightBlue, orange, red, teal} from "@material-ui/core/colors";
 
 export const theme = createMuiTheme({
     palette: {
         type: "dark",
         primary: {
-            light: "#c7d656",
-            main: "#96a500",
-            dark: "#687600",
+            light: blue["400"],
+            main: blue["600"], // blue 600
+            dark: blue["800"],
             contrastText: "#000",
         },
         secondary: {
-            light: "#5effb8",
-            main: "#02d188",
-            dark: "#009f5b",
+            light: orange["500"],
+            main: orange["700"],
+            dark: orange["800"],
             contrastText: "#000",
         },
         error: red

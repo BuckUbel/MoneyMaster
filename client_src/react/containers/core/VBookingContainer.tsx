@@ -50,10 +50,10 @@ class VBookingContainer extends React.Component<IVBookingContainerProps, {}> {
         }
     }
 
-    public async deleteVBooking(id: number) {
+    public async deleteVBooking() {
         try {
-            await this.props.deleteVBookings([id]);
-            await this.props.fetchVBooking(this.props.entity.id);
+            await this.props.deleteVBookings([this.props.entity.id]);
+            // await this.props.fetchVBooking(this.props.entity.id);
         } catch (error) {
             console.error(error);
         }

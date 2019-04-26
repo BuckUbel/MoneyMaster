@@ -1,12 +1,12 @@
 import * as React from "react";
-import {Grid, Input, TextField, Typography} from "@material-ui/core";
+import {Grid, Input, InputAdornment, TextField, Typography} from "@material-ui/core";
 import {accountFields, AccountModel} from "../../../../base/model/AccountModel";
 import {ChangeEvent} from "react";
 import Selector from "../core/simple/Selector";
 import {ReactNode} from "react";
 import {CategoryModel} from "../../../../base/model/CategoryModel";
 import Booking from "../core/Booking";
-import {VBookingModel} from "../../../../base/model/VBookingModel";
+import {vBookingFields, VBookingModel} from "../../../../base/model/VBookingModel";
 
 export interface ISplitRealBookingParams {
     name: string;
@@ -71,15 +71,17 @@ export default class SplitRealBookingForm
         const {formId, values, handler, maxValue, minValue} = this.props;
         const {textCategories, textCategory} = this.state;
 
-        const calcRest = maxValue === 0 ? (minValue - values.value) * (-1) : (maxValue - values.value) * (-1);
+        const reallyMaxValue = maxValue === 0 ? minValue : maxValue;
+        const calcRest = maxValue === 0 ? Number(((minValue - values.value) * (-1)).toFixed(2))
+            : Number(((maxValue - values.value) * (-1)).toFixed(2));
         return (
             <React.Fragment>
                 <form id={formId} autoComplete={"off"}>
                     <Grid container spacing={8}>
                         <Grid item xs={6}>
                             <TextField margin="dense"
-                                       id={accountFields.name.fieldName}
-                                       label={accountFields.name.labelName}
+                                       id={vBookingFields.name.fieldName}
+                                       label={vBookingFields.name.labelName}
                                        type="text"
                                        value={values.name}
                                        onChange={handler.name}
@@ -89,8 +91,8 @@ export default class SplitRealBookingForm
                         </Grid>
                         <Grid item xs={12}>
                             <TextField margin="dense"
-                                       id={accountFields.description.fieldName}
-                                       label={accountFields.description.labelName}
+                                       id={vBookingFields.description.fieldName}
+                                       label={vBookingFields.description.labelName}
                                        type="text"
                                        multiline
                                        rows={2}
@@ -101,23 +103,49 @@ export default class SplitRealBookingForm
                             />
                         </Grid>
                         <Grid container item xs={12}>
-                            <Grid item xs={8}>
+                            <Grid item xs={4}>
                                 <TextField margin="dense"
-                                           id={accountFields.value.fieldName}
-                                           label={accountFields.value.labelName}
+                                           id={vBookingFields.value.fieldName}
+                                           label={vBookingFields.value.labelName}
                                            type="number"
                                            inputProps={{max: maxValue, min: minValue}}
                                            value={values.value}
                                            onChange={handler.value}
                                            fullWidth
                                            autoComplete={"off"}
+                                           InputProps={{
+                                               startAdornment: <InputAdornment position="start">€</InputAdornment>,
+                                               style: Booking.getColorOnBaseOfValue(values.value)
+                                           }}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
-                                <Typography variant={"body1"}
-                                            style={Booking.getColorOnBaseOfValue(calcRest)}>
-                                    {Booking.getColoredValue(calcRest)}
-                                </Typography>
+                            <Grid container item xs={12} justify={"flex-start"} spacing={8}>
+                                <Grid item xs={3}>
+                                    <TextField
+                                        margin={"dense"}
+                                        label="Übriger Wert"
+                                        variant={"outlined"}
+                                        value={Booking.getColoredString(calcRest)}
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start">€</InputAdornment>,
+                                            readOnly: true,
+                                            style: Booking.getColorOnBaseOfValue(calcRest)
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid item xs={3}>
+                                    <TextField
+                                        margin={"dense"}
+                                        label="Maximal Wert"
+                                        variant={"outlined"}
+                                        value={Booking.getColoredString(reallyMaxValue)}
+                                        InputProps={{
+                                            startAdornment: <InputAdornment position="start">€</InputAdornment>,
+                                            readOnly: true,
+                                            style: Booking.getColorOnBaseOfValue(reallyMaxValue)
+                                        }}
+                                    />
+                                </Grid>
                             </Grid>
                         </Grid>
                         <Grid item xs={6}>

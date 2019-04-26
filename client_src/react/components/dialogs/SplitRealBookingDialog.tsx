@@ -29,6 +29,7 @@ export interface ISplitRealBookingDialogRealProps {
 
 export interface ISplitRealBookingDialogState {
     params: ISplitRealBookingParams;
+    originalParams: ISplitRealBookingParams;
     maxValue: number;
     minValue: number;
 }
@@ -36,11 +37,21 @@ export interface ISplitRealBookingDialogState {
 export default class SplitRealBookingDialog
     extends React.Component<ISplitRealBookingDialogProps, ISplitRealBookingDialogState> {
 
+    public static VBookingToSplitRealBookingDialog(vb: VBookingModel): ISplitRealBookingParams {
+        return {
+            name: vb.name,
+            description: vb.description,
+            value: vb.value,
+            category: CategoryModel.createEmptyEntity()
+        };
+    }
+
     public static getDerivedStateFromProps(
         newProps: ISplitRealBookingDialogProps,
         oldState: ISplitRealBookingDialogState
     )
         : ISplitRealBookingDialogState {
+//TODO: finde the cause, why originalParams and params are equal
 
         const associatedVBookingSum = newProps.associatedVBookings.length > 0 ? newProps.associatedVBookings
             .map(
@@ -49,20 +60,22 @@ export default class SplitRealBookingDialog
                 (acc, cV) => acc + cV) : 0;
         const newMaxValue: number = newProps.associatedBooking.value - associatedVBookingSum;
 
+        let newParams = oldState.params;
+        const newOriginalParams = SplitRealBookingDialog.VBookingToSplitRealBookingDialog(newProps.entity);
+        if (oldState.originalParams !== newOriginalParams) {
+            newParams = Object.assign({}, newOriginalParams);
+        }
         return {
-            params: oldState.params,
+            params: newParams,
+            originalParams: newOriginalParams,
             maxValue: newProps.associatedBooking.value > 0 ? newMaxValue : 0,
             minValue: newProps.associatedBooking.value > 0 ? 0 : newMaxValue
         };
     }
 
     public state: ISplitRealBookingDialogState = {
-        params: {
-            name: this.props.entity.name,
-            description: this.props.entity.description,
-            value: this.props.entity.value,
-            category: CategoryModel.createEmptyEntity()
-        },
+        params: SplitRealBookingDialog.VBookingToSplitRealBookingDialog(this.props.entity),
+        originalParams: SplitRealBookingDialog.VBookingToSplitRealBookingDialog(this.props.entity),
         maxValue: 0,
         minValue: 0,
     };
@@ -83,9 +96,13 @@ export default class SplitRealBookingDialog
             const newCategory = this.props.categories.find((category: CategoryModel): boolean => {
                 return category.id === this.props.entity.categoryId;
             });
-            // newParams.categoryName = newCategory ? newCategory.name ? newCategory.name : "" : "";
             newParams.category = newCategory ? newCategory : null;
-            return ({params: newParams});
+            const newOriginalParams = oldState.originalParams;
+            const newOriginalCategory = this.props.categories.find((category: CategoryModel): boolean => {
+                return category.id === this.props.entity.categoryId;
+            });
+            newOriginalParams.category = newOriginalCategory ? newOriginalCategory : null;
+            return ({params: newParams, originalParams: newOriginalParams});
         });
     }
 
@@ -137,11 +154,11 @@ export default class SplitRealBookingDialog
         return (
             <React.Fragment>
                 <StandardDialog
-                    title={"Konto hinzufügen"}
+                    title={"Virtuelle Buchung bearbeiten"}
                     formName={formId}
                     createOpenButton={(handleOpen) =>
                         <Fab onClick={onClick ? () => onClick(handleOpen) : handleOpen} color="primary"
-                             aria-label="Hinzufügen">
+                             aria-label="Bearbeiten">
                             <EditIcon/>
                         </Fab>
                     }

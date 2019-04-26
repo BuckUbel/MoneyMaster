@@ -44,8 +44,12 @@ export default class Booking extends React.Component<IBookingProps, {}> {
 
     public static getColoredValue(value: number): JSX.Element {
         return (
-            <React.Fragment>{(value > 0 ? "+" : "") + value.toFixed(2)}</React.Fragment>
+            <React.Fragment>{Booking.getColoredString(value)}</React.Fragment>
         );
+    }
+
+    public static getColoredString(value: number): string {
+        return (value >= 0 ? "+" : "") + value.toFixed(2);
     }
 
     public static getColorOnBaseOfValue(value: number): CSSProperties {
@@ -98,7 +102,7 @@ export default class Booking extends React.Component<IBookingProps, {}> {
                                 action={
                                     <React.Fragment>
                                         {this.props.addVBooking &&
-                                        <Fab onClick={this.props.addVBooking}>
+                                        <Fab onClick={this.props.addVBooking} color={"secondary"}>
                                             <AddIcon/>
                                         </Fab>
                                         }
