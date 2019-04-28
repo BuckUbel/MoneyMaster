@@ -1,36 +1,33 @@
 import * as React from "react";
 import {IRootState} from "../../store";
-import {IVBookingIdentity, vBookingActions, VBookingModel} from "../../../../base/model/VBookingModel";
+import {VBookingModel} from "../../../../base/model/VBookingModel";
 import {CategoryModel} from "../../../../base/model/CategoryModel";
 import {ThunkDispatch} from "redux-thunk";
 import {Action} from "redux";
-import {load} from "../../api";
 import {connect} from "react-redux";
-import {IVBookingOwnProps} from "../core/VBookingContainer";
-import {IEntityClass} from "../../../../base/helper/Entity";
 import SplitRealBookingDialog, {
-    ISplitRealBookingDialogProps,
     ISplitRealBookingDialogRealProps
 } from "../../components/dialogs/SplitRealBookingDialog";
 import {BookingModel} from "../../../../base/model/BookingModel";
+import {AccountModel} from "../../../../base/model/AccountModel";
 
-export interface ISplitRealBookingDialogContainerProps extends ISplitRealBookingDialogRealProps {
+export interface IBookOnVirtualAccountDialogContainerProps extends ISplitRealBookingDialogRealProps {
     categories: CategoryModel[];
     associatedVBookings: VBookingModel[];
-    associatedBase: BookingModel;
+    associatedBase: AccountModel;
 }
 
-export interface ISplitRealBookingDialogContainerState {
+export interface IBookOnVirtualAccountDialogContainerState {
 }
 
-export const defaultState: ISplitRealBookingDialogContainerState = {};
+export const defaultState: IBookOnVirtualAccountDialogContainerState = {};
 
-class SplitRealBookingDialogContainer
-    extends React.Component<ISplitRealBookingDialogContainerProps, ISplitRealBookingDialogContainerState> {
+class BookOnVirtualAccountDialogContainer
+    extends React.Component<IBookOnVirtualAccountDialogContainerProps, IBookOnVirtualAccountDialogContainerState> {
 
-    public state: ISplitRealBookingDialogContainerState = defaultState;
+    public state: IBookOnVirtualAccountDialogContainerState = defaultState;
 
-    constructor(props: ISplitRealBookingDialogContainerProps) {
+    constructor(props: IBookOnVirtualAccountDialogContainerProps) {
         super(props);
     }
 
@@ -47,8 +44,8 @@ const mapsStateToProps = (state: IRootState, ownProps: ISplitRealBookingDialogRe
     return {
         categories: state.categories.data,
         associatedVBookings: state.vBookings.data.filter(
-            (vb: VBookingModel) => (vb.bookingId === ownProps.entity.bookingId && vb.id !== ownProps.entity.id)),
-        associatedBase: state.bookings.data.find((b: BookingModel) => b.id === ownProps.entity.bookingId),
+            (vb: VBookingModel) => (vb.accountId === ownProps.entity.accountId && vb.id !== ownProps.entity.id)),
+        associatedBase: state.accounts.data.find((b: AccountModel) => b.id === ownProps.entity.accountId),
     };
 };
 const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) => ({
@@ -56,4 +53,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) =
     // editVBookings: (vBookings: IVBookingIdentity[]) => dispatch(load(vBookingActions.actions.edit(vBookings))),
     // deleteVBookings: (ids: number[]) => dispatch(load(vBookingActions.actions.delete(ids))),
 });
-export default connect(mapsStateToProps, mapDispatchToProps)(SplitRealBookingDialogContainer);
+export default connect(mapsStateToProps, mapDispatchToProps)(BookOnVirtualAccountDialogContainer);

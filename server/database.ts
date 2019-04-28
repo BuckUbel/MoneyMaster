@@ -54,7 +54,7 @@ export class Database implements IDatabase {
                         // this.connection.end();
                         connection.release();
                         if (sqlError) {
-                            return reject(error);
+                            return reject(sqlError);
                         }
                         return resolve(rows);
                     });

@@ -13,6 +13,7 @@ import {IBookOnVirtualAccountParams} from "../forms/BookOnVirtualAccountForm";
 import {ISplitRealBookingParams} from "../forms/SplitRealBookingForm";
 import SplitRealBookingDialogContainer from "../../containers/forms/SplitRealBookingDialogContainer";
 import DeleteIcon from "@material-ui/icons/Delete";
+import BookOnVirtualAccountDialogContainer from "../../containers/forms/BookOnVirtualAccountDialogContainer";
 
 export interface IVBookingProps {
     entity: VBookingModel;
@@ -80,19 +81,12 @@ export default class VBooking extends React.Component<IVBookingProps, {}> {
                                     (onRealBooking &&
                                         <SplitRealBookingDialogContainer
                                             entity={entity}
-                                            // delete={() => {
-                                            // }}
                                             submit={editAction}
                                         />) ||
                                     (!onRealBooking &&
-                                        <BookOnVirtualAccountDialog
+                                        <BookOnVirtualAccountDialogContainer
                                             entity={entity}
-                                            // delete={() => {
-                                            // }}
-                                            submit={(params: IBookOnVirtualAccountParams) => {
-                                                console.log(params);
-                                            }}
-                                            categories={[]}
+                                            submit={editAction}
                                         />))
                                 }
                                 {deleteAction && (
@@ -101,15 +95,9 @@ export default class VBooking extends React.Component<IVBookingProps, {}> {
                                             <DeleteIcon/>
                                         </Fab>) ||
                                     (!onRealBooking &&
-                                        <BookOnVirtualAccountDialog
-                                            entity={entity}
-                                            // delete={() => {
-                                            // }}
-                                            submit={(params: IBookOnVirtualAccountParams) => {
-                                                console.log(params);
-                                            }}
-                                            categories={[]}
-                                        />))
+                                      <Fab onClick={deleteAction} color={"secondary"}>
+                                        <DeleteIcon/>
+                                      </Fab>))
                                 }
                             </React.Fragment>
                         }

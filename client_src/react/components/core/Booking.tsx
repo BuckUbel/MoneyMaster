@@ -142,7 +142,7 @@ export default class Booking extends React.Component<IBookingProps, {}> {
                     <Grid item xs={12} container spacing={8}>
                         {this.props.vBookings.map((vb: VBookingModel, index: number) => {
                             return (<Grid item xs={6} key={index}>
-                                <VBookingContainer entity={vb}/>
+                                <VBookingContainer entity={vb} onRealBooking={true}/>
                             </Grid>);
                         })}
                     </Grid>

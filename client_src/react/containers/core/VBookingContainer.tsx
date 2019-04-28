@@ -16,6 +16,7 @@ export interface IVBookingContainerProps {
     editVBookings: (vBookings: IVBookingIdentity[]) => Promise<any>;
     deleteVBookings: (ids: number[]) => Promise<any>;
     entity: VBookingModel;
+    onRealBooking?: boolean;
     category: CategoryModel;
 }
 
@@ -68,7 +69,7 @@ class VBookingContainer extends React.Component<IVBookingContainerProps, {}> {
                     category={this.props.category}
                     editAction={this.editVBooking}
                     deleteAction={this.deleteVBooking}
-                    onRealBooking={true}
+                    onRealBooking={this.props.onRealBooking}
                 />
                 }
             </React.Fragment>

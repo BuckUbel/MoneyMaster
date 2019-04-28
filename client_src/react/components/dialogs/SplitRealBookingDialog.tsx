@@ -18,7 +18,7 @@ import {BookingModel} from "../../../../base/model/BookingModel";
 export interface ISplitRealBookingDialogProps extends ISplitRealBookingDialogRealProps {
     categories: CategoryModel[];
     associatedVBookings: VBookingModel[];
-    associatedBooking: BookingModel;
+    associatedBase: BookingModel|AccountModel;
 }
 
 export interface ISplitRealBookingDialogRealProps {
@@ -58,7 +58,7 @@ export default class SplitRealBookingDialog
                 (aVB) => aVB.value)
             .reduce(
                 (acc, cV) => acc + cV) : 0;
-        const newMaxValue: number = newProps.associatedBooking.value - associatedVBookingSum;
+        const newMaxValue: number = newProps.associatedBase.value - associatedVBookingSum;
 
         let newParams = oldState.params;
         const newOriginalParams = SplitRealBookingDialog.VBookingToSplitRealBookingDialog(newProps.entity);
@@ -68,8 +68,8 @@ export default class SplitRealBookingDialog
         return {
             params: newParams,
             originalParams: newOriginalParams,
-            maxValue: newProps.associatedBooking.value > 0 ? newMaxValue : 0,
-            minValue: newProps.associatedBooking.value > 0 ? 0 : newMaxValue
+            maxValue: newProps.associatedBase.value > 0 ? newMaxValue : 0,
+            minValue: newProps.associatedBase.value > 0 ? 0 : newMaxValue
         };
     }
 
@@ -147,7 +147,7 @@ export default class SplitRealBookingDialog
     }
 
     public render() {
-        const {onClick, categories, associatedBooking} = this.props;
+        const {onClick, categories, associatedBase} = this.props;
         const {maxValue, minValue} = this.state;
         const formId = "addAccountForm";
 
@@ -165,7 +165,7 @@ export default class SplitRealBookingDialog
                     submitFunction={this.onSubmit}
                 >
                     <DialogContentText>
-                        Geben Sie hier die nötigen Daten für die Aufteilung dieser realen Buchung in Virtuelle ein.
+                        Geben Sie hier die nötigen Daten für die virtuelle Buchung ein.
                     </DialogContentText>
                     <SplitRealBookingForm
                         formId={formId}

@@ -60,25 +60,6 @@ class BookingContainer extends React.Component<IBookingContainerProps, IBookingS
         }
     }
 
-    //
-    // public async editBooking(booking: IBookingIdentity) {
-    //     try {
-    //         await this.props.editBookings([booking]);
-    //         await this.props.fetchBooking(this.props.entity.id);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }
-    //
-    // public async deleteBooking(id: number) {
-    //     try {
-    //         await this.props.deleteBookings([id]);
-    //         await this.props.fetchBooking(this.props.entity.id);
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }
-
     public render() {
         return (
             <React.Fragment>

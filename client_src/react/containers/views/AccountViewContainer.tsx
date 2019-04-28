@@ -7,12 +7,15 @@ import {IRootState} from "../../store";
 import {accountActions, AccountModel, IAccountIdentity} from "../../../../base/model/AccountModel";
 import AccountTableView from "../../components/views/AccountTableView";
 import * as React from "react";
+import {VBookingModel} from "../../../../base/model/VBookingModel";
 
 export interface IAccountViewContainerProps {
     accounts: AccountModel[];
     fetchAllAccounts: () => Promise<any>;
     addAccounts: (accounts: IAccountIdentity[]) => Promise<any>;
     editAccounts: (accounts: IAccountIdentity[]) => Promise<any>;
+    vBookings?: VBookingModel[];
+    addVBooking?: () => void;
 }
 
 export interface IAccountViewContainerState {
