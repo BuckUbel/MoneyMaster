@@ -151,7 +151,7 @@ export default class Account extends React.Component<IAccountProps, IAccountStat
                         {!isReal && this.props.vBookings &&
                         this.props.vBookings.map((vb: VBookingModel, index: number) => {
                             return (<Grid item xs={6} key={index}>
-                                <VBookingContainer entity={vb}/>
+                                <VBookingContainer entity={vb}bookOnVirtualAccount={true}/>
                             </Grid>);
                         })
                         // <VBookingView vBookings={this.props.vBookings}/>

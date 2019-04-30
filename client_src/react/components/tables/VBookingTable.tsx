@@ -54,13 +54,19 @@ export const vBookingTableConfiguration: IVBookingTableInformations<ICol> = {
         type: "number",
     },
     name: {
-        name: vBookingFields.value.labelName,
+        name: vBookingFields.name.labelName,
+        filterOptions: {
+            stringCut: -1,
+        },
         filtering: true,
         sorting: true,
         type: "string",
     },
     description: {
-        name: vBookingFields.value.labelName,
+        name: vBookingFields.description.labelName,
+        filterOptions: {
+            stringCut: -1,
+        },
         filtering: true,
         sorting: true,
         type: "string",

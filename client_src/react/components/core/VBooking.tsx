@@ -16,7 +16,8 @@ export interface IVBookingProps {
     category?: CategoryModel;
     editAction?: (params: ISplitRealBookingParams, oldEntity: VBookingModel) => void;
     deleteAction?: () => void;
-    onRealBooking?: boolean;
+    splitRealBooking?: boolean;
+    bookOnVirtualAccount?: boolean;
 }
 
 export default class VBooking extends React.Component<IVBookingProps, {}> {
@@ -49,7 +50,7 @@ export default class VBooking extends React.Component<IVBookingProps, {}> {
     }
 
     public render() {
-        const {deleteAction, editAction, entity, category, onRealBooking} = this.props;
+        const {deleteAction, editAction, entity, category, splitRealBooking, bookOnVirtualAccount} = this.props;
         const {id, bookingId, accountId, categoryId, name, description, value} = entity;
 
         const avatarSize = Math.abs(value) > 100 ? 45 : 25;
@@ -71,20 +72,20 @@ export default class VBooking extends React.Component<IVBookingProps, {}> {
                         action={
                             <React.Fragment>
                                 {editAction && (
-                                    (onRealBooking &&
+                                    (splitRealBooking &&
                                         <SplitRealBookingDialogContainer
                                             withValueBounds={true}
                                             entity={entity}
                                             submit={editAction}
                                         />) ||
-                                    (!onRealBooking &&
+                                    (bookOnVirtualAccount &&
                                         <BookOnVirtualAccountDialogContainer
                                             withValueBounds={false}
                                             entity={entity}
                                             submit={editAction}
                                         />))
                                 }
-                                {deleteAction && (
+                                {deleteAction && (splitRealBooking || bookOnVirtualAccount) && (
                                     <Fab onClick={deleteAction} color={"secondary"}>
                                         <DeleteIcon/>
                                     </Fab>)

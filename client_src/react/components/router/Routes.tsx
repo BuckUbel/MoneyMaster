@@ -6,12 +6,13 @@ import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import CategoryOutlinedIcon from "@material-ui/icons/CategoryOutlined";
 import ShortTextIcon from "@material-ui/icons/ShortText";
 import {SvgIconProps} from "@material-ui/core/SvgIcon/SvgIcon";
-import {BookingViewContainer, BookingTableViewContainer} from "../../containers/views/BookingViewContainer";
+import {BookingTableViewContainer} from "../../containers/views/BookingViewContainer";
 import AccountViewContainer from "../../containers/views/AccountViewContainer";
 import CategoryViewContainer from "../../containers/views/CategoryViewContainer";
 import ShortDescriptionViewContainer from "../../containers/views/ShortDescriptionViewContainer";
 import HomeViewContainer from "../../containers/views/HomeViewContainer";
 import AccountContainer from "../../containers/core/AccountContainer";
+import CategoryContainer from "../../containers/core/CategoryContainer";
 
 export interface IAppRoute {
     name: string;
@@ -40,6 +41,15 @@ export const routeList: IAppRoute[] =
             icon: null,
             path: "/accounts/:id",
             pathWithoutParams: "/accounts/",
+            title: "",
+            notDisplay: true
+        },
+        {
+            name: "CategoryPage",
+            component: (match) => <CategoryContainer entity={{id: match.params.id}}/>,
+            icon: null,
+            path: "/categories/:id",
+            pathWithoutParams: "/categories/",
             title: "",
             notDisplay: true
         },

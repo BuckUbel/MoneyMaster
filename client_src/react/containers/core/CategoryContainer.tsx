@@ -7,12 +7,15 @@ import {connect} from "react-redux";
 import {categoryActions, CategoryModel, ICategoryIdentity} from "../../../../base/model/CategoryModel";
 import {IEntityClass} from "../../../../base/helper/Entity";
 import Category from "../../components/core/Category";
+import {IVBookingIdentity, vBookingActions, VBookingModel} from "../../../../base/model/VBookingModel";
+import {AccountModel} from "../../../../base/model/AccountModel";
 
 export interface ICategoryContainerProps {
     fetchCategory: (id: number) => Promise<any>;
     editCategories: (accounts: ICategoryIdentity[]) => Promise<any>;
     deleteCategories: (ids: number[]) => Promise<any>;
     entity: CategoryModel;
+    vBookings: VBookingModel[];
 }
 
 export interface ICategoryOwnProps {
@@ -59,6 +62,7 @@ class CategoryContainer extends React.Component<ICategoryContainerProps, {}> {
                     entity={this.props.entity}
                     deleteAction={this.deleteCategory}
                     editAction={this.editCategory}
+                    vBookings={this.props.vBookings}
                 />}
             </React.Fragment>
         );
@@ -66,13 +70,19 @@ class CategoryContainer extends React.Component<ICategoryContainerProps, {}> {
 }
 
 const mapsStateToProps = (state: IRootState, ownProps: ICategoryOwnProps) => {
+    let virtualBookings: VBookingModel[] = [];
+    let thisEntity: CategoryModel = null;
+    if (ownProps.entity) {
+        if (ownProps.entity.id) {
+            const seekedId: number = Number(ownProps.entity.id);
+            thisEntity = state.categories.data.find((category: CategoryModel) => category.id === seekedId);
+            virtualBookings = state.vBookings.data.filter((vb: VBookingModel) => vb.categoryId === seekedId);
+        }
+    }
     return (
         {
-            entity: ownProps.entity ?
-                ownProps.entity.id ?
-                    state.categories.data.find((account) => account.id === Number(ownProps.entity.id)) :
-                    null :
-                null,
+            entity: thisEntity,
+            vBookings: virtualBookings
         }
     );
 };
