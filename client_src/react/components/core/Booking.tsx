@@ -8,6 +8,7 @@ import {CSSProperties} from "react";
 import {VBookingModel} from "../../../../base/model/VBookingModel";
 import VBookingContainer from "../../containers/core/VBookingContainer";
 import AddIcon from "@material-ui/icons/Add";
+import {IAccountProps, IAccountState} from "./Account";
 
 export interface IBookingProps {
     entity: BookingModel;
@@ -15,7 +16,15 @@ export interface IBookingProps {
     addVBooking?: () => void;
 }
 
-export default class Booking extends React.Component<IBookingProps, {}> {
+export interface IBookingState {
+    vBookingsSum: number;
+}
+
+export const defaultState: IBookingState = {
+    vBookingsSum: 0,
+};
+
+export default class Booking extends React.Component<IBookingProps, IBookingState> {
 
     public static compareOnDate(a: BookingModel, b: BookingModel): number {
         if (a.bookingDate < b.bookingDate) {
@@ -30,9 +39,9 @@ export default class Booking extends React.Component<IBookingProps, {}> {
     public static getDisplay(act: BookingModel): IBookingTableInformations<RenderThings> {
         return ({
             id: String(act.id),
-            orderAccount: act.orderAccount,
+            // orderAccount: act.orderAccount,
             bookingDate: beautyDateString(act.bookingDate),
-            validDate: beautyDateString(act.validDate),
+            // validDate: beautyDateString(act.validDate),
             bookingType: act.bookingType,
             purpose: act.purpose,
             payPartner: act.payPartner,
@@ -52,11 +61,24 @@ export default class Booking extends React.Component<IBookingProps, {}> {
         return (value >= 0 ? "+" : "") + value.toFixed(2);
     }
 
+    public static getColorOnBaseOfValueInline(value: number): CSSProperties {
+        return {color: (value < 0 ? "#F00" : "#0F0"), display: "inline"};
+    }
     public static getColorOnBaseOfValue(value: number): CSSProperties {
         return {color: (value < 0 ? "#F00" : "#0F0")};
     }
+    public static getDerivedStateFromProps(newProps: IBookingProps, oldState: IBookingState): IBookingState {
+        const associatedVBookingSum = newProps.vBookings.length > 0 ? newProps.vBookings
+            .map(
+                (aVB) => aVB.value)
+            .reduce(
+                (acc, cV) => acc + cV) : 0;
+        return {
+            vBookingsSum: associatedVBookingSum
+        };
+    }
 
-    public state: {} = {};
+    public state: IBookingState = defaultState;
 
     constructor(props: IBookingProps) {
         super(props);
@@ -76,8 +98,8 @@ export default class Booking extends React.Component<IBookingProps, {}> {
             currency,
             info,
         } = this.props.entity;
+        const {vBookingsSum} = this.state;
 
-        const money = value.toFixed(2) + " " + currency;
         const valueColor = value < 0 ? "#f00" : "#0b0";
         const avatarSize = Math.abs(value) > 100 ? 45 : 25;
 
@@ -96,9 +118,18 @@ export default class Booking extends React.Component<IBookingProps, {}> {
                                             }}/>
                                 }
                                 title={beautyDateString(bookingDate)}
-                                subheader={<Typography component="p" style={{color: valueColor}}>
-                                    {money}
-                                </Typography>}
+                                subheader={
+                                    <React.Fragment>
+                                        <Typography component="p" style={Booking.getColorOnBaseOfValueInline(value)}>
+                                            {Booking.getColoredValue(value)}
+                                        </Typography>
+                                        {" / "}
+                                        <Typography component="p"
+                                                    style={Booking.getColorOnBaseOfValueInline(value - vBookingsSum)}>
+                                            {Booking.getColoredValue(value - vBookingsSum)}
+                                        </Typography>
+                                    </React.Fragment>
+                                }
                                 action={
                                     <React.Fragment>
                                         {this.props.addVBooking &&

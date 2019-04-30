@@ -8,8 +8,9 @@ import Booking from "./Booking";
 import EditAccountDialog from "../dialogs/EditEntity/EditAccountDialog";
 import MultilineText from "./simple/MultilineText";
 import {VBookingModel} from "../../../../base/model/VBookingModel";
-import VBookingContainer from "../../containers/core/VBookingContainer";
 import AddIcon from "@material-ui/icons/Add";
+import VBookingView from "../views/VBookingView";
+import VBookingContainer from "../../containers/core/VBookingContainer";
 
 export interface IAccountProps {
     entity: AccountModel;
@@ -19,7 +20,25 @@ export interface IAccountProps {
     addVBooking?: () => void;
 }
 
-export default class Account extends React.Component<IAccountProps, {}> {
+export interface IAccountState {
+    vBookingsSum: number;
+}
+
+export const defaultState: IAccountState = {
+    vBookingsSum: 0,
+};
+export default class Account extends React.Component<IAccountProps, IAccountState> {
+
+    public static getDerivedStateFromProps(newProps: IAccountProps, oldState: IAccountState): IAccountState {
+        const associatedVBookingSum = newProps.vBookings ? newProps.vBookings.length > 0 ? newProps.vBookings
+            .map(
+                (aVB) => aVB.value)
+            .reduce(
+                (acc, cV) => acc + cV) : 0 : 0;
+        return {
+            vBookingsSum: associatedVBookingSum
+        };
+    }
 
     public static compare(a: AccountModel, b: AccountModel): number {
         if (a.id < b.id) {
@@ -45,7 +64,7 @@ export default class Account extends React.Component<IAccountProps, {}> {
         });
     }
 
-    public state: {} = {};
+    public state: IAccountState = defaultState;
 
     constructor(props: IAccountProps) {
         super(props);
@@ -53,6 +72,7 @@ export default class Account extends React.Component<IAccountProps, {}> {
 
     public render() {
         const {deleteAction, editAction, entity} = this.props;
+        const {vBookingsSum} = this.state;
         const {
             id,
             name,
@@ -77,20 +97,27 @@ export default class Account extends React.Component<IAccountProps, {}> {
                                 }
                                 title={name}
                                 subheader={
-                                    <Typography component="p" style={Booking.getColorOnBaseOfValue(value)}>
-                                        {Booking.getColoredValue(value)}
-                                    </Typography>
+                                    <React.Fragment>
+                                        <Typography component="p" style={Booking.getColorOnBaseOfValueInline(value)}>
+                                            {Booking.getColoredValue(value)}
+                                        </Typography>
+                                        {" / "}
+                                        <Typography component="p"
+                                                    style={Booking.getColorOnBaseOfValueInline(value - vBookingsSum)}>
+                                            {Booking.getColoredValue(value - vBookingsSum)}
+                                        </Typography>
+                                    </React.Fragment>
                                 }
                                 action={<React.Fragment>
                                     {editAction && deleteAction &&
                                     <EditAccountDialog
-                                      entity={entity}
-                                      delete={deleteAction}
-                                      submit={editAction}
+                                        entity={entity}
+                                        delete={deleteAction}
+                                        submit={editAction}
                                     />}
-                                    {this.props.addVBooking &&
+                                    {this.props.addVBooking && !isReal &&
                                     <Fab onClick={this.props.addVBooking} color={"primary"}>
-                                      <AddIcon/>
+                                        <AddIcon/>
                                     </Fab>
                                     }
                                 </React.Fragment>}
@@ -121,11 +148,14 @@ export default class Account extends React.Component<IAccountProps, {}> {
                         </Card>
                     </Grid>
                     <Grid item xs={12} container spacing={8}>
-                        {this.props.vBookings.map((vb: VBookingModel, index: number) => {
+                        {!isReal && this.props.vBookings &&
+                        this.props.vBookings.map((vb: VBookingModel, index: number) => {
                             return (<Grid item xs={6} key={index}>
                                 <VBookingContainer entity={vb}/>
                             </Grid>);
-                        })}
+                        })
+                        // <VBookingView vBookings={this.props.vBookings}/>
+                        }
                     </Grid>
                 </Grid>
             </React.Fragment>

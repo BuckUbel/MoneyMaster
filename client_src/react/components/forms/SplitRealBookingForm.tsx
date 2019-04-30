@@ -27,6 +27,7 @@ export interface ISplitRealBookingFormProps {
     categories: CategoryModel[];
     maxValue: number;
     minValue: number;
+    withValueBounds?: boolean;
     values: ISplitRealBookingParams;
     handler: ISplitRealBookingFormHandler;
 }
@@ -68,12 +69,12 @@ export default class SplitRealBookingForm
     }
 
     public render() {
-        const {formId, values, handler, maxValue, minValue} = this.props;
+        const {formId, values, handler, maxValue, minValue, withValueBounds} = this.props;
         const {textCategories, textCategory} = this.state;
 
         const reallyMaxValue = maxValue === 0 ? minValue : maxValue;
-        const calcRest = maxValue === 0 ? Number(((minValue - values.value) * (-1)).toFixed(2))
-            : Number(((maxValue - values.value) * (-1)).toFixed(2));
+        const calcRest = maxValue === 0 ? Number(((minValue - values.value)).toFixed(2))
+            : Number(((maxValue - values.value)).toFixed(2));
         return (
             <React.Fragment>
                 <form id={formId} autoComplete={"off"}>
@@ -108,7 +109,8 @@ export default class SplitRealBookingForm
                                            id={vBookingFields.value.fieldName}
                                            label={vBookingFields.value.labelName}
                                            type="number"
-                                           inputProps={{max: maxValue, min: minValue}}
+                                           inputProps={withValueBounds ? {max: maxValue, min: minValue} : {}}
+                                    // inputProps={withValueBounds ? {max: maxValue, min: minValue} : null}
                                            value={values.value}
                                            onChange={handler.value}
                                            fullWidth

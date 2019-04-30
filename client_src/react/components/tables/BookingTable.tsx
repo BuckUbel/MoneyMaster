@@ -4,7 +4,6 @@ import {bookingFields, BookingModel} from "../../../../base/model/BookingModel";
 import {RenderThings} from "../../helper/util";
 import Booking from "../core/Booking";
 import EntityTable, {IEntityTableInformations} from "./EntityTable";
-import {getArrayFromObject} from "../../../../base/helper/util";
 import BookingContainer from "../../containers/core/BookingContainer";
 
 export interface IBookingTableProps {
@@ -28,7 +27,7 @@ export default class BookingTable extends React.Component<IBookingTableProps, {}
                     getDisplay={Booking.getDisplay}
                     entityTableConfiguration={bookingTableConfiguration}
                     baseClass={BookingContainer}
-                    defaultSortRow={2}
+                    defaultSortRow={1}
                 />
             </React.Fragment>
         );
@@ -36,9 +35,9 @@ export default class BookingTable extends React.Component<IBookingTableProps, {}
 }
 
 export interface IBookingTableInformations<T extends RenderThings | ICol> extends IEntityTableInformations<T> {
-    orderAccount: T;
+    //orderAccount: T;
     bookingDate: T;
-    validDate: T;
+    // validDate: T;
     bookingType: T;
     purpose: T;
     payPartner: T;
@@ -58,27 +57,27 @@ export const bookingTableConfiguration: IBookingTableInformations<ICol> = {
         hidden: true,
         type: "number",
     },
-    orderAccount: {
-        name: bookingFields.orderAccount.labelName,
-        filterOptions: {
-            stringCut: -1,
-        },
-        filtering: true,
-        sorting: true,
-        type: "string",
-    },
+    // orderAccount: {
+    //     name: bookingFields.orderAccount.labelName,
+    //     filterOptions: {
+    //         stringCut: -1,
+    //     },
+    //     filtering: true,
+    //     sorting: true,
+    //     type: "string",
+    // },
     bookingDate: {
         name: bookingFields.bookingDate.labelName,
         filtering: true,
         sorting: true,
         type: "date",
     },
-    validDate: {
-        name: bookingFields.validDate.labelName,
-        filtering: true,
-        sorting: true,
-        type: "date",
-    },
+    // validDate: {
+    //     name: bookingFields.validDate.labelName,
+    //     filtering: true,
+    //     sorting: true,
+    //     type: "date",
+    // },
     bookingType: {
         name: bookingFields.bookingType.labelName,
         filterOptions: {
