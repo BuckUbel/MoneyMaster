@@ -10,16 +10,19 @@ import {SortDirection} from "@material-ui/core/TableCell/TableCell";
 import TableFilter from "./TableFilter";
 import {ReactNode} from "react";
 import {ISelectorResponse} from "../../core/simple/Selector";
-import {Card, CardContent, Drawer, Grid} from "@material-ui/core";
+import {Card, CardContent, Checkbox, Drawer, Grid, Toolbar, Typography} from "@material-ui/core";
 import {defaultRowCompare, eliminateByFilterValues, IBaseData, ICol, IObjectWithEntityProp, IRow} from "./helper";
+import {RenderThings} from "../../../helper/util";
 
 export interface IDataTableProps {
     rowData: IRow[];
     colData: ICol[];
     noFilter?: boolean;
+    withCheckboxes?: boolean;
     baseData?: IBaseData[];
     baseClass?: React.ComponentType<IObjectWithEntityProp>;
     defaultSortRow?: number;
+    selectedActions?: (selectedItems: number[]) => RenderThings[];
 }
 
 export interface IDataTableState {
@@ -31,6 +34,7 @@ export interface IDataTableState {
     clickedRow: number;
     currentFilteredData: IRow[];
     currentDisplayData: IRow[];
+    selectedItems: number[];
 }
 
 export const defaultState: IDataTableState = {
@@ -42,12 +46,13 @@ export const defaultState: IDataTableState = {
     clickedRow: -1,
     currentFilteredData: [],
     currentDisplayData: [],
+    selectedItems: [],
 };
 export default class DataTable extends React.Component<IDataTableProps, IDataTableState> {
 
     public static getDerivedStateFromProps(newProps: IDataTableProps, oldState: IDataTableState): IDataTableState {
         const {defaultSortRow, rowData, colData} = newProps;
-        const {order, orderBy, currentPage, rowsPerPage, filterValues, clickedRow} = oldState;
+        const {order, orderBy, currentPage, rowsPerPage, filterValues, clickedRow, selectedItems} = oldState;
 
         const newOrderBy = (orderBy === -1) ? defaultSortRow ? defaultSortRow : 0 : orderBy;
 
@@ -66,7 +71,8 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
             filterValues,
             clickedRow,
             currentFilteredData: newFilteredData,
-            currentDisplayData: newDisplayData
+            currentDisplayData: newDisplayData,
+            selectedItems,
         });
 
     }
@@ -81,9 +87,34 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
         this.onFilter = this.onFilter.bind(this);
         this.resetFilter = this.resetFilter.bind(this);
         this.clickOnRow = this.clickOnRow.bind(this);
+        this.selectAllItems = this.selectAllItems.bind(this);
+    }
+
+    public selectAllItems(event: ChangeEvent<HTMLInputElement>) {
+        if (event.target.checked) {
+            this.setState((prevState) =>
+                ({selectedItems: prevState.currentFilteredData.map((row: IRow) => row.id)})
+            );
+        } else {
+            this.setState({selectedItems: []});
+        }
     }
 
     public clickOnRow(id: number) {
+        if (this.props.withCheckboxes) {
+            return () => {
+                this.setState((prevState) => {
+                    const newSelectedItems = prevState.selectedItems;
+                    const indexNumber = prevState.selectedItems.indexOf(id);
+                    if (indexNumber === -1) {
+                        newSelectedItems.push(id);
+                    } else {
+                        newSelectedItems.splice(indexNumber, 1);
+                    }
+                    return ({selectedItems: newSelectedItems});
+                });
+            };
+        }
         return () => {
             this.setState({clickedRow: id});
         };
@@ -136,10 +167,11 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
 
     public render() {
 
-        const {colData, baseData, baseClass, noFilter} = this.props;
+        const {colData, baseData, baseClass, noFilter, withCheckboxes, selectedActions} = this.props;
         const {
             order, orderBy, currentPage, rowsPerPage,
-            filterValues, clickedRow, currentDisplayData, currentFilteredData
+            filterValues, clickedRow, currentDisplayData, currentFilteredData,
+            selectedItems
         } = this.state;
 
         const hiddenElement = clickedRow !== -1 ? baseData.find((d: IBaseData) => {
@@ -150,27 +182,60 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
             <React.Fragment>
                 <Grid container spacing={40}>
                     {!noFilter && <Grid item xs={12}>
-                      <Card>
-                        <CardContent>
-                          <TableFilter
-                            rowData={currentFilteredData}
-                            headerData={colData}
-                            onFilter={this.onFilter}
-                            filterValues={filterValues}
-                            resetFilter={this.resetFilter}
-                          />
-                        </CardContent>
-                      </Card>
+                        <Card>
+                            <CardContent>
+                                <TableFilter
+                                    rowData={currentFilteredData}
+                                    headerData={colData}
+                                    onFilter={this.onFilter}
+                                    filterValues={filterValues}
+                                    resetFilter={this.resetFilter}
+                                />
+                            </CardContent>
+                        </Card>
                     </Grid>}
                     <Grid item xs={12}>
                         <Card>
                             <CardContent>
+                                {withCheckboxes &&
+                                <Toolbar>
+                                    <Grid container justify={"space-between"}>
+                                        <Grid item xs={5}>
+                                            {selectedItems.length > 0 ?
+                                                <Typography variant="subtitle1">
+                                                    {selectedItems.length} Elemente ausgewählt
+                                                </Typography> :
+                                                <Typography color="inherit" variant="subtitle1">
+                                                    Keine Elemente sind ausgewählt
+                                                </Typography>
+                                            }
+                                        </Grid>
+                                        <Grid item xs={7} container justify={"flex-end"}>
+                                            {selectedActions(selectedItems).map(
+                                                (currentAction: RenderThings, index: number) => {
+                                                    return (
+                                                        <Grid item xs={1} container justify={"flex-end"} key={index}>
+                                                            <Grid item xs={12}>
+                                                                {currentAction}
+                                                            </Grid>
+                                                        </Grid>);
+                                                })}
+                                        </Grid>
+
+                                    </Grid>
+                                </Toolbar>}
                                 <Table>
                                     <SortTableHeader
                                         colData={colData}
                                         order={order}
                                         orderBy={orderBy}
                                         sortHandler={this.onSort}
+                                        withCheckboxes={withCheckboxes}
+                                        handleSelectAll={this.selectAllItems}
+                                        anythingIsSelected={
+                                            selectedItems.length > 0 &&
+                                            selectedItems.length < currentFilteredData.length
+                                        }
                                     />
                                     <TableBody>
                                         {currentDisplayData.map((row, index) => {
@@ -180,6 +245,11 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
                                                     hover={true}
                                                     onClick={this.clickOnRow(row.id)}
                                                 >
+                                                    {withCheckboxes &&
+                                                    <TableCell key={1} padding={"checkbox"}>
+                                                        <Checkbox checked={selectedItems.indexOf(row.id) !== -1}/>
+                                                    </TableCell>}
+
                                                     {Object.keys(row.content).map((key: string, cellIndex: number) => {
                                                         if (!colData[cellIndex].hidden) {
                                                             let cellContent = row.content[key];
