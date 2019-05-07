@@ -8,6 +8,8 @@ import VBookingContainer from "../../containers/core/VBookingContainer";
 
 export interface IVBookingTableProps {
     vBookings: VBookingModel[];
+    withCheckboxes?: boolean;
+    selectedActions?: (selectedItems: number[]) => RenderThings[];
 }
 
 export default class VBookingTable extends React.Component<IVBookingTableProps, {}> {
@@ -17,7 +19,7 @@ export default class VBookingTable extends React.Component<IVBookingTableProps, 
     }
 
     public render() {
-        const {vBookings} = this.props;
+        const {vBookings, withCheckboxes, selectedActions} = this.props;
 
         return (
             <React.Fragment>
@@ -28,6 +30,8 @@ export default class VBookingTable extends React.Component<IVBookingTableProps, 
                     entityTableConfiguration={vBookingTableConfiguration}
                     baseClass={VBookingContainer}
                     defaultSortRow={1}
+                    withCheckboxes={withCheckboxes}
+                    selectedActions={selectedActions}
                 />
             </React.Fragment>
         );

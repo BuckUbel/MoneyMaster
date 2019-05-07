@@ -14,8 +14,11 @@ export interface ICategoryContainerProps {
     fetchCategory: (id: number) => Promise<any>;
     editCategories: (accounts: ICategoryIdentity[]) => Promise<any>;
     deleteCategories: (ids: number[]) => Promise<any>;
+    fetchAllVBookings: () => Promise<any>;
+    editVBookings: (vBookings: IVBookingIdentity[]) => Promise<any>;
     entity: CategoryModel;
     vBookings: VBookingModel[];
+    withTable?: boolean;
 }
 
 export interface ICategoryOwnProps {
@@ -28,6 +31,7 @@ class CategoryContainer extends React.Component<ICategoryContainerProps, {}> {
         super(props);
         this.editCategory = this.editCategory.bind(this);
         this.deleteCategory = this.deleteCategory.bind(this);
+        this.changeVBookingsCategory = this.changeVBookingsCategory.bind(this);
     }
 
     public async componentDidMount() {
@@ -50,7 +54,21 @@ class CategoryContainer extends React.Component<ICategoryContainerProps, {}> {
             await this.props.fetchCategory(this.props.entity.id);
         } catch (error) {
             console.error(error);
+        }
+    }
 
+    public async changeVBookingsCategory(newCategoryId: number, ids: number[]) {
+        const newVBookings = this.props.vBookings
+            .filter((vB: VBookingModel) => ids.indexOf(vB.id) !== -1)
+            .map((vb: VBookingModel) => {
+                vb.categoryId = newCategoryId;
+                return vb;
+            });
+        try {
+            await this.props.editVBookings(newVBookings);
+            await this.props.fetchAllVBookings();
+        } catch (error) {
+            console.error(error);
         }
     }
 
@@ -63,6 +81,8 @@ class CategoryContainer extends React.Component<ICategoryContainerProps, {}> {
                     deleteAction={this.deleteCategory}
                     editAction={this.editCategory}
                     vBookings={this.props.vBookings}
+                    withTable={this.props.withTable}
+                    changeVBookingsCategory={this.changeVBookingsCategory}
                 />}
             </React.Fragment>
         );
@@ -77,6 +97,11 @@ const mapsStateToProps = (state: IRootState, ownProps: ICategoryOwnProps) => {
             const seekedId: number = Number(ownProps.entity.id);
             thisEntity = state.categories.data.find((category: CategoryModel) => category.id === seekedId);
             virtualBookings = state.vBookings.data.filter((vb: VBookingModel) => vb.categoryId === seekedId);
+            // if no entity with this id is found
+            if (!thisEntity) {
+                thisEntity = CategoryModel.createEmptyEntity();
+                thisEntity.id = ownProps.entity.id;
+            }
         }
     }
     return (
@@ -90,5 +115,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) =
     fetchCategory: (id: number) => dispatch(load(categoryActions.actions.load(id))),
     editCategories: (cateogories: ICategoryIdentity[]) => dispatch(load(categoryActions.actions.edit(cateogories))),
     deleteCategories: (ids: number[]) => dispatch(load(categoryActions.actions.delete(ids))),
+    fetchAllVBookings: () => dispatch(load(vBookingActions.actions.loadAll())),
+    editVBookings: (vBookings: IVBookingIdentity[]) => dispatch(load(vBookingActions.actions.edit(vBookings))),
 });
 export default connect(mapsStateToProps, mapDispatchToProps)(CategoryContainer);

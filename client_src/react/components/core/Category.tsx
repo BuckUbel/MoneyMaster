@@ -1,5 +1,16 @@
 import * as React from "react";
-import {Avatar, Card, CardContent, CardHeader, Divider, Grid, Tooltip, Typography} from "@material-ui/core";
+import {
+    Avatar,
+    Card,
+    CardContent,
+    CardHeader,
+    Divider,
+    Fab,
+    Grid,
+    IconButton,
+    Tooltip,
+    Typography
+} from "@material-ui/core";
 import {RenderThings} from "../../helper/util";
 import {categoryFields, CategoryModel, ICategoryIdentity} from "../../../../base/model/CategoryModel";
 import {ICategoryTableInformations} from "../tables/CategoryTable";
@@ -7,16 +18,19 @@ import ColorField from "./simple/ColorField";
 import EditCategoryDialog from "../dialogs/EditEntity/EditCategoryDialog";
 import MultilineText from "./simple/MultilineText";
 import {VBookingModel} from "../../../../base/model/VBookingModel";
-import VBookingContainer from "../../containers/core/VBookingContainer";
-import VBookingView from "../views/VBookingView";
-import VBookingTableView from "../views/VBookingTableView";
 import VBookingTable from "../tables/VBookingTable";
+import ChangeVBookingsCategoryDialogContainer from "../../containers/dialogs/ChangeVBookingsCategoryDialogContainer";
+import {getRouteByName} from "../router/Routes";
+import RouteButton from "../router/RouteButton";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
 export interface ICategoryProps {
     entity: CategoryModel;
     editAction?: (account: ICategoryIdentity) => void;
     deleteAction?: (id: number) => void;
     vBookings?: VBookingModel[];
+    withTable?: boolean;
+    changeVBookingsCategory?: (newCategoryId: number, ids: number[]) => void;
 }
 
 export default class Category extends React.Component<ICategoryProps, {}> {
@@ -38,6 +52,14 @@ export default class Category extends React.Component<ICategoryProps, {}> {
             description: act.description,
             color: <ColorField color={act.color}/>,
             isStandard: act.isStandard,
+            button: <RouteButton
+                nextRoute={getRouteByName("CategoryPage")}
+                params={[String(act.id)]}
+                buttonProps={{size: "medium", variant: "contained", color: "primary"}}
+                aria-label={"nähere Informationen"}
+            >
+                <ChevronRightIcon/>
+            </RouteButton>
         });
     }
 
@@ -48,7 +70,7 @@ export default class Category extends React.Component<ICategoryProps, {}> {
     }
 
     public render() {
-        const {deleteAction, editAction, entity} = this.props;
+        const {deleteAction, editAction, entity, changeVBookingsCategory, withTable, vBookings} = this.props;
         const {
             id,
             name,
@@ -56,7 +78,7 @@ export default class Category extends React.Component<ICategoryProps, {}> {
             color,
             isStandard
         } = entity;
-        const avatarSize = 25;
+        const avatarSize = 10 + (vBookings.length * 0.1);
 
         return (
             <React.Fragment>
@@ -69,6 +91,7 @@ export default class Category extends React.Component<ICategoryProps, {}> {
                                             style={{backgroundColor: color, width: avatarSize, height: avatarSize}}/>
                                 }
                                 title={name}
+                                subheader={vBookings.length + " virtuelle Buchungen"}
                                 action={<React.Fragment>
                                     {editAction && deleteAction &&
                                     <EditCategoryDialog
@@ -95,13 +118,17 @@ export default class Category extends React.Component<ICategoryProps, {}> {
                         </Card>
                     </Grid>
                     <Grid item xs={12} container>
-                        { this.props.vBookings &&
-                        // this.props.vBookings.map((vb: VBookingModel, index: number) => {
-                        //     return (<Grid item xs={6} key={index}>
-                        //         <VBookingContainer entity={vb}/>
-                        //     </Grid>);
-                        // })
-                             <VBookingTable vBookings={this.props.vBookings}/>
+                        {withTable && vBookings &&
+                        <VBookingTable
+                            vBookings={vBookings}
+                            withCheckboxes={true}
+                            selectedActions={(selectedItems: number[]) => [
+                                <ChangeVBookingsCategoryDialogContainer
+                                    submit={(params, ids) => changeVBookingsCategory(params.category.id, ids)}
+                                    vBookingIds={selectedItems}
+                                    categoryId={this.props.entity.id}/>
+                            ]}
+                        />
                         }
                     </Grid>
                 </Grid>

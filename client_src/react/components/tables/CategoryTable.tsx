@@ -40,6 +40,7 @@ export interface ICategoryTableInformations<T extends RenderThings | ICol> exten
     description: T;
     color: T;
     isStandard: T;
+    button: T;
 
     [key: string]: T;
 }
@@ -76,4 +77,10 @@ export const categoryTableConfiguration: ICategoryTableInformations<ICol> = {
         sorting: true,
         type: "boolean",
     },
+    button: {
+        name: "",
+        filtering: false,
+        sorting: false,
+        type: "object",
+    }
 };

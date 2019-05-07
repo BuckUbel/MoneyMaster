@@ -46,7 +46,7 @@ export const routeList: IAppRoute[] =
         },
         {
             name: "CategoryPage",
-            component: (match) => <CategoryContainer entity={{id: match.params.id}}/>,
+            component: (match) => <CategoryContainer entity={{id: match.params.id}} withTable={true}/>,
             icon: null,
             path: "/categories/:id",
             pathWithoutParams: "/categories/",
@@ -94,6 +94,10 @@ export const routeList: IAppRoute[] =
             pathWithoutParams: "/short-descriptions",
         }
     ];
+
+export function getRouteByName(name: string): IAppRoute {
+    return routeList.find((ar) => ar.name === name);
+}
 
 class Routes extends React.Component<RouteComponentProps> {
 
