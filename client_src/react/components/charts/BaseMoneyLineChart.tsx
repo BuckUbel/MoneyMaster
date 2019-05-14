@@ -1,24 +1,34 @@
 import * as React from "react";
 import {BookingModel} from "../../../../base/model/BookingModel";
-import {Area, AreaChart, CartesianGrid, ComposedChart, Line, LineChart, Tooltip, XAxis, YAxis, ZAxis} from "recharts";
 import {
-    changeDateMonthFirstDay,
-    changeDateMonthLastDay,
-    changeDateMonthMiddleDay,
+    Area,
+    AreaChart,
+    BarChart,
+    CartesianGrid,
+    ComposedChart,
+    Line,
+    LineChart,
+    Tooltip,
+    XAxis,
+    YAxis,
+    ZAxis
+} from "recharts";
+import {
     dateToString
 } from "../../../../base/helper/time/dateHelper";
-import DateTextField from "../core/simple/DateTextField";
-import {stringToDate} from "../../../../base/helper/util";
-import StatisticsNavigation from "../views/statistics/StatisticsNavigation";
+import BaseMoneyLineChartToolTip from "./tooltips/BaseMoneyLineChartToolTip";
+import {getRouteByName} from "../router/Routes";
+import {RouteComponentProps, withRouter} from "react-router";
 
 export interface IBaseMoneyLineChartData {
     name: string;
     sumValue: number;
     value: number;
     bookingDate: string;
+    bookingId: number;
 }
 
-export interface IBaseMoneyLineChartProps {
+export interface IBaseMoneyLineChartProps extends RouteComponentProps {
     bookings: BookingModel[];
     startDate: Date;
     endDate: Date;
@@ -32,7 +42,7 @@ export const defaultState: IBaseMoneyLineChartState = {
     currentData: [],
 };
 
-export default class BaseMoneyLineChart extends React.Component<IBaseMoneyLineChartProps, IBaseMoneyLineChartState> {
+class BaseMoneyLineChart extends React.Component<IBaseMoneyLineChartProps, IBaseMoneyLineChartState> {
 
     public static getDerivedStateFromProps(
         newProps: IBaseMoneyLineChartProps,
@@ -52,7 +62,8 @@ export default class BaseMoneyLineChart extends React.Component<IBaseMoneyLineCh
                         name: b.payPartner,
                         value: b.value,
                         sumValue: tempValue,
-                        bookingDate: dateToString(b.bookingDate)
+                        bookingDate: dateToString(b.bookingDate),
+                        bookingId: b.id,
                     });
                 }
             }
@@ -71,46 +82,42 @@ export default class BaseMoneyLineChart extends React.Component<IBaseMoneyLineCh
 
     public render() {
         const {currentData} = this.state;
+        const {history} = this.props;
         return (
             <React.Fragment>
 
-                <ComposedChart width={1200} height={400} data={currentData}
-                               margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+                <ComposedChart
+                    width={1200}
+                    height={400}
+                    data={currentData}
+                    margin={{top: 10, right: 30, left: 0, bottom: 0}}
+                    onClick={(a: any) => {
+                        history.push(getRouteByName("BookingPage").pathWithoutParams +
+                            a.activePayload[0].payload.bookingId);
+                    }}>
                     <CartesianGrid strokeDasharray="1 1"/>
                     <XAxis dataKey="bookingDate"/>
                     <YAxis dataKey=""/>
-                    <Tooltip/>
-                    <Area type="monotone" dataKey="sumValue" dot={false} stroke="#00F" fill="#00A"/>
-                    <Line type="monotone" dataKey="value" dot={false} stroke="#0F0" fill="#0F0"/>
+                    <Tooltip content={<BaseMoneyLineChartToolTip/>}/>
+                    <Area type="monotone" dataKey="sumValue" dot={false} stroke="#00F" fill="#00A"
+                    />
+                    <Line
+                        // activeDot={{
+                        //     onClick: (a: any, b: any, c: any) => {
+                        //         console.log(a, b, c);
+                        //         history.push(getRouteByName("BookingPage").pathWithoutParams + a.payload.bookingId);
+                        //     }
+                        // }}
+                        type="monotone"
+                        dataKey="value"
+                        dot={false}
+                        stroke="#0F0"
+                        fill="#0F0"
+                    />
                 </ComposedChart>
             </React.Fragment>
         );
     }
 }
 
-function CustomTooltip({payload, label, active}: any) {
-    if (active) {
-        return (
-            <div className="custom-tooltip">
-                <p className="label">{payload[0].payload.name}</p>
-                <p className="label">{payload[0].payload.value}</p>
-                <p className="desc">{payload[0].payload.sumValue}</p>
-            </div>
-        );
-    }
-    return null;
-}
-
-export function getLastDate(bookings: BookingModel[]): Date {
-    return new Date(Math.max(...bookings.map((booking): number => {
-        const endDate = booking.bookingDate;
-        return endDate !== null ? endDate.getTime() : 0;
-    })));
-}
-
-export function getFirstDate(bookings: BookingModel[]): Date {
-    return new Date(Math.min(...bookings.map((booking): number => {
-        const startDate = booking.bookingDate;
-        return startDate !== null ? startDate.getTime() : 0;
-    })));
-}
+export default withRouter(BaseMoneyLineChart);

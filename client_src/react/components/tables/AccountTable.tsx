@@ -56,7 +56,7 @@ export const accountTableConfiguration: IAccountTableInformations<ICol> = {
     },
     name: {
         name: accountFields.name.labelName,
-        filtering: false,
+        filtering: true,
         sorting: true,
         type: "string",
     },
@@ -68,9 +68,12 @@ export const accountTableConfiguration: IAccountTableInformations<ICol> = {
     },
     value: {
         name: accountFields.value.labelName,
-        filtering: false,
+        filtering: true,
         sorting: true,
         type: "number",
+        styleOptions: {
+            coloredNumbers: true
+        }
     },
     color: {
         name: accountFields.color.labelName,
@@ -84,7 +87,6 @@ export const accountTableConfiguration: IAccountTableInformations<ICol> = {
         sorting: true,
         type: "boolean",
     },
-
     isCore: {
         name: accountFields.isCore.labelName,
         filtering: false,

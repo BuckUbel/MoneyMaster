@@ -12,11 +12,23 @@ div.chartPlaceholder {
 p.positionChartMiddle {
     text-align: center;
 }
-div.custom-toolbar {
+div.customTooltip {
     width: 200px;
     margin: 0;
     line-height: 24px;
-    border: 1px solid #f5f5f5;
-    background-color: hsla(0, 0%, 100%, .8);
+    border: 1px solid #5A5A5A;
+    background-color: #303030;
     padding: 10px;
+}
+div.customTooltip p {
+    margin: 0;
+}
+div.customTooltip p.inlineText {
+    display: inline;
+}
+div.customTooltip div {
+    margin-right: 10px;
+}
+div.customTooltip div.inlineBlock {
+     display: inline-block;
 }

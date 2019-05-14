@@ -1,7 +1,24 @@
 import * as React from "react";
-import {Bar, BarChart, Brush, CartesianGrid, Legend, ReferenceLine, Tooltip, XAxis, YAxis} from "recharts";
+import {
+    Bar,
+    BarChart,
+    Brush,
+    CartesianGrid,
+    Cell,
+    Legend,
+    Pie,
+    PieChart,
+    ReferenceLine,
+    Tooltip,
+    XAxis,
+    YAxis
+} from "recharts";
 import {BookingModel} from "../../../../base/model/BookingModel";
 import {dateToString, daysDiff, getEachDayBetweenDays} from "../../../../base/helper/time/dateHelper";
+import CategoryPieChartToolTip from "./tooltips/CategoryPieChartToolTip";
+import InOutBarChartToolTip from "./tooltips/InOutBarChartToolTip";
+import InOutBarChartLegend from "./legends/InOutBarChartLegend";
+import {blue, orange} from "@material-ui/core/colors";
 
 export interface IInOutBarChartData {
     name: string;
@@ -89,10 +106,9 @@ export default class InOutBarChart extends React.Component<IInOutBarChartProps, 
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis dataKey={"name"}/>
                     <YAxis/>
-                    <Tooltip/>
-                    <Legend/>
-                    <ReferenceLine y={0} stroke="#000"/>
-                    <Brush dataKey="name" height={30} stroke="#8884d8" startIndex={currentData.length - 2}/>
+                    <Tooltip content={<InOutBarChartToolTip/>}/>
+                    <Brush dataKey="name" height={30} fill="#303030" stroke={orange["500"]}
+                           startIndex={currentData.length - 2}/>
                     <Bar dataKey="posValue" fill="#0F0"/>
                     <Bar dataKey="negValue" fill="#F00"/>
                 </BarChart>

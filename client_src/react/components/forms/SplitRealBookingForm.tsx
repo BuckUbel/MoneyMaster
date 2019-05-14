@@ -7,6 +7,7 @@ import {ReactNode} from "react";
 import {CategoryModel} from "../../../../base/model/CategoryModel";
 import Booking from "../core/Booking";
 import {vBookingFields, VBookingModel} from "../../../../base/model/VBookingModel";
+import {getColoredString, getColorOnBaseOfValue} from "../tables/default/helper";
 
 export interface ISplitRealBookingParams {
     name: string;
@@ -110,14 +111,13 @@ export default class SplitRealBookingForm
                                            label={vBookingFields.value.labelName}
                                            type="number"
                                            inputProps={withValueBounds ? {max: maxValue, min: minValue} : {}}
-                                    // inputProps={withValueBounds ? {max: maxValue, min: minValue} : null}
                                            value={values.value}
                                            onChange={handler.value}
                                            fullWidth
                                            autoComplete={"off"}
                                            InputProps={{
                                                startAdornment: <InputAdornment position="start">€</InputAdornment>,
-                                               style: Booking.getColorOnBaseOfValue(values.value)
+                                               style: getColorOnBaseOfValue(values.value)
                                            }}
                                 />
                             </Grid>
@@ -127,11 +127,11 @@ export default class SplitRealBookingForm
                                         margin={"dense"}
                                         label="Übriger Wert"
                                         variant={"outlined"}
-                                        value={Booking.getColoredString(calcRest)}
+                                        value={getColoredString(calcRest)}
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start">€</InputAdornment>,
                                             readOnly: true,
-                                            style: Booking.getColorOnBaseOfValue(calcRest)
+                                            style: getColorOnBaseOfValue(calcRest)
                                         }}
                                     />
                                 </Grid>
@@ -140,11 +140,11 @@ export default class SplitRealBookingForm
                                         margin={"dense"}
                                         label="Maximal Wert"
                                         variant={"outlined"}
-                                        value={Booking.getColoredString(reallyMaxValue)}
+                                        value={getColoredString(reallyMaxValue)}
                                         InputProps={{
                                             startAdornment: <InputAdornment position="start">€</InputAdornment>,
                                             readOnly: true,
-                                            style: Booking.getColorOnBaseOfValue(reallyMaxValue)
+                                            style: getColorOnBaseOfValue(reallyMaxValue)
                                         }}
                                     />
                                 </Grid>

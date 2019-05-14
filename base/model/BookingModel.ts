@@ -247,6 +247,25 @@ export class BookingModel extends Entity implements IBookingIdentity {
         });
     }
 
+    public static getLastDate(bookings: BookingModel[]): Date {
+        return BookingModel.getHighestDate(bookings, true);
+    }
+
+    public static getFirstDate(bookings: BookingModel[]): Date {
+        return BookingModel.getHighestDate(bookings, false);
+    }
+
+    private static getHighestDate(bookings: BookingModel[], max: boolean): Date {
+        const dates: number[] = bookings.map((booking): number => {
+            const startDate = booking.bookingDate;
+            return startDate !== null ? startDate.getTime() : 0;
+        });
+        if (max) {
+            return new Date(Math.max(...dates));
+        }
+        return new Date(Math.min(...dates));
+    }
+
     public orderAccount: string;
     public bookingDate: Date;
     public validDate: Date;

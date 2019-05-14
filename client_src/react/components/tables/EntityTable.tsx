@@ -50,6 +50,7 @@ export default class EntityTable extends React.PureComponent<IBookingTableProps,
                     type: entityTableConfiguration[prop].type,
                     filtering: entityTableConfiguration[prop].filtering,
                     filterOptions: entityTableConfiguration[prop].filterOptions,
+                    styleOptions: entityTableConfiguration[prop].styleOptions,
                     sorting: entityTableConfiguration[prop].sorting,
                     hidden: entityTableConfiguration[prop].hidden,
                     style: entityTableConfiguration[prop].style

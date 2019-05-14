@@ -52,8 +52,10 @@ export default class SplitRealBookingDialog
         if (paramsA.value === paramsB.value) {
             if (paramsA.name === paramsB.name) {
                 if (paramsA.description === paramsB.description) {
-                    if (paramsA.category.id === paramsB.category.id) {
+                    if (paramsA.category === paramsB.category) {
+                        if (paramsA.category.id === paramsB.category.id) {
                         return false;
+                        }
                     }
                 }
             }

@@ -104,12 +104,10 @@ const mapsStateToProps = (state: IRootState, ownProps: ICategoryOwnProps) => {
             }
         }
     }
-    return (
-        {
-            entity: thisEntity,
-            vBookings: virtualBookings
-        }
-    );
+    return {
+        entity: thisEntity,
+        vBookings: virtualBookings
+    };
 };
 const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) => ({
     fetchCategory: (id: number) => dispatch(load(categoryActions.actions.load(id))),

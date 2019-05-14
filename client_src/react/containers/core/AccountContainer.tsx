@@ -8,7 +8,6 @@ import {connect} from "react-redux";
 import Account from "../../components/core/Account";
 import {IEntityClass} from "../../../../base/helper/Entity";
 import {IVBookingIdentity, vBookingActions, VBookingModel} from "../../../../base/model/VBookingModel";
-import Booking from "../../components/core/Booking";
 import {BookingModel} from "../../../../base/model/BookingModel";
 
 export interface IAccountContainerProps {
@@ -83,11 +82,11 @@ class AccountContainer extends React.Component<IAccountContainerProps, {}> {
             <React.Fragment>
                 {this.props.entity &&
                 <Account
-                  entity={this.props.entity}
-                  editAction={this.editAccount}
-                  deleteAction={this.deleteAccount}
-                  vBookings={this.props.vBookings}
-                  addVBooking={this.addVBooking}
+                    entity={this.props.entity}
+                    editAction={this.editAccount}
+                    deleteAction={this.deleteAccount}
+                    vBookings={this.props.vBookings}
+                    addVBooking={this.addVBooking}
                 />
                 }
             </React.Fragment>
@@ -103,14 +102,17 @@ const mapsStateToProps = (state: IRootState, ownProps: IAccountOwnProps) => {
             const seekedId: number = Number(ownProps.entity.id);
             thisEntity = state.accounts.data.find((account: AccountModel) => account.id === seekedId);
             virtualBookings = state.vBookings.data.filter((vb: VBookingModel) => vb.accountId === seekedId);
+            // if no entity with this id is found
+            if (!thisEntity) {
+                thisEntity = AccountModel.createEmptyEntity();
+                thisEntity.id = ownProps.entity.id;
+            }
         }
     }
-    return (
-        {
-            entity: thisEntity,
-            vBookings: virtualBookings
-        }
-    );
+    return {
+        entity: thisEntity,
+        vBookings: virtualBookings
+    };
 };
 const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) => ({
     fetchAccount: (id: number) => dispatch(load(accountActions.actions.load(id))),

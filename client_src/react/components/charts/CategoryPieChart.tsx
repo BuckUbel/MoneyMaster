@@ -7,16 +7,18 @@ import {BarChart, Cell, Legend, Pie, PieChart, Tooltip} from "recharts";
 import {uniqueArray} from "../../../../base/helper/util";
 import {Typography} from "@material-ui/core";
 import {dateToString} from "../../../../base/helper/time/dateHelper";
-
-export const RADIAN = Math.PI / 180;
+import {RouteComponentProps, withRouter} from "react-router";
+import {getRouteByName} from "../router/Routes";
+import CategoryPieChartToolTip from "./tooltips/CategoryPieChartToolTip";
 
 export interface ICategoryPieChartData {
     name: string;
     color: string;
     value: number;
+    categoryId: number;
 }
 
-export interface ICategoryPieChartProps {
+export interface ICategoryPieChartProps extends RouteComponentProps {
     vBookings: VBookingModel[];
     categories: CategoryModel[];
     bookings: BookingModel[];
@@ -32,7 +34,7 @@ export const defaultState: ICategoryPieChartState = {
     currentData: []
 };
 
-export default class CategoryPieChart extends React.Component<ICategoryPieChartProps, ICategoryPieChartState> {
+class CategoryPieChart extends React.Component<ICategoryPieChartProps, ICategoryPieChartState> {
     public static getDerivedStateFromProps(
         newProps: ICategoryPieChartProps,
         oldState: ICategoryPieChartState): ICategoryPieChartState {
@@ -55,7 +57,8 @@ export default class CategoryPieChart extends React.Component<ICategoryPieChartP
                             vBArray.push({
                                 name: String(currentVB.categoryId),
                                 value: Number(currentVB.value),
-                                color: ""
+                                color: "",
+                                categoryId: 0,
                             });
                         } else {
                             vBArray[i].value += Number(currentVB.value);
@@ -72,6 +75,7 @@ export default class CategoryPieChart extends React.Component<ICategoryPieChartP
                 // insert category values
                 ncVBooking.name = foundedCat.name;
                 ncVBooking.color = foundedCat.color;
+                ncVBooking.categoryId = foundedCat.id;
             }
             if (ncVBooking.value > 0) {
                 newCurrentBookings[index] = null;
@@ -85,23 +89,10 @@ export default class CategoryPieChart extends React.Component<ICategoryPieChartP
 
     constructor(props: ICategoryPieChartProps) {
         super(props);
-        this.renderCustomizedLabel = this.renderCustomizedLabel.bind(this);
     }
 
-    public renderCustomizedLabel({cx, cy, midAngle, innerRadius, outerRadius, percent, index}: any) {
-        const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-        const x = cx + radius * Math.cos(-midAngle * RADIAN);
-        const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-        return (
-            <text key={index} x={x} y={y} fill="white" textAnchor={x > cx ? "start" : "end"} dominantBaseline="central">
-                {this.state.currentData[index].name}
-            </text>
-        );
-    };
-
     public render() {
-        const {startDate, endDate} = this.props;
+        const {startDate, endDate, history} = this.props;
         const {currentData} = this.state;
         return (
             <React.Fragment>
@@ -115,18 +106,24 @@ export default class CategoryPieChart extends React.Component<ICategoryPieChartP
                          data={currentData}
                          cx={300}
                          cy={300}
+                         stroke={"#303030"}
                          labelLine={false}
-                         label={this.renderCustomizedLabel}>
+                         label={false}
+                         onClick={(a: any) => {
+                             history.push(getRouteByName("CategoryPage").pathWithoutParams + a.payload.categoryId);
+                         }}
+                    >
                         {
                             currentData.map((entry, index) => <Cell key={index} fill={entry.color}/>)
                         }
                     </Pie>
                     }
-                    <Tooltip/>
-                    <Legend/>
+                    <Tooltip content={<CategoryPieChartToolTip/>}/>
+                    <Legend layout={"horizontal"}/>
                 </PieChart>
             </React.Fragment>
         );
     }
 }
 
+export default withRouter(CategoryPieChart);

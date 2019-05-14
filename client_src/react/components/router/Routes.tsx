@@ -1,6 +1,6 @@
 import * as React from "react";
 import {Redirect, Route, RouteComponentProps, Switch, withRouter} from "react-router";
-import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
+import EuroSymbolIcon from "@material-ui/icons/EuroSymbol";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
@@ -14,6 +14,7 @@ import ShortDescriptionViewContainer from "../../containers/views/ShortDescripti
 import HomeViewContainer from "../../containers/views/HomeViewContainer";
 import AccountContainer from "../../containers/core/AccountContainer";
 import CategoryContainer from "../../containers/core/CategoryContainer";
+import BookingContainer from "../../containers/core/BookingContainer";
 
 export interface IAppRoute {
     name: string;
@@ -55,6 +56,15 @@ export const routeList: IAppRoute[] =
             notDisplay: true
         },
         {
+            name: "BookingPage",
+            component: (match) => <BookingContainer entity={{id: match.params.id}}/>,
+            icon: null,
+            path: "/bookings/:id",
+            pathWithoutParams: "/bookings/",
+            title: "",
+            notDisplay: true
+        },
+        {
             name: "Home",
             component: () => <HomeViewContainer/>,
             icon: HomeRoundedIcon,
@@ -73,7 +83,7 @@ export const routeList: IAppRoute[] =
         {
             name: "BookingTable",
             component: () => <BookingTableViewContainer/>,
-            icon: DirectionsRunIcon,
+            icon: EuroSymbolIcon,
             path: "/bookings",
             title: "Buchungen",
             pathWithoutParams: "/bookings",

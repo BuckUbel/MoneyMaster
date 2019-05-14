@@ -23,6 +23,13 @@ import ChangeVBookingsCategoryDialogContainer from "../../containers/dialogs/Cha
 import {getRouteByName} from "../router/Routes";
 import RouteButton from "../router/RouteButton";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import {BookingModel} from "../../../../base/model/BookingModel";
+import {dateToString} from "../../../../base/helper/time/dateHelper";
+import {
+    IBaseMoneyLineChartData,
+    IBaseMoneyLineChartProps,
+    IBaseMoneyLineChartState
+} from "../charts/BaseMoneyLineChart";
 
 export interface ICategoryProps {
     entity: CategoryModel;
@@ -33,7 +40,24 @@ export interface ICategoryProps {
     changeVBookingsCategory?: (newCategoryId: number, ids: number[]) => void;
 }
 
-export default class Category extends React.Component<ICategoryProps, {}> {
+export interface ICategoryState {
+    currentVBookings: VBookingModel[];
+}
+
+export const defaultState: ICategoryState = {
+    currentVBookings: [],
+};
+export default class Category extends React.Component<ICategoryProps, ICategoryState> {
+    public static getDerivedStateFromProps(
+        newProps: ICategoryProps,
+        oldState: ICategoryState): ICategoryState {
+        const {vBookings} = newProps;
+        const newCurrentVBookings = vBookings.filter((b: VBookingModel) =>
+            b.accountId === null);
+        return {
+            currentVBookings: newCurrentVBookings,
+        };
+    }
 
     public static compare(a: CategoryModel, b: CategoryModel): number {
         if (a.id < b.id) {
@@ -63,14 +87,15 @@ export default class Category extends React.Component<ICategoryProps, {}> {
         });
     }
 
-    public state: {} = {};
+    public state: ICategoryState = defaultState;
 
     constructor(props: ICategoryProps) {
         super(props);
     }
 
     public render() {
-        const {deleteAction, editAction, entity, changeVBookingsCategory, withTable, vBookings} = this.props;
+        const {deleteAction, editAction, entity, changeVBookingsCategory, withTable} = this.props;
+        const {currentVBookings} = this.state;
         const {
             id,
             name,
@@ -78,7 +103,7 @@ export default class Category extends React.Component<ICategoryProps, {}> {
             color,
             isStandard
         } = entity;
-        const avatarSize = 10 + (vBookings.length * 0.1);
+        const avatarSize = 10 + (currentVBookings.length * 0.1);
 
         return (
             <React.Fragment>
@@ -91,7 +116,7 @@ export default class Category extends React.Component<ICategoryProps, {}> {
                                             style={{backgroundColor: color, width: avatarSize, height: avatarSize}}/>
                                 }
                                 title={name}
-                                subheader={vBookings.length + " virtuelle Buchungen"}
+                                subheader={currentVBookings.length + " virtuelle Buchungen"}
                                 action={<React.Fragment>
                                     {editAction && deleteAction &&
                                     <EditCategoryDialog
@@ -118,9 +143,9 @@ export default class Category extends React.Component<ICategoryProps, {}> {
                         </Card>
                     </Grid>
                     <Grid item xs={12} container>
-                        {withTable && vBookings &&
+                        {withTable && currentVBookings &&
                         <VBookingTable
-                            vBookings={vBookings}
+                            vBookings={currentVBookings}
                             withCheckboxes={true}
                             selectedActions={(selectedItems: number[]) => [
                                 <ChangeVBookingsCategoryDialogContainer

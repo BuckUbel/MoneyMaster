@@ -11,6 +11,7 @@ import {VBookingModel} from "../../../../base/model/VBookingModel";
 import AddIcon from "@material-ui/icons/Add";
 import VBookingView from "../views/VBookingView";
 import VBookingContainer from "../../containers/core/VBookingContainer";
+import {getColoredString, getColorOnBaseOfValue, getColorOnBaseOfValueInline} from "../tables/default/helper";
 
 export interface IAccountProps {
     entity: AccountModel;
@@ -55,9 +56,7 @@ export default class Account extends React.Component<IAccountProps, IAccountStat
             id: String(act.id),
             name: act.name,
             description: act.description,
-            value: <p style={Booking.getColorOnBaseOfValue(act.value)}>
-                {Booking.getColoredValue(act.value)}
-            </p>,
+            value: act.value,
             color: <ColorField color={act.color}/>,
             isReal: act.isReal,
             isCore: act.isCore
@@ -98,13 +97,13 @@ export default class Account extends React.Component<IAccountProps, IAccountStat
                                 title={name}
                                 subheader={
                                     <React.Fragment>
-                                        <Typography component="p" style={Booking.getColorOnBaseOfValueInline(value)}>
-                                            {Booking.getColoredValue(value)}
+                                        <Typography component="p" style={getColorOnBaseOfValueInline(value)}>
+                                            {getColoredString(value)}
                                         </Typography>
                                         {" / "}
                                         <Typography component="p"
-                                                    style={Booking.getColorOnBaseOfValueInline(value - vBookingsSum)}>
-                                            {Booking.getColoredValue(value - vBookingsSum)}
+                                                    style={getColorOnBaseOfValueInline(value - vBookingsSum)}>
+                                            {getColoredString(value - vBookingsSum)}
                                         </Typography>
                                     </React.Fragment>
                                 }
@@ -130,7 +129,6 @@ export default class Account extends React.Component<IAccountProps, IAccountStat
                                         title={"Ein Kernkonto wird mit realen Buchungen mit verändert."}
                                         placement={"bottom-start"}>
                                         <Typography component="p" color={"secondary"}>
-
                                             {"Dies ist ein " + accountFields.isCore.labelName}
                                         </Typography>
                                     </Tooltip> : ""}
@@ -151,7 +149,7 @@ export default class Account extends React.Component<IAccountProps, IAccountStat
                         {!isReal && this.props.vBookings &&
                         this.props.vBookings.map((vb: VBookingModel, index: number) => {
                             return (<Grid item xs={6} key={index}>
-                                <VBookingContainer entity={vb}bookOnVirtualAccount={true}/>
+                                <VBookingContainer entity={vb} bookOnVirtualAccount={true}/>
                             </Grid>);
                         })
                         // <VBookingView vBookings={this.props.vBookings}/>

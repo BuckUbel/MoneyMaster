@@ -7,14 +7,12 @@ import {bookingActions, BookingModel, IBookingIdentity} from "../../../../base/m
 import {connect} from "react-redux";
 import Booking from "../../components/core/Booking";
 import {IEntityClass} from "../../../../base/helper/Entity";
-import {IMoveMoneyFormProps, IMoveMoneyFormState} from "../../components/forms/MoveMoneyForm";
 import {IVBookingIdentity, vBookingActions, VBookingModel} from "../../../../base/model/VBookingModel";
+import {CategoryModel} from "../../../../base/model/CategoryModel";
 
 export interface IBookingContainerProps {
     fetchBooking: (id: number) => Promise<any>;
     fetchAllVBooking: () => Promise<any>;
-    // editBookings: (bookings: IBookingIdentity[]) => Promise<any>;
-    // deleteBookings: (ids: number[]) => Promise<any>;
     entity: BookingModel;
     vBookings: VBookingModel[];
     addVBooking: (entities: IVBookingIdentity[]) => Promise<any>;
@@ -81,8 +79,13 @@ const mapsStateToProps = (state: IRootState, ownProps: IBookingOwnProps) => {
     if (ownProps.entity) {
         if (ownProps.entity.id) {
             const seekedId: number = Number(ownProps.entity.id);
-            thisEntity = state.bookings.data.find((booking) => booking.id === seekedId);
+            thisEntity = state.bookings.data.find((booking: BookingModel) => booking.id === seekedId);
             virtualBookings = state.vBookings.data.filter((vb: VBookingModel) => vb.bookingId === seekedId);
+            // if no entity with this id is found
+            if (!thisEntity) {
+                thisEntity = BookingModel.createEmptyEntity();
+                thisEntity.id = ownProps.entity.id;
+            }
         }
     }
     return {

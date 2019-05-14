@@ -2,7 +2,6 @@ import * as React from "react";
 import {Avatar, Badge, Card, CardContent, CardHeader, Divider, Fab, Grid, Tooltip, Typography} from "@material-ui/core";
 import {RenderThings} from "../../helper/util";
 import {vBookingFields, VBookingModel, IVBookingIdentity} from "../../../../base/model/VBookingModel";
-import Booking from "./Booking";
 import MultilineText from "./simple/MultilineText";
 import {CategoryModel} from "../../../../base/model/CategoryModel";
 import {ISplitRealBookingParams} from "../forms/SplitRealBookingForm";
@@ -10,6 +9,7 @@ import SplitRealBookingDialogContainer from "../../containers/dialogs/SplitRealB
 import DeleteIcon from "@material-ui/icons/Delete";
 import BookOnVirtualAccountDialogContainer from "../../containers/dialogs/BookOnVirtualAccountDialogContainer";
 import {IVBookingTableInformations} from "../tables/VBookingTable";
+import {getColoredString, getColorOnBaseOfValue} from "../tables/default/helper";
 
 export interface IVBookingProps {
     entity: VBookingModel;
@@ -37,9 +37,7 @@ export default class VBooking extends React.Component<IVBookingProps, {}> {
             id: String(act.id),
             name: act.name,
             description: act.description,
-            value: <p style={Booking.getColorOnBaseOfValue(act.value)}>
-                {Booking.getColoredValue(act.value)}
-            </p>,
+            value: act.value,
         });
     }
 
@@ -57,16 +55,20 @@ export default class VBooking extends React.Component<IVBookingProps, {}> {
 
         return (
             <React.Fragment>
-                <Card>
+                {entity && <Card>
                     <CardHeader
                         avatar={
                             <Avatar aria-label="Activity"
-                                    style={{backgroundColor: category.color, width: avatarSize, height: avatarSize}}/>
+                                    style={{
+                                        backgroundColor: category ? category.color : "#000",
+                                        width: avatarSize,
+                                        height: avatarSize
+                                    }}/>
                         }
                         title={name}
                         subheader={
-                            <Typography variant="body1" style={Booking.getColorOnBaseOfValue(value)}>
-                                {Booking.getColoredValue(value)}
+                            <Typography variant="body1" style={getColorOnBaseOfValue(value)}>
+                                {getColoredString(value)}
                             </Typography>
                         }
                         action={
@@ -96,7 +98,7 @@ export default class VBooking extends React.Component<IVBookingProps, {}> {
                     <CardContent>
                         <MultilineText text={description}/>
                     </CardContent>
-                </Card>
+                </Card>}
             </React.Fragment>
         );
     }

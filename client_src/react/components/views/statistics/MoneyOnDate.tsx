@@ -4,7 +4,7 @@ import DateTextField from "../../core/simple/DateTextField";
 import {stringToDate} from "../../../../../base/helper/util";
 import {BookingModel} from "../../../../../base/model/BookingModel";
 import Booking from "../../core/Booking";
-import {getFirstDate, getLastDate} from "../../charts/BaseMoneyLineChart";
+import {getColoredString, getColorOnBaseOfValue} from "../../tables/default/helper";
 
 export interface IMoneyOnDateProps {
     bookings: BookingModel[];
@@ -63,8 +63,8 @@ export default class MoneyOnDate extends React.Component<IMoneyOnDateProps, IMon
                     <CardContent>
                         <DateTextField name={"Kontostand zum Datum"} value={currentDate}
                                        onChange={this.changeDate}/>
-                        <Typography variant={"h4"} style={Booking.getColorOnBaseOfValue(currentValue)}>
-                            {Booking.getColoredValue(currentValue)}
+                        <Typography variant={"h4"} style={getColorOnBaseOfValue(currentValue)}>
+                            {getColoredString(currentValue)}
                         </Typography>
                     </CardContent>
                 </Card>

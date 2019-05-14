@@ -11,7 +11,15 @@ import TableFilter from "./TableFilter";
 import {ReactNode} from "react";
 import {ISelectorResponse} from "../../core/simple/Selector";
 import {Card, CardContent, Checkbox, Drawer, Grid, Toolbar, Typography} from "@material-ui/core";
-import {defaultRowCompare, eliminateByFilterValues, IBaseData, ICol, IObjectWithEntityProp, IRow} from "./helper";
+import {
+    defaultRowCompare,
+    eliminateByFilterValues, getColoredString,
+    getColorOnBaseOfValue,
+    IBaseData,
+    ICol,
+    IObjectWithEntityProp,
+    IRow
+} from "./helper";
 import {RenderThings} from "../../../helper/util";
 
 export interface IDataTableProps {
@@ -257,6 +265,14 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
                                                                 cellContent = row.content[key] ?
                                                                     String.fromCharCode(10003) :
                                                                     String.fromCharCode(9747);
+                                                            }
+                                                            if (colData[cellIndex].type === "number" &&
+                                                                colData[cellIndex].styleOptions &&
+                                                                colData[cellIndex].styleOptions.coloredNumbers) {
+                                                                cellContent =
+                                                                    <p style={getColorOnBaseOfValue(row.content[key])}>
+                                                                        {getColoredString(row.content[key])}
+                                                                    </p>;
                                                             }
                                                             return (
                                                                 <TableCell key={key}>{cellContent}</TableCell>

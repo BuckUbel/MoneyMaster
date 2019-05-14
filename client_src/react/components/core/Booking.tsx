@@ -9,6 +9,7 @@ import {VBookingModel} from "../../../../base/model/VBookingModel";
 import VBookingContainer from "../../containers/core/VBookingContainer";
 import AddIcon from "@material-ui/icons/Add";
 import {IAccountProps, IAccountState} from "./Account";
+import {getColoredString, getColorOnBaseOfValueInline} from "../tables/default/helper";
 
 export interface IBookingProps {
     entity: BookingModel;
@@ -39,34 +40,14 @@ export default class Booking extends React.Component<IBookingProps, IBookingStat
     public static getDisplay(act: BookingModel): IBookingTableInformations<RenderThings> {
         return ({
             id: String(act.id),
-            // orderAccount: act.orderAccount,
             bookingDate: beautyDateString(act.bookingDate),
-            // validDate: beautyDateString(act.validDate),
             bookingType: act.bookingType,
             purpose: act.purpose,
             payPartner: act.payPartner,
-            value: (<p style={Booking.getColorOnBaseOfValue(act.value)}>
-                {Booking.getColoredValue(act.value)}
-            </p>),
+            value: (act.value),
         });
     }
 
-    public static getColoredValue(value: number): JSX.Element {
-        return (
-            <React.Fragment>{Booking.getColoredString(value)}</React.Fragment>
-        );
-    }
-
-    public static getColoredString(value: number): string {
-        return (value >= 0 ? "+" : "") + value.toFixed(2);
-    }
-
-    public static getColorOnBaseOfValueInline(value: number): CSSProperties {
-        return {color: (value < 0 ? "#F00" : "#0F0"), display: "inline"};
-    }
-    public static getColorOnBaseOfValue(value: number): CSSProperties {
-        return {color: (value < 0 ? "#F00" : "#0F0")};
-    }
     public static getDerivedStateFromProps(newProps: IBookingProps, oldState: IBookingState): IBookingState {
         const associatedVBookingSum = newProps.vBookings.length > 0 ? newProps.vBookings
             .map(
@@ -120,13 +101,13 @@ export default class Booking extends React.Component<IBookingProps, IBookingStat
                                 title={beautyDateString(bookingDate)}
                                 subheader={
                                     <React.Fragment>
-                                        <Typography component="p" style={Booking.getColorOnBaseOfValueInline(value)}>
-                                            {Booking.getColoredValue(value)}
+                                        <Typography component="p" style={getColorOnBaseOfValueInline(value)}>
+                                            {getColoredString(value)}
                                         </Typography>
                                         {" / "}
                                         <Typography component="p"
-                                                    style={Booking.getColorOnBaseOfValueInline(value - vBookingsSum)}>
-                                            {Booking.getColoredValue(value - vBookingsSum)}
+                                                    style={getColorOnBaseOfValueInline(value - vBookingsSum)}>
+                                            {getColoredString(value - vBookingsSum)}
                                         </Typography>
                                     </React.Fragment>
                                 }

@@ -60,7 +60,7 @@ export const vBookingTableConfiguration: IVBookingTableInformations<ICol> = {
     name: {
         name: vBookingFields.name.labelName,
         filterOptions: {
-            stringCut: -1,
+            stringCut: -10,
         },
         filtering: true,
         sorting: true,
@@ -69,7 +69,7 @@ export const vBookingTableConfiguration: IVBookingTableInformations<ICol> = {
     description: {
         name: vBookingFields.description.labelName,
         filterOptions: {
-            stringCut: -1,
+            stringCut: 10,
         },
         filtering: true,
         sorting: true,
@@ -80,5 +80,8 @@ export const vBookingTableConfiguration: IVBookingTableInformations<ICol> = {
         filtering: true,
         sorting: true,
         type: "number",
+        styleOptions:{
+            coloredNumbers: true
+        }
     },
 };

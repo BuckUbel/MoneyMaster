@@ -9,7 +9,7 @@ import {stringToDate} from "../../../../../base/helper/util";
 import CategoryPieChart from "../../charts/CategoryPieChart";
 import {VBookingModel} from "../../../../../base/model/VBookingModel";
 import {CategoryModel} from "../../../../../base/model/CategoryModel";
-import BaseMoneyLineChart, {getFirstDate, getLastDate} from "../../charts/BaseMoneyLineChart";
+import BaseMoneyLineChart from "../../charts/BaseMoneyLineChart";
 import StatisticsNavigation from "./StatisticsNavigation";
 import {changeDateMonthFirstDay, changeDateMonthLastDay} from "../../../../../base/helper/time/dateHelper";
 import MoneyOnDate from "./MoneyOnDate";
@@ -46,8 +46,8 @@ export default class StatisticsView extends React.Component<IStatisticsViewProps
         const {currentDate, startDate, endDate} = oldState;
         const {bookings} = newProps;
 
-        const newMaxDate = getLastDate(bookings);
-        const newMinDate = getFirstDate(bookings);
+        const newMaxDate = BookingModel.getLastDate(bookings);
+        const newMinDate = BookingModel.getFirstDate(bookings);
         return {
             startDate,
             endDate,

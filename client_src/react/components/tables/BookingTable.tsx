@@ -35,9 +35,7 @@ export default class BookingTable extends React.Component<IBookingTableProps, {}
 }
 
 export interface IBookingTableInformations<T extends RenderThings | ICol> extends IEntityTableInformations<T> {
-    //orderAccount: T;
     bookingDate: T;
-    // validDate: T;
     bookingType: T;
     purpose: T;
     payPartner: T;
@@ -57,27 +55,12 @@ export const bookingTableConfiguration: IBookingTableInformations<ICol> = {
         hidden: true,
         type: "number",
     },
-    // orderAccount: {
-    //     name: bookingFields.orderAccount.labelName,
-    //     filterOptions: {
-    //         stringCut: -1,
-    //     },
-    //     filtering: true,
-    //     sorting: true,
-    //     type: "string",
-    // },
     bookingDate: {
         name: bookingFields.bookingDate.labelName,
         filtering: true,
         sorting: true,
         type: "date",
     },
-    // validDate: {
-    //     name: bookingFields.validDate.labelName,
-    //     filtering: true,
-    //     sorting: true,
-    //     type: "date",
-    // },
     bookingType: {
         name: bookingFields.bookingType.labelName,
         filterOptions: {
@@ -90,7 +73,7 @@ export const bookingTableConfiguration: IBookingTableInformations<ICol> = {
     purpose: {
         name: bookingFields.purpose.labelName,
         filterOptions: {
-            stringCut: -1,
+            stringCut: 10,
         },
         filtering: true,
         sorting: true,
@@ -111,5 +94,8 @@ export const bookingTableConfiguration: IBookingTableInformations<ICol> = {
         filtering: true,
         sorting: true,
         type: "number",
+        styleOptions: {
+            coloredNumbers: true
+        }
     },
 };

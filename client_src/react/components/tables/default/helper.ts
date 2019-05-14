@@ -3,6 +3,7 @@ import {basicStringDMYToDate, isDMYDateString} from "../../../../../base/helper/
 import * as React from "react";
 import {TypesAsString} from "../../../../../base/helper/util";
 import {Entity} from "../../../../../base/helper/Entity";
+import {CSSProperties} from "react";
 
 export interface IObjectWithEntityProp {
     entity: any;
@@ -25,6 +26,10 @@ export interface IFilterOptions {
     stringCut?: number;
 }
 
+export interface IStyleOptions {
+    coloredNumbers?: boolean;
+}
+
 export interface ICol {
     key?: string;
     name: string;
@@ -32,8 +37,9 @@ export interface ICol {
     hidden?: boolean;
     sorting?: boolean;
     filtering?: boolean;
-    filterOptions?: IFilterOptions;
     style?: React.CSSProperties;
+    filterOptions?: IFilterOptions;
+    styleOptions?: IStyleOptions;
 }
 
 export function eliminateByFilterValues(data: IRow[], cols: ICol[], allFilter: ISelectorResponse[]): IRow[] {
@@ -100,4 +106,29 @@ export function defaultRowCompare(index: number) {
         }
         return 0;
     };
+}
+
+// export function getColoredValue(value: number): string {
+//     return (getColoredString(value));
+// }
+
+export function getColoredString(value: number): string {
+    if (value) {
+        return (value >= 0 ? "+" : "") + value.toFixed(2);
+    }
+    return "";
+}
+
+export function getColorOnBaseOfValueInline(value: number): CSSProperties {
+    if (value) {
+        return {color: (value < 0 ? "#F00" : "#0F0"), display: "inline"};
+    }
+    return null;
+}
+
+export function getColorOnBaseOfValue(value: number): CSSProperties {
+    if (value) {
+        return {color: (value < 0 ? "#F00" : "#0F0")};
+    }
+    return null;
 }
