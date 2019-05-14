@@ -7,6 +7,12 @@ import Button from "@material-ui/core/Button";
 import {Divider, Grid, Typography} from "@material-ui/core";
 import BookingTable from "../tables/BookingTable";
 import Booking from "../core/Booking";
+import DateTextField from "../core/simple/DateTextField";
+import {stringToDate} from "../../../../base/helper/util";
+import {
+    IChangeVBookingsCategoryFormProps,
+    IChangeVBookingsCategoryFormState
+} from "../forms/ChangeVBookingsCategoryForm";
 
 export interface IBookingViewProps {
     bookings: BookingModel[];
@@ -34,27 +40,12 @@ export default class BookingTableView extends React.Component<IBookingViewProps,
 
     public render() {
         const {bookings} = this.props;
-        let nowValue = 0;
-        if (bookings.length > 0) {
-            nowValue = bookings.map((b) => {
-                return b.value;
-            }).reduce((accumulator: number, currentValue: number) => {
-                return accumulator + currentValue;
-            });
-        }
         return (
             <Grid item xs={12} container spacing={24}>
                 <Grid key={1} item xs={12} container spacing={16} justify={"space-between"}>
-                    <Grid item xs={9}>
-                        <Typography variant={"h3"}>
-                            Buchungen
-                        </Typography>
-                    </Grid>
-                    <Grid item key={3}>
-                        <Typography variant={"h4"} style={Booking.getColorOnBaseOfValue(nowValue)}>
-                            {Booking.getColoredValue(nowValue)}
-                        </Typography>
-                    </Grid>
+                    <Typography variant={"h3"}>
+                        Buchungen
+                    </Typography>
                 </Grid>
                 <Grid item xs={12} key={2}>
                     <Divider variant={"middle"}/>

@@ -306,7 +306,7 @@ export class BookingModel extends Entity implements IBookingIdentity {
         this.payPartner = object && object.payPartner ? object.payPartner : bookingFields.payPartner.value;
         this.iban = object && object.iban ? object.iban : bookingFields.iban.value;
         this.bic = object && object.bic ? object.bic : bookingFields.bic.value;
-        this.value = object && object.value ? parseFloat(object.value.replace(",", ".")) : bookingFields.value.value;
+        this.value = object && object.value ? Number(Number(object.value.replace(",", ".")).toFixed(2)) : bookingFields.value.value;
         this.currency = object && object.currency ? object.currency : bookingFields.currency.value;
         this.info = object && object.info ? object.info : bookingFields.info.value;
     }

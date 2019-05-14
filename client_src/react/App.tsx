@@ -1,6 +1,7 @@
 import * as React from "react";
 import "../css/App.css";
 import "../css/form.css";
+import "../css/chart.css";
 import "../css/index.css";
 import {BrowserRouter as Router} from "react-router-dom";
 import Routes, {routeList} from "./components/router/Routes";

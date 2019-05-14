@@ -23,7 +23,7 @@ export interface IBookingTableProps {
     selectedActions?: (selectedItems: number[]) => RenderThings[];
 }
 
-export default class EntityTable extends React.Component<IBookingTableProps, {}> {
+export default class EntityTable extends React.PureComponent<IBookingTableProps, {}> {
 
     constructor(props: IBookingTableProps) {
         super(props);

@@ -1,12 +1,13 @@
 import * as React from "react";
 import {Redirect, Route, RouteComponentProps, Switch, withRouter} from "react-router";
 import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
+import BarChartIcon from "@material-ui/icons/BarChart";
 import HomeRoundedIcon from "@material-ui/icons/HomeRounded";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
 import CategoryOutlinedIcon from "@material-ui/icons/CategoryOutlined";
 import ShortTextIcon from "@material-ui/icons/ShortText";
 import {SvgIconProps} from "@material-ui/core/SvgIcon/SvgIcon";
-import {BookingTableViewContainer} from "../../containers/views/BookingViewContainer";
+import {BookingTableViewContainer, StatisticsViewContainer} from "../../containers/views/BookingViewContainer";
 import AccountViewContainer from "../../containers/views/AccountViewContainer";
 import CategoryViewContainer from "../../containers/views/CategoryViewContainer";
 import ShortDescriptionViewContainer from "../../containers/views/ShortDescriptionViewContainer";
@@ -60,6 +61,14 @@ export const routeList: IAppRoute[] =
             path: "/home",
             title: "Home",
             pathWithoutParams: "/home",
+        },
+        {
+            name: "Statistics",
+            component: () => <StatisticsViewContainer/>,
+            icon: BarChartIcon,
+            path: "/statistics",
+            title: "Statistiken",
+            pathWithoutParams: "/statistics",
         },
         {
             name: "BookingTable",
