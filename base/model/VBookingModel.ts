@@ -1,4 +1,4 @@
-import {IDBCol} from "../helper/util";
+import {dateTo_YMDHMS_String, IDBCol, stringToDate} from "../helper/util";
 import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
 import {createEntityActions, IEntityActionsObject} from "../actions/Entity";
 
@@ -12,6 +12,7 @@ interface IVBookingFields extends IDatabaseFields {
     name?: IDBCol<string>;
     value?: IDBCol<number>;
     description?: IDBCol<string>;
+    bookingDate?: IDBCol<Date>;
 }
 
 export const vBookingFields: IVBookingFields = {
@@ -56,6 +57,12 @@ export const vBookingFields: IVBookingFields = {
         labelName: "Beschreibung",
         value: "",
         type: "string",
+    },
+    bookingDate: {
+        fieldName: "bookingDate",
+        labelName: "Buchungstag",
+        value: null,
+        type: "date",
     }
 };
 
@@ -66,6 +73,7 @@ export interface IVBookingIdentityDefaultStringValues extends IEntityStringClass
     bookingId: string;
     accountId: string;
     categoryId: string;
+    bookingDate: string;
 }
 
 export interface IVBookingIdentity extends IEntityClass {
@@ -75,6 +83,7 @@ export interface IVBookingIdentity extends IEntityClass {
     bookingId: number;
     accountId: number;
     categoryId: number;
+    bookingDate: Date;
 }
 
 export interface IVBookingDatabase extends IDatabaseClass {
@@ -84,6 +93,7 @@ export interface IVBookingDatabase extends IDatabaseClass {
     bookingId: number;
     accountId: number;
     categoryId: number;
+    bookingDate: string;
 }
 
 export class VBookingModel extends Entity implements IVBookingIdentity {
@@ -102,7 +112,8 @@ export class VBookingModel extends Entity implements IVBookingIdentity {
             value: vBookingFields.value.value,
             bookingId: vBookingFields.bookingId.value,
             accountId: vBookingFields.accountId.value,
-            categoryId: vBookingFields.categoryId.value
+            categoryId: vBookingFields.categoryId.value,
+            bookingDate: vBookingFields.bookingDate.value
         };
     }
 
@@ -112,15 +123,20 @@ export class VBookingModel extends Entity implements IVBookingIdentity {
     public bookingId: number;
     public accountId: number;
     public categoryId: number;
+    public bookingDate: Date;
 
     public set(object: IVBookingIdentityDefaultStringValues) {
-        this.id = object.id ? Number(object.id) : null;
-        this.name = object.name ? object.name : "";
-        this.description = object.description ? object.description : "";
-        this.value = object.value ? Number(object.value) : 0;
-        this.bookingId = object.bookingId ? Number(object.bookingId) : null;
-        this.accountId = object.accountId ? Number(object.accountId) : null;
-        this.categoryId = object.categoryId ? Number(object.categoryId) : null;
+        this.id = object.id ? Number(object.id) : vBookingFields.id.value;
+        this.name = object.name ? object.name : vBookingFields.name.value;
+        this.description = object.description ? object.description : vBookingFields.description.value;
+        this.value = object.value ? Number(object.value) : vBookingFields.value.value;
+        this.bookingId = object.bookingId ? Number(object.bookingId) : vBookingFields.bookingId.value;
+        this.accountId = object.accountId ? Number(object.accountId) : vBookingFields.accountId.value;
+        this.categoryId = object.categoryId ? Number(object.categoryId) : vBookingFields.categoryId.value;
+        this.bookingDate = vBookingFields.bookingDate.value;
+        if (object && object.bookingDate) {
+            this.bookingDate = stringToDate(object.bookingDate);
+        }
     }
 
     public getDBObject(): IVBookingDatabase {
@@ -131,7 +147,8 @@ export class VBookingModel extends Entity implements IVBookingIdentity {
             value: this.value,
             bookingId: this.bookingId ? Number(this.bookingId) : null,
             accountId: this.accountId ? Number(this.accountId) : null,
-            categoryId: this.categoryId ? Number(this.categoryId) : null
+            categoryId: this.categoryId ? Number(this.categoryId) : null,
+            bookingDate: dateTo_YMDHMS_String(new Date(this.bookingDate))
         };
     }
 }

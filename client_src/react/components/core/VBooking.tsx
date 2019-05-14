@@ -10,6 +10,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import BookOnVirtualAccountDialogContainer from "../../containers/dialogs/BookOnVirtualAccountDialogContainer";
 import {IVBookingTableInformations} from "../tables/VBookingTable";
 import {getColoredString, getColorOnBaseOfValue} from "../tables/default/helper";
+import {dateToString} from "../../../../base/helper/time/dateHelper";
+import {beautyDateString} from "../../../../base/helper/util";
 
 export interface IVBookingProps {
     entity: VBookingModel;
@@ -35,6 +37,7 @@ export default class VBooking extends React.Component<IVBookingProps, {}> {
     public static getDisplay(act: VBookingModel): IVBookingTableInformations<RenderThings> {
         return ({
             id: String(act.id),
+            bookingDate: beautyDateString(act.bookingDate),
             name: act.name,
             description: act.description,
             value: act.value,

@@ -39,6 +39,7 @@ export default class VBookingTable extends React.Component<IVBookingTableProps, 
 }
 
 export interface IVBookingTableInformations<T extends RenderThings | ICol> extends IEntityTableInformations<T> {
+    bookingDate: T;
     name: T;
     description: T;
     value: T;
@@ -56,6 +57,12 @@ export const vBookingTableConfiguration: IVBookingTableInformations<ICol> = {
         sorting: false,
         hidden: true,
         type: "number",
+    },
+    bookingDate: {
+        name: vBookingFields.bookingDate.labelName,
+        filtering: true,
+        sorting: true,
+        type: "date",
     },
     name: {
         name: vBookingFields.name.labelName,
@@ -80,7 +87,7 @@ export const vBookingTableConfiguration: IVBookingTableInformations<ICol> = {
         filtering: true,
         sorting: true,
         type: "number",
-        styleOptions:{
+        styleOptions: {
             coloredNumbers: true
         }
     },
