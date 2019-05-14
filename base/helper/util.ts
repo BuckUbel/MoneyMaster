@@ -1,6 +1,4 @@
 import {basicStringDMYToDate, isDMYDateString} from "./time/dateHelper";
-import {Requireable} from "prop-types";
-import {AccountModel} from "../model/AccountModel";
 
 export function dateToDayString(date: Date): string {
     return basicDateToString(date, "-");

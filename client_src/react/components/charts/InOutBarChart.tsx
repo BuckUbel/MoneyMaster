@@ -4,21 +4,14 @@ import {
     BarChart,
     Brush,
     CartesianGrid,
-    Cell,
-    Legend,
-    Pie,
-    PieChart,
-    ReferenceLine,
     Tooltip,
     XAxis,
     YAxis
 } from "recharts";
 import {BookingModel} from "../../../../base/model/BookingModel";
 import {dateToString, daysDiff, getEachDayBetweenDays} from "../../../../base/helper/time/dateHelper";
-import CategoryPieChartToolTip from "./tooltips/CategoryPieChartToolTip";
 import InOutBarChartToolTip from "./tooltips/InOutBarChartToolTip";
-import InOutBarChartLegend from "./legends/InOutBarChartLegend";
-import {blue, orange} from "@material-ui/core/colors";
+import {orange} from "@material-ui/core/colors";
 
 export interface IInOutBarChartData {
     name: string;

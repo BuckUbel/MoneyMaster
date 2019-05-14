@@ -1,10 +1,8 @@
 import * as React from "react";
 import {BookingModel} from "../../../../base/model/BookingModel";
 import {CategoryModel} from "../../../../base/model/CategoryModel";
-import {IBaseMoneyLineChartData, IBaseMoneyLineChartProps, IBaseMoneyLineChartState} from "./BaseMoneyLineChart";
 import {VBookingModel} from "../../../../base/model/VBookingModel";
-import {BarChart, Cell, Legend, Pie, PieChart, Tooltip} from "recharts";
-import {uniqueArray} from "../../../../base/helper/util";
+import {Cell, Legend, Pie, PieChart, Tooltip} from "recharts";
 import {Typography} from "@material-ui/core";
 import {dateToString} from "../../../../base/helper/time/dateHelper";
 import {RouteComponentProps, withRouter} from "react-router";

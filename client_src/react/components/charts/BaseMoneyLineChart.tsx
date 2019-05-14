@@ -2,16 +2,12 @@ import * as React from "react";
 import {BookingModel} from "../../../../base/model/BookingModel";
 import {
     Area,
-    AreaChart,
-    BarChart,
     CartesianGrid,
     ComposedChart,
     Line,
-    LineChart,
     Tooltip,
     XAxis,
     YAxis,
-    ZAxis
 } from "recharts";
 import {
     dateToString

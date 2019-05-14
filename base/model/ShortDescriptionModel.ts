@@ -3,7 +3,6 @@ import {
 } from "../helper/util";
 import {Entity, IDatabaseClass, IDatabaseFields, IEntityClass, IEntityStringClass} from "../helper/Entity";
 import {createEntityActions, IEntityActionsObject} from "../actions/Entity";
-import {IAccountIdentity} from "./AccountModel";
 
 export const shortDescriptionActions: IEntityActionsObject = createEntityActions("short-descriptions");
 

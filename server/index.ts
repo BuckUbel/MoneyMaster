@@ -62,7 +62,7 @@ const job = new CronJob("0 0 */6 * * *", () => {
         console.log("Cron Job to download CSV is started.");
         if (server.bankConfig.password !== "") {
 
-            BookingRoutes.loadDataFromSPKBLK(this.server)
+            BookingRoutes.loadDataFromSPKBLK(server)
                 .then(() => {
                     console.log("CSV is downloaded.");
                 }).catch(() => {
