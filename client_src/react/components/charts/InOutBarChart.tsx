@@ -60,11 +60,12 @@ export default class InOutBarChart extends React.Component<IInOutBarChartProps, 
         const inOutCollectedValues: IInOutBarChartData[] = [];
 
         for (let i = 0; i < segmentCount; i++) {
-            const startPos = Math.ceil(i * currentDiff);
-            const iStartDate = allDates[startPos];
-            const endPos = Math.ceil(startPos + currentDiff);
-            const iEndDate = allDates[endPos < allDates.length ? endPos : allDates.length - 1];
-            inOutCollectedValues.push({
+
+            const endPos = Math.ceil((completeDiff) - (i * currentDiff));
+            const iEndDate = allDates[endPos];
+            const startPos = Math.ceil(endPos - currentDiff);
+            const iStartDate = allDates[startPos > 0 ? startPos : 0];
+            inOutCollectedValues.unshift({
                 name: dateToString(iStartDate) + "-" + dateToString(iEndDate),
                 posValue: 0,
                 negValue: 0,
@@ -77,7 +78,7 @@ export default class InOutBarChart extends React.Component<IInOutBarChartProps, 
         }).forEach((b) => {
             if (b.bookingDate && minDate && maxDate) {
                 if (b.bookingDate.getTime() > minDate.getTime() && b.bookingDate.getTime() < maxDate.getTime()) {
-                    const segmentIndex = Math.ceil(daysDiff(minDate, b.bookingDate) / currentDiff) - 1;
+                    const segmentIndex = Math.ceil(daysDiff(b.bookingDate, maxDate) / currentDiff) - 1;
                     if (b.value >= 0) {
                         inOutCollectedValues[segmentIndex].posValue += Number(b.value.toFixed());
                     } else {

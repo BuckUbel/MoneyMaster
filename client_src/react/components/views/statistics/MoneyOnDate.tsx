@@ -48,6 +48,7 @@ export default class MoneyOnDate extends React.Component<IMoneyOnDateProps, IMon
 
     constructor(props: IMoneyOnDateProps) {
         super(props);
+        this.changeDate = this.changeDate.bind(this);
     }
 
     public changeDate(event: React.ChangeEvent<HTMLInputElement>) {

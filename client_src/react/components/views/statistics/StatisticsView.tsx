@@ -11,7 +11,11 @@ import {VBookingModel} from "../../../../../base/model/VBookingModel";
 import {CategoryModel} from "../../../../../base/model/CategoryModel";
 import BaseMoneyLineChart from "../../charts/BaseMoneyLineChart";
 import StatisticsNavigation from "./StatisticsNavigation";
-import {changeDateMonthFirstDay, changeDateMonthLastDay} from "../../../../../base/helper/time/dateHelper";
+import {
+    changeDateMonthFirstDay,
+    changeDateMonthLastDay,
+    changeDateMonthVarDay
+} from "../../../../../base/helper/time/dateHelper";
 import MoneyOnDate from "./MoneyOnDate";
 import InOutBarChart from "../../charts/InOutBarChart";
 
@@ -31,7 +35,7 @@ export interface IStatisticsViewState {
 
 const defaultState: IStatisticsViewState = {
     currentDate: new Date(),
-    startDate: changeDateMonthFirstDay(new Date(), -1),
+    startDate: changeDateMonthVarDay(new Date(), -1, new Date().getDate()),
     endDate: new Date(),
     minDate: changeDateMonthFirstDay(new Date(), -1),
     maxDate: changeDateMonthFirstDay(new Date(), 1),

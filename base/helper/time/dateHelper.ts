@@ -69,6 +69,13 @@ export function changeDateYearFirstDay(d: Date, a: number): Date {
     return new Date(d.getFullYear() + a, 0, 1);
 }
 
+export function changeDateMonthVarDay(d: Date, a: number, b: number): Date {
+    if (b < 29) {
+        return new Date(d.getFullYear(), d.getMonth() + a, b);
+    }
+    return new Date(d.getFullYear(), d.getMonth() + a + 1, 0);
+}
+
 export function changeDateMonthFirstDay(d: Date, a: number): Date {
     return new Date(d.getFullYear(), d.getMonth() + a, 1);
 }

@@ -97,7 +97,7 @@ class CategoryPieChart extends React.Component<ICategoryPieChartProps, ICategory
         return (
             <React.Fragment>
                 <Typography variant={"h4"}>
-                    {dateToString(startDate) + "-" + dateToString(endDate)}
+                    {dateToString(startDate) + "-" + dateToString(endDate) + " Ausgaben Übersicht"}
                 </Typography>
                 <PieChart width={600} height={600}>
                     {currentData[0] && currentData[0].name &&

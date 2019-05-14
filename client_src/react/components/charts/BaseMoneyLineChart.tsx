@@ -54,7 +54,7 @@ class BaseMoneyLineChart extends React.Component<IBaseMoneyLineChartProps, IBase
         bookings.sort((a: BookingModel, b: BookingModel) => {
             return a.bookingDate.getTime() - b.bookingDate.getTime();
         }).forEach((b) => {
-            tempValue += Number(b.value.toFixed());
+            tempValue += b.value;
 
             if (b.bookingDate && startDate && endDate) {
                 if (b.bookingDate.getTime() > startDate.getTime() && b.bookingDate.getTime() < endDate.getTime()) {
