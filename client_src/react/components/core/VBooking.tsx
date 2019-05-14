@@ -91,7 +91,7 @@ export default class VBooking extends React.Component<IVBookingProps, {}> {
                                         />))
                                 }
                                 {deleteAction && (splitRealBooking || bookOnVirtualAccount) && (
-                                    <Fab onClick={deleteAction} color={"secondary"}>
+                                    <Fab onClick={deleteAction} color={"primary"}>
                                         <DeleteIcon/>
                                     </Fab>)
                                 }

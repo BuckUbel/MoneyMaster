@@ -17,19 +17,16 @@ import {ICategoryTableInformations} from "../tables/CategoryTable";
 import ColorField from "./simple/ColorField";
 import EditCategoryDialog from "../dialogs/EditEntity/EditCategoryDialog";
 import MultilineText from "./simple/MultilineText";
-import {VBookingModel} from "../../../../base/model/VBookingModel";
+import {IVBookingIdentity, VBookingModel} from "../../../../base/model/VBookingModel";
 import VBookingTable from "../tables/VBookingTable";
 import ChangeVBookingsCategoryDialogContainer from "../../containers/dialogs/ChangeVBookingsCategoryDialogContainer";
 import {getRouteByName} from "../router/Routes";
 import RouteButton from "../router/RouteButton";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import {BookingModel} from "../../../../base/model/BookingModel";
-import {dateToString} from "../../../../base/helper/time/dateHelper";
-import {
-    IBaseMoneyLineChartData,
-    IBaseMoneyLineChartProps,
-    IBaseMoneyLineChartState
-} from "../charts/BaseMoneyLineChart";
+import SplitRealBookingDialogContainer from "../../containers/dialogs/SplitRealBookingDialogContainer";
+import EditIcon from "@material-ui/icons/Edit";
+import EditVBookingDialogContainer from "../../containers/dialogs/EditVBookingDialogContainer";
+import {ISplitRealBookingParams} from "../forms/SplitRealBookingForm";
 
 export interface ICategoryProps {
     entity: CategoryModel;
@@ -38,6 +35,7 @@ export interface ICategoryProps {
     vBookings?: VBookingModel[];
     withTable?: boolean;
     changeVBookingsCategory?: (newCategoryId: number, ids: number[]) => void;
+    editVBookingAction?: (params: ISplitRealBookingParams, oldEntity: VBookingModel) => void;
 }
 
 export interface ICategoryState {
@@ -94,7 +92,7 @@ export default class Category extends React.Component<ICategoryProps, ICategoryS
     }
 
     public render() {
-        const {deleteAction, editAction, entity, changeVBookingsCategory, withTable} = this.props;
+        const {deleteAction, editAction, entity, changeVBookingsCategory, withTable, editVBookingAction} = this.props;
         const {currentVBookings} = this.state;
         const {
             id,
@@ -151,7 +149,19 @@ export default class Category extends React.Component<ICategoryProps, ICategoryS
                                 <ChangeVBookingsCategoryDialogContainer
                                     submit={(params, ids) => changeVBookingsCategory(params.category.id, ids)}
                                     vBookingIds={selectedItems}
-                                    categoryId={this.props.entity.id}/>
+                                    categoryId={this.props.entity.id}/>,
+                                <React.Fragment>
+                                    {selectedItems.length === 1 ?
+                                        <EditVBookingDialogContainer
+                                            withValueBounds={true}
+                                            id={selectedItems[0]}
+                                            submit={editVBookingAction}
+                                        /> :
+                                        <Fab disabled={true} color="primary"
+                                             aria-label="Bearbeiten">
+                                            <EditIcon/>
+                                        </Fab>}
+                                </React.Fragment>
                             ]}
                         />
                         }

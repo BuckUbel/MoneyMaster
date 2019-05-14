@@ -21,7 +21,7 @@ export interface ISplitRealBookingDialogProps extends ISplitRealBookingDialogRea
 export interface ISplitRealBookingDialogRealProps {
     onClick?: (fct: () => void) => void;
     submit: (params: ISplitRealBookingParams, oldEntity: VBookingModel) => void;
-    entity: VBookingModel;
+    entity?: VBookingModel;
     withValueBounds?: boolean;
 }
 
@@ -179,7 +179,7 @@ export default class SplitRealBookingDialog
                     title={"Virtuelle Buchung bearbeiten"}
                     formName={formId}
                     createOpenButton={(handleOpen) =>
-                        <Fab onClick={onClick ? () => onClick(handleOpen) : handleOpen} color="primary"
+                        <Fab onClick={onClick ? () => onClick(handleOpen) : handleOpen} color="secondary"
                              aria-label="Bearbeiten">
                             <EditIcon/>
                         </Fab>

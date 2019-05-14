@@ -48,9 +48,4 @@ const mapsStateToProps = (state: IRootState, ownProps: ISplitRealBookingDialogRe
         associatedBase: state.accounts.data.find((b: AccountModel) => b.id === ownProps.entity.accountId),
     };
 };
-const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) => ({
-    // fetchVBooking: (id: number) => dispatch(load(vBookingActions.actions.load(id))),
-    // editVBookings: (vBookings: IVBookingIdentity[]) => dispatch(load(vBookingActions.actions.edit(vBookings))),
-    // deleteVBookings: (ids: number[]) => dispatch(load(vBookingActions.actions.delete(ids))),
-});
-export default connect(mapsStateToProps, mapDispatchToProps)(BookOnVirtualAccountDialogContainer);
+export default connect(mapsStateToProps)(BookOnVirtualAccountDialogContainer);

@@ -9,12 +9,14 @@ import {IEntityClass} from "../../../../base/helper/Entity";
 import Category from "../../components/core/Category";
 import {IVBookingIdentity, vBookingActions, VBookingModel} from "../../../../base/model/VBookingModel";
 import {AccountModel} from "../../../../base/model/AccountModel";
+import {ISplitRealBookingParams} from "../../components/forms/SplitRealBookingForm";
 
 export interface ICategoryContainerProps {
     fetchCategory: (id: number) => Promise<any>;
     editCategories: (accounts: ICategoryIdentity[]) => Promise<any>;
     deleteCategories: (ids: number[]) => Promise<any>;
     fetchAllVBookings: () => Promise<any>;
+    fetchVBooking: (id: number) => Promise<any>;
     editVBookings: (vBookings: IVBookingIdentity[]) => Promise<any>;
     entity: CategoryModel;
     vBookings: VBookingModel[];
@@ -30,6 +32,7 @@ class CategoryContainer extends React.Component<ICategoryContainerProps, {}> {
     constructor(props: ICategoryContainerProps) {
         super(props);
         this.editCategory = this.editCategory.bind(this);
+        this.editVBooking = this.editVBooking.bind(this);
         this.deleteCategory = this.deleteCategory.bind(this);
         this.changeVBookingsCategory = this.changeVBookingsCategory.bind(this);
     }
@@ -72,6 +75,21 @@ class CategoryContainer extends React.Component<ICategoryContainerProps, {}> {
         }
     }
 
+    public async editVBooking(params: ISplitRealBookingParams, oldEntity: VBookingModel) {
+
+        const newVBooking = oldEntity;
+        newVBooking.name = params.name;
+        newVBooking.description = params.description;
+        newVBooking.value = params.value;
+        newVBooking.categoryId = params.category.id;
+        try {
+            await this.props.editVBookings([newVBooking]);
+            await this.props.fetchVBooking(newVBooking.id);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     public render() {
         return (
             <React.Fragment>
@@ -83,6 +101,7 @@ class CategoryContainer extends React.Component<ICategoryContainerProps, {}> {
                     vBookings={this.props.vBookings}
                     withTable={this.props.withTable}
                     changeVBookingsCategory={this.changeVBookingsCategory}
+                    editVBookingAction={this.editVBooking}
                 />}
             </React.Fragment>
         );
@@ -113,6 +132,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<IRootState, void, Action>) =
     fetchCategory: (id: number) => dispatch(load(categoryActions.actions.load(id))),
     editCategories: (cateogories: ICategoryIdentity[]) => dispatch(load(categoryActions.actions.edit(cateogories))),
     deleteCategories: (ids: number[]) => dispatch(load(categoryActions.actions.delete(ids))),
+    fetchVBooking: (id: number) => dispatch(load(vBookingActions.actions.load(id))),
     fetchAllVBookings: () => dispatch(load(vBookingActions.actions.loadAll())),
     editVBookings: (vBookings: IVBookingIdentity[]) => dispatch(load(vBookingActions.actions.edit(vBookings))),
 });
