@@ -9,7 +9,7 @@ import {
 } from "../../../../base/helper/time/dateHelper";
 import DateTextField from "../core/simple/DateTextField";
 import {stringToDate} from "../../../../base/helper/util";
-import BaseMoneyLineCharNavigation from "./BaseMoneyLineChartNavigation";
+import StatisticsNavigation from "../views/statistics/StatisticsNavigation";
 
 export interface IBaseMoneyLineChartData {
     name: string;
@@ -20,22 +20,16 @@ export interface IBaseMoneyLineChartData {
 
 export interface IBaseMoneyLineChartProps {
     bookings: BookingModel[];
+    startDate: Date;
+    endDate: Date;
 }
 
 export interface IBaseMoneyLineChartState {
     currentData: IBaseMoneyLineChartData[];
-    startDate: Date;
-    endDate: Date;
-    minDate: Date;
-    maxDate: Date;
 }
 
 export const defaultState: IBaseMoneyLineChartState = {
     currentData: [],
-    startDate: changeDateMonthFirstDay(new Date(), -1),
-    endDate: new Date(),
-    minDate: changeDateMonthFirstDay(new Date(), -1),
-    maxDate: changeDateMonthFirstDay(new Date(), 1),
 };
 
 export default class BaseMoneyLineChart extends React.Component<IBaseMoneyLineChartProps, IBaseMoneyLineChartState> {
@@ -44,8 +38,7 @@ export default class BaseMoneyLineChart extends React.Component<IBaseMoneyLineCh
         newProps: IBaseMoneyLineChartProps,
         oldState: IBaseMoneyLineChartState): IBaseMoneyLineChartState {
 
-        const {startDate, endDate} = oldState;
-        const {bookings} = newProps;
+        const {bookings, startDate, endDate} = newProps;
         let tempValue = 0;
         const newCurrentBookings: IBaseMoneyLineChartData[] = [];
         bookings.sort((a: BookingModel, b: BookingModel) => {
@@ -64,15 +57,9 @@ export default class BaseMoneyLineChart extends React.Component<IBaseMoneyLineCh
                 }
             }
         });
-        const newMaxDate = getLastDate(bookings);
-        const newMinDate = getFirstDate(bookings);
 
         return {
-            startDate,
-            endDate,
             currentData: newCurrentBookings,
-            maxDate: newMaxDate,
-            minDate: newMinDate
         };
     }
 
@@ -80,88 +67,13 @@ export default class BaseMoneyLineChart extends React.Component<IBaseMoneyLineCh
 
     constructor(props: IBaseMoneyLineChartProps) {
         super(props);
-        this.changeEndDate = this.changeEndDate.bind(this);
-        this.changeStartDate = this.changeStartDate.bind(this);
-        this.changeDate = this.changeDate.bind(this);
-        this.setCurrentToMonth = this.setCurrentToMonth.bind(this);
-        this.setCurrentFromMonth = this.setCurrentFromMonth.bind(this);
-        this.switchMonthRight = this.switchMonthRight.bind(this);
-        this.switchMonthLeft = this.switchMonthLeft.bind(this);
-        this.changeMonth = this.changeMonth.bind(this);
-        this.resetMonth = this.resetMonth.bind(this);
-    }
-
-    public changeStartDate(event: React.ChangeEvent<HTMLInputElement>) {
-        const newDate: Date = stringToDate(event.target.value);
-        this.setState({startDate: newDate});
-    }
-
-    public changeEndDate(event: React.ChangeEvent<HTMLInputElement>) {
-        const newDate: Date = stringToDate(event.target.value);
-        this.setState({endDate: newDate});
-    }
-
-    public changeMonth(a: number) {
-        this.setState({
-            startDate: changeDateMonthFirstDay(this.state.startDate, a),
-            endDate: changeDateMonthLastDay(this.state.endDate, a),
-        });
-    }
-
-    public resetMonth() {
-        this.setState(defaultState);
-    }
-
-    public switchMonthLeft() {
-        this.changeMonth(-1);
-    }
-
-    public switchMonthRight() {
-        this.changeMonth(1);
-    }
-
-    public setCurrentFromMonth(d: Date) {
-        this.setState({
-            startDate: d
-        });
-    }
-
-    public setCurrentToMonth(d: Date) {
-        this.setState({
-            endDate: d
-        });
-    }
-
-    public changeDate(event: React.ChangeEvent<HTMLInputElement>) {
-        if (event.target.value !== "") {
-            const newDate: Date = stringToDate(event.target.value);
-            const minDate: Date = event.target.min !== "0" ? stringToDate(event.target.min) : newDate;
-            const maxDate: Date = event.target.max !== "0" ? stringToDate(event.target.max) : newDate;
-            if (minDate <= newDate && newDate <= maxDate) {
-                if (event.target.name === "startDate") {
-                    this.setCurrentFromMonth(newDate);
-                }
-                if (event.target.name === "endDate") {
-                    this.setCurrentToMonth(newDate);
-                }
-            }
-        }
     }
 
     public render() {
-        const {currentData, startDate, endDate, maxDate, minDate} = this.state;
+        const {currentData} = this.state;
         return (
             <React.Fragment>
-                <BaseMoneyLineCharNavigation
-                    changeCurrentDate={this.changeDate}
-                    switchLeft={this.switchMonthLeft}
-                    switchRight={this.switchMonthRight}
-                    resetNavigation={this.resetMonth}
-                    currentFromMonth={startDate}
-                    currentToMonth={endDate}
-                    firstDayOfActivities={minDate}
-                    lastDayOfActivities={maxDate}
-                />
+
                 <ComposedChart width={1200} height={400} data={currentData}
                                margin={{top: 10, right: 30, left: 0, bottom: 0}}>
                     <CartesianGrid strokeDasharray="1 1"/>

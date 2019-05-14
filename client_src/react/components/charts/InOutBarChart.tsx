@@ -1,0 +1,102 @@
+import * as React from "react";
+import {Bar, BarChart, Brush, CartesianGrid, Legend, ReferenceLine, Tooltip, XAxis, YAxis} from "recharts";
+import {BookingModel} from "../../../../base/model/BookingModel";
+import {dateToString, daysDiff, getEachDayBetweenDays} from "../../../../base/helper/time/dateHelper";
+
+export interface IInOutBarChartData {
+    name: string;
+    negValue: number;
+    posValue: number;
+    start: Date;
+    end: Date;
+}
+
+export interface IInOutBarChartProps {
+    bookings: BookingModel[];
+    startDate: Date;
+    endDate: Date;
+    minDate: Date;
+    maxDate: Date;
+}
+
+export interface IInOutBarChartState {
+    currentData: IInOutBarChartData[];
+}
+
+export const defaultState: IInOutBarChartState = {
+    currentData: [],
+};
+
+export default class InOutBarChart extends React.Component<IInOutBarChartProps, IInOutBarChartState> {
+
+    public static getDerivedStateFromProps(
+        newProps: IInOutBarChartProps,
+        oldState: IInOutBarChartState): IInOutBarChartState {
+
+        const {bookings, startDate, endDate, minDate, maxDate} = newProps;
+        const completeDiff = daysDiff(minDate, maxDate);
+        const currentDiff = daysDiff(startDate, endDate);
+
+        const allDates: Date[] = getEachDayBetweenDays(minDate, maxDate);
+        const segmentCount = Math.ceil(completeDiff / currentDiff);
+
+        const inOutCollectedValues: IInOutBarChartData[] = [];
+
+        for (let i = 0; i < segmentCount; i++) {
+            const startPos = Math.ceil(i * currentDiff);
+            const iStartDate = allDates[startPos];
+            const endPos = Math.ceil(startPos + currentDiff);
+            const iEndDate = allDates[endPos < allDates.length ? endPos : allDates.length - 1];
+            inOutCollectedValues.push({
+                name: dateToString(iStartDate) + "-" + dateToString(iEndDate),
+                posValue: 0,
+                negValue: 0,
+                start: iStartDate,
+                end: iEndDate
+            });
+        }
+        bookings.sort((a: BookingModel, b: BookingModel) => {
+            return a.bookingDate.getTime() - b.bookingDate.getTime();
+        }).forEach((b) => {
+            if (b.bookingDate && minDate && maxDate) {
+                if (b.bookingDate.getTime() > minDate.getTime() && b.bookingDate.getTime() < maxDate.getTime()) {
+                    const segmentIndex = Math.ceil(daysDiff(minDate, b.bookingDate) / currentDiff) - 1;
+                    if (b.value >= 0) {
+                        inOutCollectedValues[segmentIndex].posValue += Number(b.value.toFixed());
+                    } else {
+                        inOutCollectedValues[segmentIndex].negValue += Number(Math.abs(b.value).toFixed());
+                    }
+                }
+            }
+        });
+        return {
+            currentData: inOutCollectedValues,
+        };
+    }
+
+    public state: IInOutBarChartState = defaultState;
+
+    constructor(props: IInOutBarChartProps) {
+        super(props);
+    }
+
+    public render() {
+        const {currentData} = this.state;
+        return (
+            <React.Fragment>
+                <BarChart width={600} height={600} data={currentData}
+                          margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                    <CartesianGrid strokeDasharray="3 3"/>
+                    <XAxis dataKey={"name"}/>
+                    <YAxis/>
+                    <Tooltip/>
+                    <Legend/>
+                    <ReferenceLine y={0} stroke="#000"/>
+                    <Brush dataKey="name" height={30} stroke="#8884d8" startIndex={currentData.length - 2}/>
+                    <Bar dataKey="posValue" fill="#0F0"/>
+                    <Bar dataKey="negValue" fill="#F00"/>
+                </BarChart>
+            </React.Fragment>
+        );
+    }
+}

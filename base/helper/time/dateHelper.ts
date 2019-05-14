@@ -91,7 +91,7 @@ export function nextDay(d: Date): Date {
 
 export function getEachDayBetweenDays(d1: Date, d2: Date) {
     const returnDates: Date[] = [];
-    for (let d3 = changeDateMonthFirstDay(d1, 0); d3.getTime() < d2.getTime(); d3 = nextDay(d3)) {
+    for (let d3 = d1; d3.getTime() < d2.getTime(); d3 = nextDay(d3)) {
         returnDates.push(d3);
     }
     return returnDates;

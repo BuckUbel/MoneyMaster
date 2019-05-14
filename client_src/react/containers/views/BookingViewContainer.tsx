@@ -6,7 +6,7 @@ import {load} from "../../api";
 import {IRootState} from "../../store";
 import {bookingActions, IBookingIdentity} from "../../../../base/model/BookingModel";
 import BookingTableView from "../../components/views/BookingTableView";
-import StatisticsView from "../../components/views/StatisticsView";
+import StatisticsView from "../../components/views/statistics/StatisticsView";
 
 const mapsStateToProps = (state: IRootState) => {
     return ({bookings: state.bookings.data});

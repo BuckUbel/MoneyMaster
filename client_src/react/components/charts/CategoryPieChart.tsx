@@ -3,8 +3,10 @@ import {BookingModel} from "../../../../base/model/BookingModel";
 import {CategoryModel} from "../../../../base/model/CategoryModel";
 import {IBaseMoneyLineChartData, IBaseMoneyLineChartProps, IBaseMoneyLineChartState} from "./BaseMoneyLineChart";
 import {VBookingModel} from "../../../../base/model/VBookingModel";
-import {Cell, Pie, PieChart, Tooltip} from "recharts";
+import {BarChart, Cell, Legend, Pie, PieChart, Tooltip} from "recharts";
 import {uniqueArray} from "../../../../base/helper/util";
+import {Typography} from "@material-ui/core";
+import {dateToString} from "../../../../base/helper/time/dateHelper";
 
 export const RADIAN = Math.PI / 180;
 
@@ -17,6 +19,9 @@ export interface ICategoryPieChartData {
 export interface ICategoryPieChartProps {
     vBookings: VBookingModel[];
     categories: CategoryModel[];
+    bookings: BookingModel[];
+    startDate: Date;
+    endDate: Date;
 }
 
 export interface ICategoryPieChartState {
@@ -33,31 +38,45 @@ export default class CategoryPieChart extends React.Component<ICategoryPieChartP
         oldState: ICategoryPieChartState): ICategoryPieChartState {
 
         const {currentData} = oldState;
-        const {vBookings, categories} = newProps;
-        const newCurrentBookings: ICategoryPieChartData[] = vBookings.reduce((a: ICategoryPieChartData[], b) => {
-            if (!b.accountId) {
-                const i = a.length > 0 ? a.findIndex((g: ICategoryPieChartData) => g.name === String(b.categoryId))
-                    : -1;
-                if (i === -1) {
-                    a.push({name: String(b.categoryId), value: Number(b.value), color: ""});
-                } else {
-                    a[i].value += Number(b.value);
+        const {vBookings, categories, bookings, startDate, endDate} = newProps;
+
+        const newCurrentBookings: ICategoryPieChartData[] = vBookings.reduce(
+            (vBArray: ICategoryPieChartData[], currentVB) => {
+                if (!currentVB.accountId) {
+                    const foundedBooking = bookings.find((booking: BookingModel) => {
+                        return (currentVB.bookingId === booking.id);
+                    });
+                    if (foundedBooking
+                        && foundedBooking.bookingDate.getTime() > startDate.getTime()
+                        && foundedBooking.bookingDate.getTime() < endDate.getTime()) {
+                        const i = vBArray.length > 0 ? vBArray.findIndex(
+                            (g: ICategoryPieChartData) => g.name === String(currentVB.categoryId)) : -1;
+                        if (i === -1) {
+                            vBArray.push({
+                                name: String(currentVB.categoryId),
+                                value: Number(currentVB.value),
+                                color: ""
+                            });
+                        } else {
+                            vBArray[i].value += Number(currentVB.value);
+                        }
+                    }
                 }
-            }
-            return a;
-        }, []);
-        newCurrentBookings.forEach((ncb, i) => {
-            const foundedCat = categories.find((c: CategoryModel) => {
-                return (String(c.id) === ncb.name);
+                return vBArray;
+            }, []);
+        newCurrentBookings.forEach((ncVBooking, index) => {
+            const foundedCat = categories.find((category: CategoryModel) => {
+                return (String(category.id) === ncVBooking.name);
             });
             if (foundedCat) {
-                ncb.name = foundedCat.name;
-                ncb.color = foundedCat.color;
+                // insert category values
+                ncVBooking.name = foundedCat.name;
+                ncVBooking.color = foundedCat.color;
             }
-            if (ncb.value > 0) {
-                newCurrentBookings[i] = null;
+            if (ncVBooking.value > 0) {
+                newCurrentBookings[index] = null;
             }
-            ncb.value = Number(ncb.value.toFixed(2)) * -1;
+            ncVBooking.value = Number(ncVBooking.value.toFixed(2)) * -1;
         });
         return {currentData: newCurrentBookings.filter((el) => el !== null)};
     }
@@ -82,9 +101,13 @@ export default class CategoryPieChart extends React.Component<ICategoryPieChartP
     };
 
     public render() {
+        const {startDate, endDate} = this.props;
         const {currentData} = this.state;
         return (
             <React.Fragment>
+                <Typography variant={"h4"}>
+                    {dateToString(startDate) + "-" + dateToString(endDate)}
+                </Typography>
                 <PieChart width={600} height={600}>
                     {currentData[0] && currentData[0].name &&
                     <Pie dataKey="value"
@@ -100,6 +123,7 @@ export default class CategoryPieChart extends React.Component<ICategoryPieChartP
                     </Pie>
                     }
                     <Tooltip/>
+                    <Legend/>
                 </PieChart>
             </React.Fragment>
         );
