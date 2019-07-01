@@ -19,28 +19,36 @@ class Database {
     }
     sqlQuery(query) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (this.connection) {
-                this.init();
-                yield this.connection.connect();
+            if (this.pool) {
+                // this.init();
+                // await this.connection.connect();
                 return new Promise((resolve, reject) => {
-                    this.connection.query(query, (error, rows, fields) => {
-                        this.connection.end();
+                    this.pool.getConnection((error, connection) => {
                         if (error) {
                             return reject(error);
                         }
-                        return resolve(rows);
+                        connection.query(query, (sqlError, rows, fields) => {
+                            // this.connection.end();
+                            connection.release();
+                            if (sqlError) {
+                                return reject(sqlError);
+                            }
+                            return resolve(rows);
+                        });
                     });
                 });
             }
         });
     }
     init() {
-        this.connection = mysql_1.default.createConnection({
+        this.pool = mysql_1.default.createPool({
             host: this.config.host,
             port: this.config.port,
             database: this.config.databaseName,
             user: this.config.user,
             password: this.config.password,
+            multipleStatements: true,
+            connectionLimit: 20
         });
     }
 }

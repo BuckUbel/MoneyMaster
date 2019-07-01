@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const util_1 = require("../helper/util");
 const Entity_1 = require("../helper/Entity");
-const AccountModel_1 = require("./AccountModel");
 const Entity_2 = require("../actions/Entity");
 exports.bookingActions = Entity_2.createEntityActions("booking");
 exports.bookingFields = {
@@ -139,9 +138,64 @@ function arrayToBookingModel(arr, categories) {
 exports.arrayToBookingModel = arrayToBookingModel;
 class BookingModel extends Entity_1.Entity {
     static createEntity(object) {
-        const entity = new AccountModel_1.AccountModel();
+        const entity = new BookingModel();
         entity.set(object);
         return entity;
+    }
+    static createEmptyEntity() {
+        return new BookingModel({
+            id: exports.bookingFields.id.value,
+            orderAccount: exports.bookingFields.orderAccount.value,
+            bookingDate: exports.bookingFields.bookingDate.value,
+            validDate: exports.bookingFields.validDate.value,
+            bookingType: exports.bookingFields.bookingType.value,
+            purpose: exports.bookingFields.purpose.value,
+            believerId: exports.bookingFields.believerId.value,
+            mandateReference: exports.bookingFields.mandateReference.value,
+            customerReference: exports.bookingFields.customerReference.value,
+            payPartner: exports.bookingFields.payPartner.value,
+            iban: exports.bookingFields.iban.value,
+            bic: exports.bookingFields.bic.value,
+            value: exports.bookingFields.value.value,
+            currency: exports.bookingFields.currency.value,
+            info: exports.bookingFields.info.value,
+        });
+    }
+    static getLastDate(bookings) {
+        return BookingModel.getHighestDate(bookings, true);
+    }
+    static getFirstDate(bookings) {
+        return BookingModel.getHighestDate(bookings, false);
+    }
+    static getHighestDate(bookings, max) {
+        const dates = bookings.map((booking) => {
+            const startDate = booking.bookingDate;
+            return startDate !== null ? startDate.getTime() : 0;
+        });
+        if (max) {
+            return new Date(Math.max(...dates));
+        }
+        return new Date(Math.min(...dates));
+    }
+    constructor(obj) {
+        super();
+        if (obj) {
+            this.id = obj.id;
+            this.orderAccount = obj.orderAccount;
+            this.bookingDate = obj.bookingDate;
+            this.validDate = obj.validDate;
+            this.bookingType = obj.bookingType;
+            this.purpose = obj.purpose;
+            this.believerId = obj.believerId;
+            this.mandateReference = obj.mandateReference;
+            this.customerReference = obj.customerReference;
+            this.payPartner = obj.payPartner;
+            this.iban = obj.iban;
+            this.bic = obj.bic;
+            this.value = obj.value;
+            this.currency = obj.currency;
+            this.info = obj.info;
+        }
     }
     set(object) {
         this.id = object && object.id ? Number(object.id) : exports.bookingFields.id.value;
@@ -166,7 +220,10 @@ class BookingModel extends Entity_1.Entity {
         this.payPartner = object && object.payPartner ? object.payPartner : exports.bookingFields.payPartner.value;
         this.iban = object && object.iban ? object.iban : exports.bookingFields.iban.value;
         this.bic = object && object.bic ? object.bic : exports.bookingFields.bic.value;
-        this.value = object && object.value ? parseFloat(object.value.replace(",", ".")) : exports.bookingFields.value.value;
+        this.value = exports.bookingFields.value.value;
+        if (object && object.value) {
+            this.value = Number(Number(object.value.replace(",", ".")).toFixed(2));
+        }
         this.currency = object && object.currency ? object.currency : exports.bookingFields.currency.value;
         this.info = object && object.info ? object.info : exports.bookingFields.info.value;
     }

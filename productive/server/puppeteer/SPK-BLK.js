@@ -75,3 +75,47 @@ function getCSVDataFromSPKBLK(downloadPath, bank) {
     });
 }
 exports.getCSVDataFromSPKBLK = getCSVDataFromSPKBLK;
+function testPasswordForSPKBLK(newPassword, bank) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const browser = yield puppeteer.launch({
+            headless: true
+        });
+        const page = yield browser.newPage();
+        yield page.goto(homeURL);
+        yield page.evaluate((username, password) => {
+            const userNameLabelObject = document.getElementsByTagName("label")[0];
+            const passwordLabelObject = document.getElementsByTagName("label")[1];
+            const userNameLabel = userNameLabelObject.htmlFor;
+            const passwordLabel = passwordLabelObject.htmlFor;
+            const usernameObject = document.getElementsByName(userNameLabel)[0];
+            const passwordObject = document.getElementsByName(passwordLabel)[0];
+            usernameObject.value = username;
+            passwordObject.value = password;
+        }, bank.username, newPassword);
+        yield page.evaluate(() => {
+            const loginObject = document.querySelector(".login > input");
+            loginObject.click();
+        });
+        yield page.waitForNavigation({
+            waitUntil: "networkidle0"
+        });
+        yield page.waitFor(waitTimeForGoto);
+        yield page.goto(bookingsURL);
+        let success = false;
+        success = yield page.evaluate(() => {
+            const firstDateLabelObject = document.getElementsByTagName("label")[2];
+            const firstDateLabel = firstDateLabelObject.htmlFor;
+            const firstDateObject = document.getElementsByName(firstDateLabel)[0];
+            const refreshObject = document.getElementsByClassName("icon-if5_refresh")[0]
+                .getElementsByTagName("input")[0];
+            if (firstDateLabelObject && firstDateLabel && firstDateObject && refreshObject) {
+                return true;
+            }
+        });
+        yield browser.close();
+        if (!success) {
+            throw new Error("False Password");
+        }
+    });
+}
+exports.testPasswordForSPKBLK = testPasswordForSPKBLK;

@@ -69,7 +69,7 @@ exports.standardAddAction = (actionType, endpoint) => (entities) => {
 exports.standardLoadOneAction = (actionType, endpoint) => (id) => {
     return ({
         method: exports.httpMethods.GET,
-        endpoint: endpoint + "/" + id,
+        endpoint: endpoint + id,
         type: actionType.request,
         successAction: exports.standardEntityResultAction(actionType.success, true),
         failAction: exports.standardEntityResultAction(actionType.failure, false),
@@ -107,8 +107,8 @@ exports.standardDeleteAction = (actionType, endpoint) => (ids) => {
             ids,
         },
         type: actionType.request,
-        successAction: exports.standardEntityResultAction(actionType.success, true),
-        failAction: exports.standardEntityResultAction(actionType.failure, false),
+        successAction: exports.standardResultAction(actionType.success, true),
+        failAction: exports.standardResultAction(actionType.failure, false),
         isApiAction: true,
     });
 };

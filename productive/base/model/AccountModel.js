@@ -31,7 +31,7 @@ exports.accountFields = {
     color: {
         fieldName: "color",
         labelName: "Farbe",
-        value: "",
+        value: "#000",
         type: "string",
     },
     isReal: {
@@ -52,6 +52,29 @@ class AccountModel extends Entity_1.Entity {
         const entity = new AccountModel();
         entity.set(object);
         return entity;
+    }
+    static createEmptyEntity() {
+        return new AccountModel({
+            id: exports.accountFields.id.value,
+            name: exports.accountFields.name.value,
+            description: exports.accountFields.description.value,
+            value: exports.accountFields.value.value,
+            color: exports.accountFields.color.value,
+            isReal: exports.accountFields.isReal.value,
+            isCore: exports.accountFields.isCore.value
+        });
+    }
+    constructor(obj) {
+        super();
+        if (obj) {
+            this.id = obj.id;
+            this.name = obj.name;
+            this.description = obj.description;
+            this.color = obj.color;
+            this.isCore = obj.isCore;
+            this.isReal = obj.isReal;
+            this.value = obj.value;
+        }
     }
     set(object) {
         this.id = object.id ? Number(object.id) : null;

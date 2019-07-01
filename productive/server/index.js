@@ -34,6 +34,7 @@ const dbConfig = {
     password: process.env.DB_PASSWORD,
     tableNames: {
         bookings: process.env.BOOKING_TABLE_NAME,
+        vBookings: process.env.VBOOKING_TABLE_NAME,
         accounts: process.env.ACCOUNT_TABLE_NAME,
         categories: process.env.CATEGORY_TABLE_NAME,
         shortDescriptions: process.env.SHORT_DESCRIPTION_TABLE_NAME,
@@ -61,8 +62,8 @@ serverRoutes.init().then(() => {
 });
 const job = new cron_1.CronJob("0 0 */6 * * *", () => {
     console.log("Cron Job to download CSV is started.");
-    if (this.server.bankConfig.password !== "") {
-        bookings_1.default.loadDataFromSPKBLK(this.server)
+    if (server.bankConfig.password !== "") {
+        bookings_1.default.loadDataFromSPKBLK(server)
             .then(() => {
             console.log("CSV is downloaded.");
         }).catch(() => {

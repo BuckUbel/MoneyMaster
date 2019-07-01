@@ -18,46 +18,80 @@ function standardEntityRouting(server, dbTable, dbFields, routes, newEntity) {
             return yield basicActions_1.loadAllEntitiesFromDB(server.database, dbTable, dbFields).then((result) => {
                 return result;
             }).catch((e) => {
-                console.log(e);
+                console.error(e);
                 return new ErrorMessage_1.ErrorMessage("Databank Fehler", e);
             });
         })
     });
     server.app.route({
         method: "GET",
-        path: routes.readOne + "{index*}",
-        handler: (request, h) => {
+        path: routes.readOne + "{index*1}",
+        handler: (request, h) => __awaiter(this, void 0, void 0, function* () {
             // load one Entity
-            return "";
-        }
+            const id = Number(request.params.index);
+            return yield basicActions_1.loadOneEntityFromDB(server.database, dbTable, dbFields, id).then((result) => {
+                return result;
+            }).catch((e) => {
+                console.error(e);
+                return new ErrorMessage_1.ErrorMessage("Databank Fehler", e);
+            });
+        })
     });
     server.app.route({
         method: "POST",
         path: routes.create,
-        handler: (request, h) => {
+        handler: (request, h) => __awaiter(this, void 0, void 0, function* () {
             const requestBody = request.payload;
             const objects = requestBody.entities;
             const entityObjects = objects.map((object) => {
                 return newEntity(object);
             });
-            return basicActions_1.insertEntities(server.database, dbTable, dbFields, entityObjects);
-        }
+            return yield basicActions_1.insertEntities(server.database, dbTable, dbFields, entityObjects)
+                .then((result) => {
+                return result;
+            })
+                .catch((e) => {
+                console.error(e);
+                return new ErrorMessage_1.ErrorMessage("Datenbank Fehler", e);
+            });
+        })
     });
     server.app.route({
         method: "PUT",
         path: routes.update,
-        handler: (request, h) => {
+        handler: (request, h) => __awaiter(this, void 0, void 0, function* () {
             // update routine
-            return "";
-        }
+            const requestBody = request.payload;
+            const objects = requestBody.entities;
+            const entityObjects = objects.map((object) => {
+                return newEntity(object);
+            });
+            return yield basicActions_1.updateEntities(server.database, dbTable, dbFields, entityObjects)
+                .then((result) => {
+                return result;
+            })
+                .catch((e) => {
+                console.error(e);
+                return new ErrorMessage_1.ErrorMessage("Datenbank Fehler", e);
+            });
+        })
     });
     server.app.route({
         method: "DELETE",
         path: routes.delete,
-        handler: (request, h) => {
+        handler: (request, h) => __awaiter(this, void 0, void 0, function* () {
             // delete routine
-            return "";
-        }
+            const requestBody = request.payload;
+            const ids = requestBody.ids;
+            return yield basicActions_1.deleteEntities(server.database, dbTable, ids)
+                .then((result) => {
+                return { result, ids };
+            })
+                .catch((e) => {
+                console.error(e);
+                return new ErrorMessage_1.ErrorMessage("Datenbank Fehler", e);
+            });
+        })
     });
 }
 exports.standardEntityRouting = standardEntityRouting;

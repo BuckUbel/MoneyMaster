@@ -17,6 +17,7 @@ const BookingModel_1 = require("../base/model/BookingModel");
 const ShortDescriptionModel_1 = require("../base/model/ShortDescriptionModel");
 const CategoryModel_1 = require("../base/model/CategoryModel");
 const enities_1 = require("./routes/enities");
+const VBookingModel_1 = require("../base/model/VBookingModel");
 class ServerRoutes {
     constructor(server) {
         this.server = server;
@@ -42,6 +43,7 @@ class ServerRoutes {
     restAPIRouting() {
         enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.bookings, BookingModel_1.bookingFields, BookingModel_1.bookingActions.apiPaths, BookingModel_1.BookingModel.createEntity);
         enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.accounts, AccountModel_1.accountFields, AccountModel_1.accountActions.apiPaths, AccountModel_1.AccountModel.createEntity);
+        enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.vBookings, VBookingModel_1.vBookingFields, VBookingModel_1.vBookingActions.apiPaths, VBookingModel_1.VBookingModel.createEntity);
         enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.shortDescriptions, ShortDescriptionModel_1.shortDescriptionFields, ShortDescriptionModel_1.shortDescriptionActions.apiPaths, ShortDescriptionModel_1.ShortDescriptionModel.createEntity);
         enities_1.standardEntityRouting(this.server, this.server.database.config.tableNames.categories, CategoryModel_1.categoryFields, CategoryModel_1.categoryActions.apiPaths, CategoryModel_1.CategoryModel.createEntity);
     }

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Entity_1 = require("../helper/Entity");
-const AccountModel_1 = require("./AccountModel");
 const Entity_2 = require("../actions/Entity");
 exports.shortDescriptionActions = Entity_2.createEntityActions("short-descriptions");
 exports.shortDescriptionFields = {
@@ -26,9 +25,24 @@ exports.shortDescriptionFields = {
 };
 class ShortDescriptionModel extends Entity_1.Entity {
     static createEntity(object) {
-        const entity = new AccountModel_1.AccountModel();
+        const entity = new ShortDescriptionModel();
         entity.set(object);
         return entity;
+    }
+    static createEmptyEntity() {
+        return new ShortDescriptionModel({
+            id: exports.shortDescriptionFields.id.value,
+            originalContent: exports.shortDescriptionFields.originalContent.value,
+            replaceContent: exports.shortDescriptionFields.replaceContent.value,
+        });
+    }
+    constructor(obj) {
+        super();
+        if (obj) {
+            this.id = obj.id;
+            this.originalContent = obj.originalContent;
+            this.replaceContent = obj.replaceContent;
+        }
     }
     set(object) {
         this.id = Number(object.id);

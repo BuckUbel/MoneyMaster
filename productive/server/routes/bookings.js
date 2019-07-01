@@ -16,6 +16,7 @@ const ErrorMessage_1 = require("../../base/helper/messages/ErrorMessage");
 class BookingRoutes {
     static loadDataFromSPKBLK(server) {
         return __awaiter(this, void 0, void 0, function* () {
+            let abort = false;
             if (!server.status.bankIsRequested) {
                 server.status.bankIsRequested = true;
                 console.log("Start downloading CSV from SPK BLK");
@@ -23,36 +24,45 @@ class BookingRoutes {
                     addBookings: [],
                     editBookings: [],
                 };
-                try {
-                    yield SPK_BLK_1.getCSVDataFromSPKBLK(server.serverConfig.downloadPath, server.bankConfig);
-                    console.log("CSV is downloaded.");
-                }
-                catch (e) {
-                    console.log("CSV is false downloaded.");
-                }
-                try {
-                    const file = yield helper_1.getLastModifiedFileInDir(server.serverConfig.downloadPath);
-                    result = yield BookingRoutes.updateDatabaseBookings(server, file);
-                    console.log("CSV was read successfully:");
-                    console.log("Items to add:" + result.addBookings.length);
-                    console.log("Items to edit:" + result.editBookings.length);
-                }
-                catch (e) {
-                    console.log("CSV was not read.");
-                    console.log(e);
-                }
-                try {
-                    if (result.addBookings.length > 0) {
-                        yield Booking_1.insertABooking(server.database, result.addBookings);
+                if (!abort) {
+                    try {
+                        yield SPK_BLK_1.getCSVDataFromSPKBLK(server.serverConfig.downloadPath, server.bankConfig);
+                        console.log("CSV is downloaded.");
                     }
-                    // if (result.editBookings.length > 0) {
-                    // await updateABooking(this.server.database, result.editBookings);
-                    // }
-                    console.log("Bookings are imported.");
+                    catch (e) {
+                        abort = true;
+                        console.log("CSV is false downloaded.");
+                        console.error(e);
+                    }
                 }
-                catch (e) {
-                    console.log("Bookings are not imported:");
-                    console.log(e);
+                if (!abort) {
+                    try {
+                        const file = yield helper_1.getLastModifiedFileInDir(server.serverConfig.downloadPath);
+                        result = yield BookingRoutes.updateDatabaseBookings(server, file);
+                        console.log("CSV was read successfully:");
+                        console.log("Items to add:" + result.addBookings.length);
+                        console.log("Items to edit:" + result.editBookings.length);
+                    }
+                    catch (e) {
+                        abort = true;
+                        console.log("CSV was not read.");
+                        console.log(e);
+                    }
+                }
+                if (!abort) {
+                    try {
+                        if (result.addBookings.length > 0) {
+                            yield Booking_1.insertABooking(server.database, result.addBookings);
+                        }
+                        // if (result.editBookings.length > 0) {
+                        // await updateABooking(this.server.database, result.editBookings);
+                        // }
+                        console.log("Bookings are imported.");
+                    }
+                    catch (e) {
+                        console.log("Bookings are not imported:");
+                        console.log(e);
+                    }
                 }
                 server.status.bankIsRequested = false;
             }
@@ -77,10 +87,17 @@ class BookingRoutes {
             this.server.app.route({
                 method: "POST",
                 path: "/api/bookings/loadFromSPK",
-                handler: (request, h) => {
+                handler: (request, h) => __awaiter(this, void 0, void 0, function* () {
                     const requestBody = request.payload;
                     if (requestBody.pwd && requestBody.pwd !== "") {
-                        this.server.bankConfig.password = requestBody.pwd;
+                        try {
+                            console.log("Start testing password for SPK BLK");
+                            yield SPK_BLK_1.testPasswordForSPKBLK(requestBody.pwd, this.server.bankConfig);
+                            this.server.bankConfig.password = requestBody.pwd;
+                        }
+                        catch (e) {
+                            return new ErrorMessage_1.ErrorMessage("False Password");
+                        }
                     }
                     if (this.server.bankConfig.password !== "") {
                         if (!this.server.status.bankIsRequested) {
@@ -96,7 +113,7 @@ class BookingRoutes {
                         return new ErrorMessage_1.ErrorMessage("Bank is already being requested.");
                     }
                     return new ErrorMessage_1.ErrorMessage("No password is available.");
-                }
+                })
             });
         });
     }

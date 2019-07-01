@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Entity_1 = require("../helper/Entity");
-const AccountModel_1 = require("./AccountModel");
 const Entity_2 = require("../actions/Entity");
 exports.categoryActions = Entity_2.createEntityActions("category");
 exports.categoryFields = {
@@ -26,7 +25,7 @@ exports.categoryFields = {
     color: {
         fieldName: "color",
         labelName: "Farbe",
-        value: "",
+        value: "#000",
         type: "string",
     },
     isStandard: {
@@ -38,9 +37,28 @@ exports.categoryFields = {
 };
 class CategoryModel extends Entity_1.Entity {
     static createEntity(object) {
-        const entity = new AccountModel_1.AccountModel();
+        const entity = new CategoryModel();
         entity.set(object);
         return entity;
+    }
+    static createEmptyEntity() {
+        return new CategoryModel({
+            id: exports.categoryFields.id.value,
+            name: exports.categoryFields.name.value,
+            description: exports.categoryFields.description.value,
+            color: exports.categoryFields.color.value,
+            isStandard: exports.categoryFields.isStandard.value
+        });
+    }
+    constructor(obj) {
+        super();
+        if (obj) {
+            this.id = obj.id;
+            this.name = obj.name;
+            this.description = obj.description;
+            this.color = obj.color;
+            this.isStandard = obj.isStandard;
+        }
     }
     set(object) {
         this.id = Number(object.id);

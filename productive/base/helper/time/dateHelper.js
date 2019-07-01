@@ -66,6 +66,13 @@ function changeDateYearFirstDay(d, a) {
     return new Date(d.getFullYear() + a, 0, 1);
 }
 exports.changeDateYearFirstDay = changeDateYearFirstDay;
+function changeDateMonthVarDay(d, a, b) {
+    if (b < 29) {
+        return new Date(d.getFullYear(), d.getMonth() + a, b);
+    }
+    return new Date(d.getFullYear(), d.getMonth() + a + 1, 0);
+}
+exports.changeDateMonthVarDay = changeDateMonthVarDay;
 function changeDateMonthFirstDay(d, a) {
     return new Date(d.getFullYear(), d.getMonth() + a, 1);
 }
@@ -88,7 +95,7 @@ function nextDay(d) {
 exports.nextDay = nextDay;
 function getEachDayBetweenDays(d1, d2) {
     const returnDates = [];
-    for (let d3 = changeDateMonthFirstDay(d1, 0); d3.getTime() < d2.getTime(); d3 = nextDay(d3)) {
+    for (let d3 = d1; d3.getTime() < d2.getTime(); d3 = nextDay(d3)) {
         returnDates.push(d3);
     }
     return returnDates;
