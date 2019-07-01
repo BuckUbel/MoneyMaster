@@ -43,7 +43,7 @@
     display: none;
 }
 .clickedLinkText {
-    background-color: rgba(0, 0, 0, 0.075) !important;
+    background-color:#f57c00 !important;
 }
 .menuIcon {
     margin-right: unset !important;
