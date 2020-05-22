@@ -3,7 +3,6 @@ import {
     loadAllBookingsFromDB,
 } from "../database/model/Booking";
 import * as Hapi from "hapi";
-import {getCSVDataFromSPKBLK, testPasswordForSPKBLK} from "../puppeteer/SPK-BLK";
 import {IHapiServer} from "../HapiServer";
 import {
     extractBookingsFromFile,
@@ -28,7 +27,7 @@ export default class BookingRoutes {
             if (!abort) {
 
                 try {
-                    await getCSVDataFromSPKBLK(server.serverConfig.downloadPath, server.bankConfig);
+                    // await getCSVDataFromSPKBLK(server.serverConfig.downloadPath, server.bankConfig);
                     console.log("CSV is downloaded.");
                 } catch (e) {
                     abort = true;
@@ -92,7 +91,7 @@ export default class BookingRoutes {
                 if (requestBody.pwd && requestBody.pwd !== "") {
                     try {
                         console.log("Start testing password for SPK BLK");
-                        await testPasswordForSPKBLK(requestBody.pwd, this.server.bankConfig);
+                        // await testPasswordForSPKBLK(requestBody.pwd, this.server.bankConfig);
                         this.server.bankConfig.password = requestBody.pwd;
                     } catch (e) {
                         return new ErrorMessage("False Password");

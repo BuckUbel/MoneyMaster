@@ -57,21 +57,3 @@ serverRoutes.init().then(() => {
         console.log("Server: " + server.app.info.host + ":" + server.serverConfig.port);
     });
 });
-
-const job = new CronJob("0 0 */6 * * *", () => {
-        console.log("Cron Job to download CSV is started.");
-        if (server.bankConfig.password !== "") {
-
-            BookingRoutes.loadDataFromSPKBLK(server)
-                .then(() => {
-                    console.log("CSV is downloaded.");
-                }).catch(() => {
-                console.log("CSV is false downloaded.");
-            });
-        }
-        console.error("Password is not available");
-    }, () => {
-        console.error("Der Cronjob endete unerwartet");
-    },
-    true
-);
