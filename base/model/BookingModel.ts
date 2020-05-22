@@ -203,6 +203,7 @@ export function arrayToBookingModel(arr: string[], categories: string[]): Bookin
         if (typeOfField === "date") {
             newElement[fieldName] = null;
             if (arr[categoryIndex]) {
+                // TODO: make from string a utc date
                 const withTwenty = addTwentyToYear(arr[categoryIndex], ".");
                 newElement[fieldName] = stringToDateWithSeparator(withTwenty, ".");
             }
@@ -383,6 +384,7 @@ export class BookingModel extends Entity implements IBookingIdentity {
 }
 
 export function compareDateData(d1: Date, d2: Date): boolean {
+    // TODO: use only day, month and of these dates and form to utc
     if (d1 && d2) {
         if (d1.getTime() === d2.getTime()) {
             return true;
