@@ -1,29 +1,17 @@
 import * as React from "react";
-import {
-    Avatar,
-    Card,
-    CardContent,
-    CardHeader,
-    Divider,
-    Fab,
-    Grid,
-    IconButton,
-    Tooltip,
-    Typography
-} from "@material-ui/core";
+import {Avatar, Card, CardContent, CardHeader, Divider, Fab, Grid, Tooltip, Typography} from "@material-ui/core";
 import {RenderThings} from "../../helper/util";
 import {categoryFields, CategoryModel, ICategoryIdentity} from "../../../../base/model/CategoryModel";
 import {ICategoryTableInformations} from "../tables/CategoryTable";
 import ColorField from "./simple/ColorField";
 import EditCategoryDialog from "../dialogs/EditEntity/EditCategoryDialog";
 import MultilineText from "./simple/MultilineText";
-import {IVBookingIdentity, VBookingModel} from "../../../../base/model/VBookingModel";
+import {VBookingModel} from "../../../../base/model/VBookingModel";
 import VBookingTable from "../tables/VBookingTable";
 import ChangeVBookingsCategoryDialogContainer from "../../containers/dialogs/ChangeVBookingsCategoryDialogContainer";
 import {getRouteByName} from "../router/Routes";
 import RouteButton from "../router/RouteButton";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import SplitRealBookingDialogContainer from "../../containers/dialogs/SplitRealBookingDialogContainer";
 import EditIcon from "@material-ui/icons/Edit";
 import EditVBookingDialogContainer from "../../containers/dialogs/EditVBookingDialogContainer";
 import {ISplitRealBookingParams} from "../forms/SplitRealBookingForm";
@@ -145,9 +133,12 @@ export default class Category extends React.Component<ICategoryProps, ICategoryS
                         <VBookingTable
                             vBookings={currentVBookings}
                             withCheckboxes={true}
-                            selectedActions={(selectedItems: number[]) => [
+                            selectedActions={(selectedItems: number[], afterSubmit: () => void) => [
                                 <ChangeVBookingsCategoryDialogContainer
-                                    submit={(params, ids) => changeVBookingsCategory(params.category.id, ids)}
+                                    submit={(params, ids) => {
+                                        changeVBookingsCategory(params.category.id, ids);
+                                        afterSubmit();
+                                    }}
                                     vBookingIds={selectedItems}
                                     categoryId={this.props.entity.id}/>,
                                 <React.Fragment>

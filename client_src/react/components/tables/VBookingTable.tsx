@@ -1,15 +1,16 @@
 import * as React from "react";
-import {ICol, IRow} from "./default/helper";
+import {ICol} from "./default/helper";
 import {vBookingFields, VBookingModel} from "../../../../base/model/VBookingModel";
 import {RenderThings} from "../../helper/util";
 import VBooking from "../core/VBooking";
 import EntityTable, {IEntityTableInformations} from "./EntityTable";
 import VBookingContainer from "../../containers/core/VBookingContainer";
+import {SelectedActions} from "./default/DataTable";
 
 export interface IVBookingTableProps {
     vBookings: VBookingModel[];
     withCheckboxes?: boolean;
-    selectedActions?: (selectedItems: number[]) => RenderThings[];
+    selectedActions?: SelectedActions;
 }
 
 export default class VBookingTable extends React.Component<IVBookingTableProps, {}> {

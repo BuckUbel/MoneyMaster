@@ -1,19 +1,19 @@
 import * as React from "react";
+import {ChangeEvent, ReactNode} from "react";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import TablePager from "./pager/TablePager";
-import {ChangeEvent} from "react";
 import SortTableHeader from "./SortTableHeader";
 import {SortDirection} from "@material-ui/core/TableCell/TableCell";
 import TableFilter from "./TableFilter";
-import {ReactNode} from "react";
 import {ISelectorResponse} from "../../core/simple/Selector";
 import {Card, CardContent, Checkbox, Drawer, Grid, Toolbar, Typography} from "@material-ui/core";
 import {
     defaultRowCompare,
-    eliminateByFilterValues, getColoredString,
+    eliminateByFilterValues,
+    getColoredString,
     getColorOnBaseOfValue,
     IBaseData,
     ICol,
@@ -21,6 +21,8 @@ import {
     IRow
 } from "./helper";
 import {RenderThings} from "../../../helper/util";
+
+export type SelectedActions = (selectedItems: number[], afterSubmit: () => void) => RenderThings[];
 
 export interface IDataTableProps {
     rowData: IRow[];
@@ -30,7 +32,7 @@ export interface IDataTableProps {
     baseData?: IBaseData[];
     baseClass?: React.ComponentType<IObjectWithEntityProp>;
     defaultSortRow?: number;
-    selectedActions?: (selectedItems: number[]) => RenderThings[];
+    selectedActions?: SelectedActions;
 }
 
 export interface IDataTableState {
@@ -104,7 +106,7 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
                 ({selectedItems: prevState.currentFilteredData.map((row: IRow) => row.id)})
             );
         } else {
-            this.setState({selectedItems: []});
+            this.setState((prevState) => ({selectedItems: []}));
         }
     }
 
@@ -124,19 +126,19 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
             };
         }
         return () => {
-            this.setState({clickedRow: id});
+            this.setState((prevState) => ({clickedRow: id}));
         };
     }
 
     public onPageChange(page: number) {
-        this.setState({currentPage: page});
+        this.setState((prevState) => ({currentPage: page}));
     }
 
     public onRowsPerPageChange(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
-        this.setState({
+        this.setState((prevState) => ({
             currentPage: defaultState.currentPage,
             rowsPerPage: Number(event.target.value)
-        });
+        }));
     }
 
     public onSort(event: React.MouseEvent<HTMLElement, MouseEvent>, property: number) {
@@ -146,11 +148,11 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
         if (this.state.orderBy === property && this.state.order === "desc") {
             order = "asc";
         }
-        this.setState({order, orderBy});
+        this.setState((prevState) => ({order, orderBy}));
     }
 
     public resetFilter() {
-        this.setState({filterValues: []});
+        this.setState((prevState) => ({filterValues: []}));
     }
 
     public onFilter(event: ChangeEvent<HTMLSelectElement>, child: ReactNode) {
@@ -168,9 +170,9 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
         const newFilterValuesWithoutEmptys = newFilterValues.filter((filter) => {
             return (filter.value !== "");
         });
-        this.setState({
+        this.setState((prevState) => ({
             filterValues: newFilterValuesWithoutEmptys
-        });
+        }));
     }
 
     public render() {
@@ -190,47 +192,51 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
             <React.Fragment>
                 <Grid container spacing={40}>
                     {!noFilter && <Grid item xs={12}>
-                        <Card>
-                            <CardContent>
-                                <TableFilter
-                                    rowData={currentFilteredData}
-                                    headerData={colData}
-                                    onFilter={this.onFilter}
-                                    filterValues={filterValues}
-                                    resetFilter={this.resetFilter}
-                                />
-                            </CardContent>
-                        </Card>
+                      <Card>
+                        <CardContent>
+                          <TableFilter
+                              rowData={currentFilteredData}
+                              headerData={colData}
+                              onFilter={this.onFilter}
+                              filterValues={filterValues}
+                              resetFilter={this.resetFilter}
+                          />
+                        </CardContent>
+                      </Card>
                     </Grid>}
                     <Grid item xs={12}>
                         <Card>
                             <CardContent>
                                 {withCheckboxes &&
                                 <Toolbar>
-                                    <Grid container justify={"space-between"}>
-                                        <Grid item xs={5}>
-                                            {selectedItems.length > 0 ?
-                                                <Typography variant="subtitle1">
-                                                    {selectedItems.length} Elemente ausgewählt
-                                                </Typography> :
-                                                <Typography color="inherit" variant="subtitle1">
-                                                    Keine Elemente sind ausgewählt
-                                                </Typography>
-                                            }
-                                        </Grid>
-                                        <Grid item xs={7} container justify={"flex-end"}>
-                                            {selectedActions(selectedItems).map(
-                                                (currentAction: RenderThings, index: number) => {
-                                                    return (
-                                                        <Grid item xs={1} container justify={"flex-end"} key={index}>
-                                                            <Grid item xs={12}>
-                                                                {currentAction}
-                                                            </Grid>
-                                                        </Grid>);
-                                                })}
-                                        </Grid>
-
+                                  <Grid container justify={"space-between"}>
+                                    <Grid item xs={5}>
+                                        {selectedItems.length > 0 ?
+                                            <Typography variant="subtitle1">
+                                                {selectedItems.length} Elemente ausgewählt
+                                            </Typography> :
+                                            <Typography color="inherit" variant="subtitle1">
+                                                Keine Elemente sind ausgewählt
+                                            </Typography>
+                                        }
                                     </Grid>
+                                    <Grid item xs={7} container justify={"flex-end"}>
+                                        {selectedActions(selectedItems, () => {
+                                            this.setState((prevState) => ({
+                                                selectedItems: []
+                                            }));
+                                        }).map(
+                                            (currentAction: RenderThings, index: number) => {
+                                                return (
+                                                    <Grid item xs={1} container justify={"flex-end"} key={index}>
+                                                        <Grid item xs={12}>
+                                                            {currentAction}
+                                                        </Grid>
+                                                    </Grid>);
+                                            })}
+                                    </Grid>
+
+                                  </Grid>
                                 </Toolbar>}
                                 <Table>
                                     <SortTableHeader
@@ -255,7 +261,7 @@ export default class DataTable extends React.Component<IDataTableProps, IDataTab
                                                 >
                                                     {withCheckboxes &&
                                                     <TableCell key={1} padding={"checkbox"}>
-                                                        <Checkbox checked={selectedItems.indexOf(row.id) !== -1}/>
+                                                      <Checkbox checked={selectedItems.indexOf(row.id) !== -1}/>
                                                     </TableCell>}
 
                                                     {Object.keys(row.content).map((key: string, cellIndex: number) => {

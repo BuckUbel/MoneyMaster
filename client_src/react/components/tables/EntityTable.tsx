@@ -1,7 +1,7 @@
 import * as React from "react";
 import {ICol, IObjectWithEntityProp, IRow} from "./default/helper";
 import {RenderThings} from "../../helper/util";
-import DataTable from "./default/DataTable";
+import DataTable, {SelectedActions} from "./default/DataTable";
 import {Entity} from "../../../../base/helper/Entity";
 import {getArrayFromObject} from "../../../../base/helper/util";
 
@@ -20,7 +20,7 @@ export interface IBookingTableProps {
     noFilter?: boolean;
     defaultSortRow?: number;
     withCheckboxes?: boolean;
-    selectedActions?: (selectedItems: number[]) => RenderThings[];
+    selectedActions?: SelectedActions;
 }
 
 export default class EntityTable extends React.PureComponent<IBookingTableProps, {}> {
