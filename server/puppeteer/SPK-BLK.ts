@@ -6,8 +6,8 @@ const puppeteer = require("puppeteer");
 const path = require("path");
 require("dotenv").config();
 
-const today: Date = new Date(new Date().getFullYear(), 0, 1);
-const todayString: string = today.getDate() + "." + (today.getMonth() + 1) + "." + today.getFullYear();
+// const today: Date = new Date(new Date().getFullYear(), 0, 1);
+// const todayString: string = today.getDate() + "." + (today.getMonth() + 1) + "." + today.getFullYear();
 
 const waitTimeForGoto: number = 1000;
 const waitTimeForDisplayChanging: number = 10000;
@@ -54,15 +54,6 @@ export async function getCSVDataFromSPKBLK(downloadPath: string, bank: IBankConf
 
     await page.goto(bookingsURL);
 
-    await page.evaluate((ts: string) => {
-        const firstDateLabelObject: any = document.getElementsByTagName("label")[2];
-        const firstDateLabel: string = firstDateLabelObject.htmlFor;
-        const firstDateObject: any = document.getElementsByName(firstDateLabel)[0];
-        firstDateObject.value = ts;
-        const refreshObject: any = document.getElementsByClassName("icon-if5_refresh")[0].getElementsByTagName("input")[0];
-        refreshObject.click();
-    }, todayString);
-
     await page.waitFor(waitTimeForDisplayChanging);
 
     await page._client.send("Page.setDownloadBehavior", {
@@ -71,14 +62,13 @@ export async function getCSVDataFromSPKBLK(downloadPath: string, bank: IBankConf
     });
 
     await page.evaluate(() => {
-        const exportButtonObjectList: any = document.getElementById("exportGroup").getElementsByTagName("ul")[0];
+        const exportButtonObjectList: any = document.getElementsByClassName("exportable")[0];
         exportButtonObjectList.getElementsByTagName("input")[0].click();
     });
 
     await page.waitFor(waitTimeForDownload);
 
     await browser.close();
-
 }
 
 export async function testPasswordForSPKBLK(newPassword: string, bank: IBankConfig) {

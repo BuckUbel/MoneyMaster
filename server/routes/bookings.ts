@@ -12,6 +12,7 @@ import {
 } from "../helper";
 import {Message} from "../../base/helper/messages/Message";
 import {ErrorMessage} from "../../base/helper/messages/ErrorMessage";
+import {getCSVDataFromSPKBLK, testPasswordForSPKBLK} from "../puppeteer/SPK-BLK";
 
 export default class BookingRoutes {
 
@@ -27,7 +28,7 @@ export default class BookingRoutes {
             if (!abort) {
 
                 try {
-                    // await getCSVDataFromSPKBLK(server.serverConfig.downloadPath, server.bankConfig);
+                    await getCSVDataFromSPKBLK(server.serverConfig.downloadPath, server.bankConfig);
                     console.log("CSV is downloaded.");
                 } catch (e) {
                     abort = true;
@@ -91,7 +92,7 @@ export default class BookingRoutes {
                 if (requestBody.pwd && requestBody.pwd !== "") {
                     try {
                         console.log("Start testing password for SPK BLK");
-                        // await testPasswordForSPKBLK(requestBody.pwd, this.server.bankConfig);
+                        await testPasswordForSPKBLK(requestBody.pwd, this.server.bankConfig);
                         this.server.bankConfig.password = requestBody.pwd;
                     } catch (e) {
                         return new ErrorMessage("False Password");
@@ -100,7 +101,7 @@ export default class BookingRoutes {
                 if (this.server.bankConfig.password !== "") {
                     if (!this.server.status.bankIsRequested) {
                         try {
-                            BookingRoutes.loadDataFromSPKBLK(this.server);
+                            await BookingRoutes.loadDataFromSPKBLK(this.server);
                             return new Message("Data will imported and will save in the database");
                         } catch (error) {
                             console.error(error);
