@@ -1,15 +1,12 @@
 import * as React from "react";
-import {
-    Bar,
-    BarChart,
-    Brush,
-    CartesianGrid,
-    Tooltip,
-    XAxis,
-    YAxis
-} from "recharts";
+import {Bar, BarChart, Brush, CartesianGrid, Tooltip, XAxis, YAxis} from "recharts";
 import {BookingModel} from "../../../../base/model/BookingModel";
-import {dateToString, daysDiff, getEachDayBetweenDays} from "../../../../base/helper/time/dateHelper";
+import {
+    changeDateMonthLastDay,
+    dateToString,
+    getCountOfMonthsBetweenDates,
+    getFirstDayOfMonthsBetweenDays
+} from "../../../../base/helper/time/dateHelper";
 import InOutBarChartToolTip from "./tooltips/InOutBarChartToolTip";
 import {orange} from "@material-ui/core/colors";
 
@@ -23,10 +20,8 @@ export interface IInOutBarChartData {
 
 export interface IInOutBarChartProps {
     bookings: BookingModel[];
-    startDate: Date;
-    endDate: Date;
-    minDate: Date;
-    maxDate: Date;
+    minDate: Date; // earliest first date
+    maxDate: Date; // latest end date
 }
 
 export interface IInOutBarChartState {
@@ -43,35 +38,24 @@ export default class InOutBarChart extends React.Component<IInOutBarChartProps, 
         newProps: IInOutBarChartProps,
         oldState: IInOutBarChartState): IInOutBarChartState {
 
-        const {bookings, startDate, endDate, minDate, maxDate} = newProps;
-        const completeDiff = daysDiff(minDate, maxDate);
-        const currentDiff = daysDiff(startDate, endDate);
+        const {bookings, minDate, maxDate} = newProps;
+        const allFirstDays = getFirstDayOfMonthsBetweenDays(minDate, maxDate);
 
-        const allDates: Date[] = getEachDayBetweenDays(minDate, maxDate);
-        const segmentCount = Math.ceil(completeDiff / currentDiff);
-
-        const inOutCollectedValues: IInOutBarChartData[] = [];
-
-        for (let i = 0; i < segmentCount; i++) {
-
-            const endPos = Math.ceil((completeDiff) - (i * currentDiff));
-            const iEndDate = allDates[endPos];
-            const startPos = Math.ceil(endPos - currentDiff);
-            const iStartDate = allDates[startPos > 0 ? startPos : 0];
-            inOutCollectedValues.unshift({
-                name: dateToString(iStartDate) + "-" + dateToString(iEndDate),
+        const inOutCollectedValues: IInOutBarChartData[] = allFirstDays.map((firstDate) => {
+            const lastDate = changeDateMonthLastDay(firstDate, 0);
+            return {
+                name: dateToString(firstDate) + "-" + dateToString(lastDate),
                 posValue: 0,
                 negValue: 0,
-                start: iStartDate,
-                end: iEndDate
-            });
-        }
-        bookings.sort((a: BookingModel, b: BookingModel) => {
-            return a.bookingDate.getTime() - b.bookingDate.getTime();
-        }).forEach((b) => {
+                start: firstDate,
+                end: lastDate
+            };
+        });
+
+        bookings.forEach((b) => {
             if (b.bookingDate && minDate && maxDate) {
                 if (b.bookingDate.getTime() > minDate.getTime() && b.bookingDate.getTime() < maxDate.getTime()) {
-                    const segmentIndex = Math.ceil(daysDiff(b.bookingDate, maxDate) / currentDiff) - 1;
+                    const segmentIndex = getCountOfMonthsBetweenDates(minDate, b.bookingDate);
                     if (b.value >= 0) {
                         inOutCollectedValues[segmentIndex].posValue += Number(b.value.toFixed());
                     } else {
@@ -95,7 +79,7 @@ export default class InOutBarChart extends React.Component<IInOutBarChartProps, 
         const {currentData} = this.state;
         return (
             <React.Fragment>
-                <BarChart width={600} height={600} data={currentData}
+                <BarChart className={"inOutBarChart"} width={600} height={600} data={currentData}
                           margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis dataKey={"name"}/>

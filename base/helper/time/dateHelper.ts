@@ -126,22 +126,16 @@ export interface IMonthYear {
 }
 
 export function getCountOfMonthsBetweenDates(d1: Date, d2: Date): number {
-    let monthCount: number = 0;
-    const d3: IMonthYear = {
-        month: d1.getMonth(),
-        year: d1.getFullYear()
-    };
 
-    while (d3.month !== d2.getMonth() || d3.year !== d2.getFullYear()) {
-        if (d3.month === 11) {
-            d3.year++;
-            d3.month = 0;
-        } else {
-            d3.month++;
-        }
-        monthCount++;
-    }
-    return monthCount;
+    const firstMonth = d1.getMonth() + 1;
+    const firstYear = d1.getFullYear();
+    const lastMonth = d2.getMonth() + 1;
+    const lastYear = d2.getFullYear();
+
+    const firstCombination = firstYear + (firstMonth / 12);
+    const lastCombination = lastYear + (lastMonth / 12);
+
+    return Math.ceil((lastCombination - firstCombination) * 12);
 }
 
 export function isDMYDateString(s: string) {

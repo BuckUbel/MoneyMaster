@@ -1,10 +1,6 @@
 import * as React from "react";
-import {
-    BookingModel,
-} from "../../../../../base/model/BookingModel";
+import {BookingModel,} from "../../../../../base/model/BookingModel";
 import {Card, CardContent, Divider, Grid, Typography} from "@material-ui/core";
-import Booking from "../../core/Booking";
-import DateTextField from "../../core/simple/DateTextField";
 import {stringToDate} from "../../../../../base/helper/util";
 import CategoryPieChart from "../../charts/CategoryPieChart";
 import {VBookingModel} from "../../../../../base/model/VBookingModel";
@@ -187,11 +183,9 @@ export default class StatisticsView extends React.Component<IStatisticsViewProps
                     </Card>
                 </Grid>
                 <Grid item xs={6} key={6}>
-                    <Card>
+                    <Card style={{overflow: "visible"}}>
                         <CardContent>
                             <InOutBarChart bookings={bookings}
-                                           startDate={startDate}
-                                           endDate={endDate}
                                            minDate={minDate}
                                            maxDate={maxDate}
                             />
